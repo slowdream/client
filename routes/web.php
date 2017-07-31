@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
+Route::group(['middleware' => 'web'],function(){
+	Route::get('/',['as' => 'main', 'uses' => 'mainController@index']);
 });

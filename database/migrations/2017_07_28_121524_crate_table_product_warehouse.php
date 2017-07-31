@@ -15,8 +15,8 @@ class CrateTableProductWarehouse extends Migration
     {
         Schema::create('product_warehouse', function (Blueprint $table) {
             $table->increments('id');
-            $table->int('product_id');
-            $table->int('warehouse_id');
+            $table->integer('product');
+            $table->integer('warehouse');
             $table->float('price'); //withPivot('price')
             $table->timestamps();
         });

@@ -23,6 +23,9 @@
 					<li><a href="home"><i class="fa fa-home" aria-hidden="true"></i></a></li>
 					<li><a href="search"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 					<li><a href="card"><i class="fa fa-credit-card" aria-hidden="true"></i></a></li>
+
+					<li><a href="cart" class="cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i>
+</a></li>
 				</ul>
 			</nav>
 		</header>

@@ -4,15 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Warehouse extends Model
+class Order extends Model
 {
-	protected $table = 'warehouses';
+	protected $table = 'orders';
     
-    protected $fillable = ['name','image','description'];
+    protected $fillable = ['guid'];
     
     protected $hidden = [];
 
-    public function product()
+    public function ()
     {
     	return $this->hasMany('App\Product');
     }

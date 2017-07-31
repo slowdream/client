@@ -184,7 +184,7 @@ return [
          *  Мои хелперы
          */
 
-        App\Providers\CurlServiceProvider::class,
+        //App\Providers\CurlServiceProvider::class,
         App\Providers\TextParserServiceProvider::class,
 
     ],
@@ -236,6 +236,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Curl' => App\Helpers\Curl::class,
 
     ],
 

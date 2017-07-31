@@ -13,14 +13,14 @@ class CrateTableProperties extends Migration
      */
     public function up()
     {
-        Schema::create('properties', function (Blueprint $table) {
-            $table->increments('id');
-            $table->int('product_id'); // Ссылка на товар
-            $table->string('name'); // Имя свойства
-            $table->string('value'); // Значение свойства
-            $table->boolean('selectable')->default(false); // Можно ли его выбрать для добавления в корзину
-            $table->timestamps();
-        });
+        // Schema::create('properties', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->integer('product'); // Ссылка на товар
+        //     $table->string('name'); // Имя свойства
+        //     $table->string('value'); // Значение свойства
+        //     $table->boolean('selectable')->default(false); // Можно ли его выбрать для добавления в корзину
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -30,6 +30,6 @@ class CrateTableProperties extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('properties');
+        // Schema::dropIfExists('properties');
     }
 }

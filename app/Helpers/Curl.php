@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Helpers;
 
 
 class Curl{
@@ -12,11 +12,13 @@ class Curl{
 	//
 	// Инициализация класса для конкретного домена
 	//
-	public static function app($host) {
-	    return new self($host);
-	}
+	// public static function app($host) 
+	// {
+	//     return new self($host);
+	// }
 
-			public function __construct($host) {
+	public function __construct($host) 
+	{
 	    $this->ch = curl_init();
 	    $this->host = $host;
 	    $this->options = array(CURLOPT_RETURNTRANSFER => true, CURLOPT_HTTPHEADER => array());
@@ -36,7 +38,8 @@ class Curl{
 	 * @param mixeds $value
 	 * Значение опции для установки
 	 */
-	public function set($name, $value) {
+	public function set($name, $value) 
+	{
 	    $this->options[$name] = $value;
 	    curl_setopt($this->ch, $name, $value);
 	    return $this;
@@ -48,7 +51,8 @@ class Curl{
 	 * @param mixed $name
 	 * Константа (название) или номер опции курла
 	 */
-	public function get($name) {
+	public function get($name) 
+	{
 	    return $this->options[$name];
 	}
 
@@ -58,7 +62,8 @@ class Curl{
 	 * @param string $file
 	 * Относительный путь до файла для сохранения кук
 	 */
-	public function cookie($path) {
+	public function cookie($path) 
+	{
 	    $this->set(CURLOPT_COOKIEJAR, $_SERVER['DOCUMENT_ROOT'] . '/' . COOKIE_DIR .  $path);
 	    $this->set(CURLOPT_COOKIEFILE, $_SERVER['DOCUMENT_ROOT'] . '/' . COOKIE_DIR . $path);
 	    return $this;
@@ -70,7 +75,8 @@ class Curl{
 	 * @param int $act
 	 * 1 - https разрешено, 0 - https запрещено
 	 */
-	public function ssl($act) {
+	public function ssl($act)
+	{
 	    $this->set(CURLOPT_SSL_VERIFYPEER, $act);
 	    $this->set(CURLOPT_SSL_VERIFYHOST, $act);
 	    return $this;
@@ -82,7 +88,8 @@ class Curl{
 	 * @param int $act
 	 * 1 - есть, 0 - нет
 	 */
-	public function headers($act) {
+	public function headers($act)
+	{
 	    $this->set(CURLOPT_HEADER, $act);
 	    return $this;
 	}
@@ -94,7 +101,8 @@ class Curl{
 	 * TRUE - следовать
 	 * FALSE - не следовать
 	 */
-	public function follow($param) {
+	public function follow($param)
+	{
 	    $this->set(CURLOPT_FOLLOWLOCATION, $param);
 	    return $this;
 	}
@@ -104,7 +112,8 @@ class Curl{
 	 * 
 	 * @url string $url
 	 */
-	public function referer($url) {
+	public function referer($url)
+	{
 	    $this->set(CURLOPT_REFERER, $url);
 	    return $this;
 	}
@@ -114,7 +123,8 @@ class Curl{
 	 * 
 	 * @agent string $agent
 	 */
-	public function agent($agent) {
+	public function agent($agent)
+	{
 	    $this->set(CURLOPT_USERAGENT, $agent);
 	    return $this;
 	}
@@ -126,7 +136,8 @@ class Curl{
 	 * array - ассоциативный массив с параметрами
 	 * false - отлючить обращение методом POST
 	 */
-	public function post($data) {
+	public function post($data)
+	{
 	    if ($data === false) {
 	        $this->set(CURLOPT_POST, false);
 	        return $this;
@@ -142,7 +153,8 @@ class Curl{
 	 * 
 	 * @param string $header
 	 */
-	public function add_header($header) {
+	public function add_header($header)
+	{
 	    $this->options[CURLOPT_HTTPHEADER][] = $header;
 	    $this->set(CURLOPT_HTTPHEADER, $this->options[CURLOPT_HTTPHEADER]);
 	    return $this;
@@ -153,7 +165,8 @@ class Curl{
 	 * 
 	 * @param array $headers
 	 */
-	public function add_headers($headers) {
+	public function add_headers($headers)
+	{
 	    foreach ($headers as $h)
 	        $this->options[CURLOPT_HTTPHEADER][] = $h;
 
@@ -164,7 +177,8 @@ class Curl{
 	/**
 	 * Очиситить массив произвольных http-заголовков
 	 */
-	public function clear_headers() {
+	public function clear_headers()
+	{
 	    $this->options[CURLOPT_HTTPHEADER] = array();
 	    $this->set(CURLOPT_HTTPHEADER, $this->options[CURLOPT_HTTPHEADER]);
 	    return $this;
@@ -175,8 +189,9 @@ class Curl{
 	 * 
 	 * @param string $file
 	 */
-	public function config_load($file) {
-	    $data = file_get_contents('config/' . $file);
+	public function config_load($file)
+	{
+	    $data = file_get_contents(app_path().'\Helpers\\'.$file);
 	    $data = json_decode($data, 1);
 	    
 	    curl_setopt_array($this->ch, $data);
@@ -193,7 +208,8 @@ class Curl{
 	 * 
 	 * @param string $file
 	 */
-	public function config_save($file) {
+	public function config_save($file)
+	{
 	    $data = json_encode($this->options);
 	    file_put_contents('config/' . $file, $data);
 	    return $this;
@@ -204,7 +220,8 @@ class Curl{
 	 * 
 	 * @param string $url
 	 */
-	public function request($url='') {
+	public function request($url='')
+	{
 	    curl_setopt($this->ch, CURLOPT_URL, $this->make_url($url));
 	    $data = curl_exec($this->ch);
 	    return $this->process_result($data);
@@ -216,7 +233,8 @@ class Curl{
 	 * @param string $url
 	 * адрес страницы без домена
 	 */
-	private function make_url($url) {
+	private function make_url($url)
+	{
 	    if ($url[0] != '/')
 	        $url = '/' . $url;
 
@@ -238,7 +256,8 @@ class Curl{
 	 * 'html' => содержимое страницы
 	 * ]
 	 */
-	private function process_result($data) {
+	private function process_result($data)
+	{
 	    /* Если HEADER отключен */
 	    if (!isset($this->options[CURLOPT_HEADER]) || !$this->options[CURLOPT_HEADER]) {
 	        return array(

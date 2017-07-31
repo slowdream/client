@@ -8351,7 +8351,7 @@ button.close {
 }
 
 header {
-  height: 20vh;
+  height: 10vh;
 }
 
 header nav ul {
@@ -8365,6 +8365,10 @@ header nav ul li {
   display: inline-block;
   font-size: 50px;
   margin: 10px 30px;
+}
+
+header nav ul li:last-child {
+  float: right;
 }
 
 main {

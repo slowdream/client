@@ -15,12 +15,13 @@ class CrateTableProducts extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->int('guid'); //Айдишник в базе 1С
-            $table->string('name');
-            $table->string('image');
+            $table->integer('guid'); //Айдишник в базе 1С
+            $table->string('name', 100);
+            $table->string('image', 250);
             $table->text('description');
-            $table->string('unit'); //Единица измерения
-            $table->int('warehouse_id'); //Айдишник склада
+            $table->string('unit', 10); //Единица измерения
+            $table->integer('warehouse'); //Айдишник склада
+            $table->integer('category_id'); //Айдишник Категории родительской
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CrateTableProducts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('goods');
+        Schema::dropIfExists('products');
     }
 }

@@ -1,5 +1,5 @@
 header {
-	height: 20vh;
+	height: 10vh;
 	nav {
 		ul {
 			text-align: center;
@@ -10,6 +10,9 @@ header {
 				display: inline-block;
 				font-size: 50px;
 				margin: 10px 30px;
+				&:last-child{
+					float: right;
+				}
 			}
 		}
 	}

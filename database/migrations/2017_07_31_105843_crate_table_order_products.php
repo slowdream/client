@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CrateTableOrders extends Migration
+class CrateTableOrderProducts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CrateTableOrders extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('orders_prods', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('guid'); // Айдишник заказа пришедший от 1С
+            $table->integer('product'); // Айдишник товара
+            $table->integer('count'); // Количество
+            $table->integer('price'); // Цена
+            $table->integer('order'); // Айдишник заказа
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ class CrateTableOrders extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('orders_prods');
     }
 }
