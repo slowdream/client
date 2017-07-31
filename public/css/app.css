@@ -8351,7 +8351,14 @@ button.close {
 }
 
 header {
-  height: 10vh;
+  height: 80px;
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 9999;
+  background: #FFF;
+  border-bottom: 1px solid #CCC;
 }
 
 header nav ul {
@@ -8359,6 +8366,7 @@ header nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 header nav ul li {
@@ -8369,12 +8377,15 @@ header nav ul li {
 
 header nav ul li:last-child {
   float: right;
+  position: absolute;
+  right: 200px;
 }
 
 main {
   border: 1px solid #CCC;
-  height: 80vh;
+  height: 100vh;
   overflow-y: auto;
+  padding-top: 80px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8404,5 +8415,13 @@ main .item .title {
   text-align: center;
   padding-top: 10px;
   font-size: 20px;
+}
+
+.table td {
+  vertical-align: middle !important;
+}
+
+.table .addToCart {
+  font-size: 44px;
 }
 

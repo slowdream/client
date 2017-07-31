@@ -1,7 +1,8 @@
 main {
 	border: 1px solid #CCC;
-	height: 80vh;
+	height: 100vh;
 	overflow-y: auto;
+	padding-top: 80px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
@@ -19,5 +20,14 @@ main {
 			padding-top: 10px;
 			font-size: 20px;
 		}
+	}
+}
+
+.table {
+	td {
+		vertical-align: middle !important;
+	}
+	.addToCart {
+		font-size: 44px;
 	}
 }

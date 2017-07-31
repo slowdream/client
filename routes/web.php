@@ -17,5 +17,9 @@
 
 
 Route::group(['middleware' => 'web'],function(){
-	Route::get('/',['as' => 'main', 'uses' => 'mainController@index']);
+	Route::get('/',function(){
+		return redirect()->route('categorys');	
+	});
+	Route::get('/categorys/{id?}',['as' => 'categorys', 'uses' => 'mainController@categorys']);
+	Route::get('/items/{id}',['as' => 'items', 'uses' => 'mainController@items']);
 });

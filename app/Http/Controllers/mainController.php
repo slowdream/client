@@ -53,6 +53,30 @@ class mainController extends Controller
 	}
 	public function index()
 	{
-		return view('welcome');
+		
+	}
+
+	public function categorys($id = '')
+	{
+		if ($id == '') {
+			$categorys = Category::find(1)->take(20)->get();
+		}else {
+			$categorys = Category::find($id)->take(20)->get();
+		}
+
+		
+		return view('parts.categorys', ['categorys' => $categorys]);
+	}
+
+	public function items($id)
+	{
+		// if ($id == '') {
+		// 	$products = Product::take(20)->get();
+		// }else {
+			$products = Product::where('category_id', $id)->take(20)->get();
+		//}
+
+		
+		return view('parts.items', ['products' => $products]);
 	}
 }

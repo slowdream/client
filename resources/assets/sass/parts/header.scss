@@ -1,17 +1,27 @@
 header {
-	height: 10vh;
+	height: 80px;
+	top: 0;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	z-index: 9999;
+	background:#FFF;
+	border-bottom: 1px solid #CCC;
 	nav {
 		ul {
 			text-align: center;
 			list-style-type: none;
 			margin: 0;
 			padding: 0;
+			position: relative;
 			li {
 				display: inline-block;
 				font-size: 50px;
 				margin: 10px 30px;
 				&:last-child{
 					float: right;
+					position: absolute;
+    				right: 200px;
 				}
 			}
 		}
