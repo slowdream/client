@@ -8421,7 +8421,8 @@ main .item .title {
   vertical-align: middle !important;
 }
 
-.table .addToCart {
+.table .addToCart,
+.table .removeFromCart {
   font-size: 44px;
 }
 

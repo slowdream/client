@@ -23,13 +23,21 @@
 					<li><a href="/categorys"><i class="fa fa-home" aria-hidden="true"></i></a></li>
 					<li><a href="/search"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 					<li><a href="/card"><i class="fa fa-credit-card" aria-hidden="true"></i></a></li>
+					<li><a href="/refresh"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
 
-					<li><a href="cart" class="cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="count">0</span></a></li>
+					<li><a href="/cart" class="cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="count">0</span></a></li>
 				</ul>
 			</nav>
 		</header>
 		<main>
-		@yield('main')
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+					@yield('main')
+					</div>
+				</div>
+			</div>
+		
 		</main>
 		<footer>
 			
@@ -38,6 +46,8 @@
 
 	<!-- FontAwesome -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!-- jquery -->
+	<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<!-- My js -->
 	<script src="/js/all.js"></script>
 </html>

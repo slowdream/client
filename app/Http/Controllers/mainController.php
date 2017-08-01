@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use App\Order;
+
 use App\Product;
 use App\Category;
 
-//use App\Helpers\Curl;
 use Curl;
 
 class mainController extends Controller
 {
 
-	private function getDataFrom1C()
+	public function getDataFrom1C()
 	{
 		$username = 'admin';
 		$password = 1252351;
@@ -42,9 +41,10 @@ class mainController extends Controller
 			$product = new Product([
 				'name' => $val['name'],
 				'guid' => $val['id'],
-				'image' => 'test image',
+				'image' => 'test image.jpg',
 				'description' => 'test description',
-				'unit' => 'test шт',
+				'price' => rand(10, 1000),
+				'unit' => 'шт',
 				'warehouse' => 0
 			]);
 
@@ -53,7 +53,7 @@ class mainController extends Controller
 	}
 	public function index()
 	{
-		
+		$this->getDataFrom1C();
 	}
 
 	public function categorys($id = '')
@@ -70,12 +70,7 @@ class mainController extends Controller
 
 	public function items($id)
 	{
-		// if ($id == '') {
-		// 	$products = Product::take(20)->get();
-		// }else {
-			$products = Product::where('category_id', $id)->take(20)->get();
-		//}
-
+		$products = Product::where('category_id', $id)->take(20)->get();
 		
 		return view('parts.items', ['products' => $products]);
 	}

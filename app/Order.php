@@ -8,12 +8,12 @@ class Order extends Model
 {
 	protected $table = 'orders';
     
-    protected $fillable = ['guid'];
+    protected $fillable = ['guid','status','whyCanceled'];
     
     protected $hidden = [];
 
-    public function ()
+    public function products()
     {
-    	return $this->hasMany('App\Product');
+    	return $this->hasMany('App\OrderProds');
     }
 }
