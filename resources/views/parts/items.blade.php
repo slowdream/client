@@ -15,8 +15,8 @@
 		<tr>
 			<td>{{ $item->id }}</td>
 			<td>{{ $item->name }}</td>
-			<td>???</td>
-			<td>{{ $item->price }}</td>			
+			<td>{{ $item->count }} {{ $item->unit }}</td>
+			<td>{{ $item->price }} р.</td>			
 			<td><a href="#" data-id="{{ $item->id }}" class="addToCart"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></td>
 		</tr>	
 @endforeach

@@ -8,11 +8,19 @@ main {
 	justify-content: flex-start;
 	align-items: baseline;
 	align-content: flex-start;
-	.item {
+
+}
+
+.cat_wrapper {
+	display: flex;
+    flex-wrap: wrap;
+    	.item {
 		margin: 30px;
 		padding: 10px;
 		border-radius: 10px;
 		box-shadow: 0px 0px 2px;
+		text-align: center;
+    	flex-basis: 300px;
 		.title {
 			display: block;
 			line-height: 30px;
@@ -22,7 +30,6 @@ main {
 		}
 	}
 }
-
 .table {
 	td {
 		vertical-align: middle !important;
@@ -30,5 +37,17 @@ main {
 	.addToCart,
 	.removeFromCart {
 		font-size: 44px;
+	}
+}
+
+.cart_btns_wrapper {
+	text-align: center;
+	padding-top: 60px;
+	button {
+		margin: 10px 50px;
+		display: inline-block;
+		i {
+			margin-right: 15px;
+		}
 	}
 }

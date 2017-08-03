@@ -1,6 +1,7 @@
 @extends('welcome')
 
 @section('main') 
+<div class="cat_wrapper">
 	@foreach ($categorys as $item)
 		<div class="item">
 			<a href="/items/{{ $item->id }}">
@@ -11,5 +12,5 @@
 			</a>
 		</div>
 	@endforeach		
-
+</div>
 @endsection

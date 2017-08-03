@@ -13,6 +13,7 @@ class CrateTableWarehouses extends Migration
      */
     public function up()
     {
+        return;
         Schema::create('warehouses', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name'); //Имя склада

@@ -15,12 +15,13 @@ class CrateTableProducts extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('guid'); //Айдишник в базе 1С
+            $table->string('guid'); //Айдишник в базе 1С
             $table->string('name', 100);
+            $table->integer('price'); //Цена
+            $table->integer('count'); //Колво
             $table->string('image', 250);
             $table->text('description');
-            $table->string('unit', 10); //Единица измерения
-            $table->integer('warehouse'); //Айдишник склада
+            $table->string('unit', 10); //Единица измерения            
             $table->integer('category_id'); //Айдишник Категории родительской
             $table->timestamps();
         });

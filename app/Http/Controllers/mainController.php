@@ -26,15 +26,13 @@ class mainController extends Controller
 		foreach ($data as $val) {
 
 			$category = new Category;
-
-			$cat = $category::where('name', $val['group'])->first();
+			$cat = $category::where('guid', $val['groupid'])->first();
 			if (count($cat) > 0){
 				$category = $cat;
 			} else {
 				$category->name = $val['group'];
-				$category->guid = 000;
+				$category->guid = $val['groupid'];
 				$category->image = 'test image.jpg';
-				$category->description = 'Описание на русском';
 				$category->save();
 			}
 			
@@ -43,9 +41,9 @@ class mainController extends Controller
 				'guid' => $val['id'],
 				'image' => 'test image.jpg',
 				'description' => 'test description',
-				'price' => rand(10, 1000),
-				'unit' => 'шт',
-				'warehouse' => 0
+				'price' => $val['price'],
+				'count' => $val['mount'],
+				'unit' => 'шт'
 			]);
 
 			$category->products()->save($product);
@@ -70,8 +68,9 @@ class mainController extends Controller
 
 	public function items($id)
 	{
+		//$products = Category::find($id)->products()->take(20)->get();
 		$products = Product::where('category_id', $id)->take(20)->get();
-		
+
 		return view('parts.items', ['products' => $products]);
 	}
 }

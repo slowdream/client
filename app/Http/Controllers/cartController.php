@@ -58,8 +58,13 @@ class cartController extends Controller
         $this->order->products->find($id)->delete();
         return 'true';
     }    
-    public function cancel($reason = 'TimeOut')
-    {
-        
-    }
+    public function cancel(Request $request)
+    {   
+
+        $reason = 'TimeOut';
+        if ($request->input('reason') != '') {
+            $reason = $request->input('reason');
+        }
+        $this->order->update(['status'=>'cancel', 'whyCanceled' => $reason]);
+    }   
 }

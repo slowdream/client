@@ -39,6 +39,10 @@
 			</div>
 		
 		</main>
+		<aside>
+			<button class="up"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+			<button class="down"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+		</aside>
 		<footer>
 			
 		</footer>

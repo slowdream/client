@@ -3,14 +3,16 @@ $(document).ready(function() {
 		e.preventDefault();
 		var id = $(this).data('id');
 		var count = 1;
-		AddToCart(id, count);
-		GetCartCount();
+		AddToCart(id, count);		
 	});	
 	$('.removeFromCart').click(function(e) {
 		e.preventDefault();
 		var id = $(this).data('id');		
 		RemoveFromCart(id);
-		location.reload();
+	});		
+	$('#cancelCart').click(function(e) {
+		e.preventDefault();				
+		CancelCart();		
 	});	
 	$('a[href="/refresh"]').click(function(e) {
 		e.preventDefault();
@@ -33,6 +35,7 @@ function AddToCart(id, count = 1){
 		},
 	})
 	.done(function() {
+		GetCartCount();
 		console.log("success");
 	})
 	.fail(function() {
@@ -53,6 +56,26 @@ function RemoveFromCart(id){
 		},
 	})
 	.done(function() {
+		location.reload();
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+	
+}
+function CancelCart(){
+	$.ajax({
+		url: '/cart/cancel',
+		type: 'POST',
+		//dataType: 'json',
+		data: {},
+	})
+	.done(function() {
+		location.reload();
 		console.log("success");
 	})
 	.fail(function() {

@@ -15,10 +15,10 @@ class CrateTableCategories extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('guid'); //Айдишник в базе 1С
+            $table->string('guid'); //Айдишник в базе 1С
             $table->string('name');
             $table->string('image');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

@@ -191,7 +191,7 @@ class Curl{
 	 */
 	public function config_load($file)
 	{
-	    $data = file_get_contents(app_path().'\Helpers\\'.$file);
+	    $data = file_get_contents(app_path().'/Helpers/'.$file);
 	    $data = json_decode($data, 1);
 	    
 	    curl_setopt_array($this->ch, $data);

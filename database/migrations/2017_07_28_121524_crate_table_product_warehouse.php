@@ -13,6 +13,7 @@ class CrateTableProductWarehouse extends Migration
      */
     public function up()
     {
+        return;
         Schema::create('product_warehouse', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('product');
