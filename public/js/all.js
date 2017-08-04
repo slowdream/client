@@ -16,7 +16,8 @@ $(document).ready(function() {
 	});	
 	$('a[href="/refresh"]').click(function(e) {
 		e.preventDefault();
-		location.reload();
+		//location.reload();
+		RefreshData();
 	});
 });
 
@@ -95,6 +96,26 @@ function GetCartCount(){
 		data: {},
 		success: function(data){
     		$('.count').text(data);
+  		}
+	})
+	.done(function() {
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+}
+function RefreshData(){
+	$.ajax({
+		url: '/refresh',
+		type: 'POST',
+		//dataType: 'json',
+		data: {},
+		success: function(data){
+    		console.log(data);
   		}
 	})
 	.done(function() {

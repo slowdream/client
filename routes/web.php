@@ -18,13 +18,20 @@
 
 Route::group(['middleware' => 'web'],function(){
 
-	Route::get('/1c','mainController@getDataFrom1C');
+	Route::get('/1c',['as' => '1с', 'uses' => 'mainController@getDataFrom1C']);
 	Route::get('/',function(){
-		return redirect()->route('categorys');	
+		return redirect()->route('category');	
+	})->name('home');
+	Route::get('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
+	//Route::get('/items/{id}',['as' => 'items', 'uses' => 'mainController@items']);
+
+	Route::post('/refresh', function(){
+		$path = base_path();
+		$echo = `cd {$path} && git pull && php artisan migrate:refresh`;
+		return $echo;		
 	});
-	Route::get('/categorys/{id?}',['as' => 'categorys', 'uses' => 'mainController@categorys']);
-	Route::get('/items/{id}',['as' => 'items', 'uses' => 'mainController@items']);
 });
+
 
 
 Route::group(['prefix' => 'cart'], function() {

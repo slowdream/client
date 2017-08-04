@@ -4,9 +4,9 @@
 <div class="cat_wrapper">
 	@foreach ($categorys as $item)
 		<div class="item">
-			<a href="/items/{{ $item->id }}">
+			<a href="/category/{{ $item->guid }}">
 				<div class="img_wrapper">
-					<img src="/img/obchestroi.png" alt="">
+					<!--<img src="/img/obchestroi.png" alt="">-->
 				</div>
 				<span class="title">{{ $item->name }}</span>
 			</a>

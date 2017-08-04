@@ -8420,11 +8420,23 @@ main {
       flex-basis: 300px;
 }
 
-.cat_wrapper .item .title {
+.cat_wrapper .item a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100%;
+}
+
+.cat_wrapper .item a .title {
   display: block;
   line-height: 30px;
   text-align: center;
-  padding-top: 10px;
   font-size: 20px;
 }
 
@@ -8449,5 +8461,28 @@ main {
 
 .cart_btns_wrapper button i {
   margin-right: 15px;
+}
+
+aside {
+  position: absolute;
+  right: 0;
+  padding-top: 80px;
+  height: 100%;
+  top: 0;
+  background: #CCC;
+  width: 100px;
+}
+
+aside button {
+  display: block;
+  margin: 10px auto;
+  width: 50px;
+  height: 50px;
+}
+
+aside button:last-child {
+  position: absolute;
+  bottom: 0;
+  right: 25px;
 }
 

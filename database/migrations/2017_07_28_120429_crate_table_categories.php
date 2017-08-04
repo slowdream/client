@@ -17,8 +17,10 @@ class CrateTableCategories extends Migration
             $table->increments('id');
             $table->string('guid'); //Айдишник в базе 1С
             $table->string('name');
-            $table->string('image');
-            $table->text('description')->nullable();
+            //$table->string('image');
+            $table->string('parent_id')->nullable();
+            $table->boolean('items_parent')->default(false);
+            //$table->text('description')->nullable();
             $table->timestamps();
         });
     }
