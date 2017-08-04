@@ -27,7 +27,7 @@ Route::group(['middleware' => 'web'],function(){
 
 	Route::post('/refresh', function(){
 		$path = base_path();
-		$echo = `cd {$path} && git pull && php artisan migrate:refresh`;
+		$echo = `cd {$path} && git fetch --all && git reset --hard && php artisan migrate:refresh`;
 		return $echo;		
 	});
 });
