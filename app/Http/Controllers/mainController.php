@@ -149,7 +149,8 @@ class mainController extends Controller
 			//$products = Product::where('category_id', $id)->take(10)->get();
 			//return view('parts.items', ['products' => $products]);
 		} else {
-			$products = Product::where('category_id', $id)->take(9)->get();
+			$products = Category::where('guid', $id)->first()->products()->take(9)->get();
+			//$products = Product::where('category_id', $id)->take(9)->get();
 			return view('parts.items', ['products' => $products]);
 			//return view('parts.categorys', ['category' => $categorys]);
 		}
