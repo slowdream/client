@@ -184,9 +184,6 @@ return [
          *  Мои хелперы
          */
 
-        //App\Providers\CurlServiceProvider::class,
-        App\Providers\TextParserServiceProvider::class,
-
     ],
 
     /*
@@ -237,6 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Curl' => App\Helpers\Curl::class,
+        'Pdf' => App\Helpers\Pdf::class,
 
     ],
 

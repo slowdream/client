@@ -32,7 +32,13 @@ Route::group(['middleware' => 'web'],function(){
 	});
 });
 
-
+Route::get('/search', [
+    'as' => 'search',
+    'uses' => 'mainController@search'
+]);
+Route::get('/pdf', [
+    'uses' => 'mainController@pdf'
+]);
 
 Route::group(['prefix' => 'cart'], function() {
 	Route::get('/', ['as' => 'cart', 'uses' => 'cartController@index']);

@@ -9,6 +9,7 @@ use App\Product;
 use App\Category;
 
 use Curl;
+use Pdf;
 
 class mainController extends Controller
 {
@@ -38,95 +39,34 @@ class mainController extends Controller
 		$data = json_decode($items['html'], true);
 
 		foreach ($data as $val) {
-			$category = new Category;
-			//$category = new Category;
-			//$category = 
+
 			$category = $category::firstOrCreate([
 				'guid' => $val['groupid'],
 				'name' => $val['group'],
 			]);
+			
 			$category->update([
 				'items_parent' => true
 			]);
-			// $category = $category::firstOrNew(['guid' => $val['groupid']]);
-			// $category->name = $val['group'];
-			// $category->guid = $val['groupid'];
-			// $category->items_parent = true;
-			// $category->image = 'test image.jpg';
-			// $category->save();
-		
 			
-			$product = new Product([
+			$product = Product::firstOrNew([	
+				'guid' => $val['id'],				
+			]);
+			$product->fill([
 				'name' => $val['name'],
-				'guid' => $val['id'],
 				'image' => 'test image.jpg',
 				'description' => 'test description',
 				'price' => $val['price'],
 				'count' => $val['mount'],
 				'unit' => 'шт'
 			]);
-			//$category = Category::find($category->id);
 
 			$category->products()->save($product);
 		}
 
-		return redirect()->route('1с');	
+		return redirect()->route('home');	
 	}
-	// public function getDataFrom1C()
-	// {
-	// 	$username = 'admin';
-	// 	$password = 1252351;
-	// 	$curl = new Curl('http://95.213.156.3:8888/');
-	// 	$curl->config_load('trip.cfg');
-	// 	$curl->set(CURLOPT_USERPWD, $username . ":" . $password);
-	// 	$items = $curl->request('crm/hs/info?action=Goods');
-	// 	$data = json_decode($items['html'], true);
-
-	// 	foreach ($data as $val) {
-
-	// 		$category = new Category;
-	// 		$cat = $category::where('guid', $val['groupid'])->first();
-	// 		if (count($cat) > 0){
-	// 			$category = $cat;
-	// 		} else {
-	// 			$category->name = $val['group'];
-	// 			$category->guid = $val['groupid'];
-	// 			$category->items_parent = true;
-	// 			$category->image = 'test image.jpg';
-	// 			$category->save();
-	// 		}
-			
-	// 		$product = new Product([
-	// 			'name' => $val['name'],
-	// 			'guid' => $val['id'],
-	// 			'image' => 'test image.jpg',
-	// 			'description' => 'test description',
-	// 			'price' => $val['price'],
-	// 			'count' => $val['mount'],
-	// 			'unit' => 'шт'
-	// 		]);
-
-	// 		$category->products()->save($product);
-	// 	}
-
-	// 	$categorys = $curl->request('/crm/hs/info?action=group');
-	// 	$data = json_decode($categorys['html'], true);
-
-	// 	foreach ($data as $val) {
-
-	// 		$category = new Category;
-	// 		$cat = $category::where('guid', $val['groupid'])->first();
-	// 		if (count($cat) == 0){
-	// 			$category->name = $val['group'];
-	// 			$category->guid = $val['groupid'];
-	// 			$category->parent_id = $val['parentid'];
-	// 			$category->image = 'test image.jpg';
-	// 			$category->save();
-	// 		}
-	// 	}
-
-	// 	return redirect()->route('home');	
-	// }
+	
 
 	public function index()
 	{
@@ -135,42 +75,34 @@ class mainController extends Controller
 
 	public function getContent($id = '')
 	{
-		// if ($id == '') {
-		// 	$categorys = Category::where('parent_id', '')->take(10)->get();
-		// 	return view('parts.categorys', ['categorys' => $categorys]);
-		// }
-
-
-		$category = Category::where('parent_id', $id)->take(9)->get();
-		//dd($category);
+		$category = Category::where('parent_id', $id)->take(9)->get();		
 
 		if (count($category)) {
-			return view('parts.categorys', ['categorys' => $category]);
-			//$products = Product::where('category_id', $id)->take(10)->get();
-			//return view('parts.items', ['products' => $products]);
+			return view('parts.categorys', ['categorys' => $category]);			
 		} else {
-			$products = Category::where('guid', $id)->first()->products()->take(9)->get();
-			//$products = Product::where('category_id', $id)->take(9)->get();
+			$products = Category::where('guid', $id)->first()->products()->take(9)->get();			
 			return view('parts.items', ['products' => $products]);
-			//return view('parts.categorys', ['category' => $categorys]);
 		}
 	}
+	public function search(Request $request)
+	{		
+		$error = ['error' => 'No results found, please try with different keywords.'];
+		$query = '%'.$request->get('q') .'%';
+		$posts = Product::where('name', 'like', $query)->get();
+		dump($posts);
+		//return $posts->count() ? $posts : $error;
+	}
+	public function pdf()
+	{
 
-	// public function categorys($id = '')
-	// {
-	// 	if ($id == '') {
-	// 		$categorys = Category::find(1)->take(20)->get();
-	// 	}else {
-	// 		$categorys = Category::find($id)->take(20)->get();
-	// 	}
-	// 	return view('parts.categorys', ['categorys' => $categorys]);
-	// }
 
-	// public function items($id)
-	// {
-	// 	//$products = Category::find($id)->products()->take(20)->get();
-	// 	$products = Product::where('category_id', $id)->take(20)->get();
 
-	// 	return view('parts.items', ['products' => $products]);
-	// }
+		$pdf = new Pdf([
+			'name' => 'name',
+			'order_num' => 'order_num',
+			'barcode' => 'barcode',
+		]);
+		$pdf = $pdf->process();
+		file_put_contents(resource_path('reciepts/reciepts2.pdf'), $pdf);
+	}
 }
