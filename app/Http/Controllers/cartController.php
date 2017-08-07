@@ -84,7 +84,7 @@ class cartController extends Controller
         $pdf = $pdf->process();
         file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
         $file = resource_path('reciepts/reciept.pdf');
-        $print = `lpr {$file}`;
+        $print = `lp {$file}`;
         return $print;
     }
 }
