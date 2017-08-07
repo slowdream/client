@@ -3,16 +3,20 @@ $(document).ready(function() {
 		e.preventDefault();
 		var id = $(this).data('id');
 		var count = 1;
-		AddToCart(id, count);		
+		AddToCart(id, count);
 	});	
 	$('.removeFromCart').click(function(e) {
 		e.preventDefault();
-		var id = $(this).data('id');		
+		var id = $(this).data('id');
 		RemoveFromCart(id);
 	});		
 	$('#cancelCart').click(function(e) {
-		e.preventDefault();				
-		CancelCart();		
+		e.preventDefault();
+		CancelCart();
+	});		
+	$('#sendCart').click(function(e) {
+		e.preventDefault();
+		SendCart();
 	});	
 	$('a[href="/refresh"]').click(function(e) {
 		e.preventDefault();
@@ -119,7 +123,33 @@ function RefreshData(){
   		}
 	})
 	.done(function() {
-		location.replace('/1c')
+		location.replace('/1c');
+		console.log("success");
+	})
+	.fail(function() {
+		console.log("error");
+	})
+	.always(function() {
+		console.log("complete");
+	});
+}
+
+function SendCart() {
+	$.ajax({
+		url: '/cart',
+		type: 'POST',
+		//dataType: 'json',
+		data: {
+			name: $('#name').val(),
+			order_num: $('#nomer').val(),
+			summ: $('#summ').val()
+		},
+		success: function(data){
+			$('main').html(data);
+    		console.log(data);
+  		}
+	})
+	.done(function() {
 		console.log("success");
 	})
 	.fail(function() {

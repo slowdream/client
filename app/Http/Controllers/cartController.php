@@ -8,6 +8,8 @@ use App\Order;
 use App\OrderProds;
 use App\Product;
 
+use Pdf;
+
 class cartController extends Controller
 {
 
@@ -35,7 +37,6 @@ class cartController extends Controller
     {
 
         $id = $request->input('id');
-        dump($this->order->products->find($id));
         $count = $request->input('count');
         $order_id = $this->order->id;
         $product = Product::find($id);        
@@ -45,9 +46,9 @@ class cartController extends Controller
             'price' => $product->price,            
             'order_id' => $this->order->id            
         ]);
+
         $orderProd->count = $count;
         $orderProd->save();
-        //dump($orderProd);
 
         return 'true';
     }
@@ -66,5 +67,24 @@ class cartController extends Controller
             $reason = $request->input('reason');
         }
         $this->order->update(['status'=>'cancel', 'whyCanceled' => $reason]);
-    }   
+    }
+
+    public function complete(Request $request)
+    {
+        // $pdf = new Pdf([
+        //     'name' => 'name',
+        //     'order_num' => 'order_num',
+        //     'barcode' => 'barcode',
+        // ]);        
+        $pdf = new Pdf([
+            'name' => $request->input('name'),
+            'order_num' => $request->input('nomer'),
+            'summ' => $request->input('summ'),
+        ]);
+        $pdf = $pdf->process();
+        file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
+        $file = resource_path('reciepts/reciept.pdf');
+        $print = `lpr {$file}`;
+        return $print;
+    }
 }

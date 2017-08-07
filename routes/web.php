@@ -45,5 +45,6 @@ Route::group(['prefix' => 'cart'], function() {
 	Route::post('/count', ['as' => 'cartCount', 'uses' => 'cartController@count']);
 	Route::post('/add', ['as' => 'cartAdd', 'uses' => 'cartController@add']);
 	Route::post('/remove', ['as' => 'cartRemove', 'uses' => 'cartController@remove']);
-	Route::post('/cancel', ['as' => 'cartcancel', 'uses' => 'cartController@cancel']);
+	Route::post('/cancel', ['as' => 'cartCancel', 'uses' => 'cartController@cancel']);
+	Route::post('/complete', ['as' => 'cartComplete', 'uses' => 'cartController@complete']);
 });

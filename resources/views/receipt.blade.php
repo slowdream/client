@@ -1,5 +1,5 @@
 {{ $name }}
 {{ $order_num }}
-{{ $barcode }}
+{{ $summ }}
 
-sss
+test

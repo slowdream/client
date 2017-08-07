@@ -9,7 +9,6 @@ use App\Product;
 use App\Category;
 
 use Curl;
-use Pdf;
 
 class mainController extends Controller
 {
@@ -91,18 +90,5 @@ class mainController extends Controller
 		$posts = Product::where('name', 'like', $query)->get();
 		dump($posts);
 		//return $posts->count() ? $posts : $error;
-	}
-	public function pdf()
-	{
-
-
-
-		$pdf = new Pdf([
-			'name' => 'name',
-			'order_num' => 'order_num',
-			'barcode' => 'barcode',
-		]);
-		$pdf = $pdf->process();
-		file_put_contents(resource_path('reciepts/reciepts2.pdf'), $pdf);
 	}
 }
