@@ -5,6 +5,7 @@ use Dompdf\Dompdf;
 
 class Pdf{
 
+
 	private $Dompdf;
 
 	private $name;
