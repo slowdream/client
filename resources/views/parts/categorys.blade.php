@@ -1,10 +1,9 @@
-@extends('welcome')
 
-@section('main') 
+
 <div class="cat_wrapper">
 	@foreach ($categorys as $item)
 		<div class="item">
-			<a href="/category/{{ $item->guid }}">
+			<a href="/category/{{ $item->guid }}" class="ajax_item">
 				<div class="img_wrapper">
 					<!--<img src="/img/obchestroi.png" alt="">-->
 				</div>
@@ -13,4 +12,3 @@
 		</div>
 	@endforeach		
 </div>
-@endsection

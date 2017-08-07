@@ -19,26 +19,27 @@
 		<header>
 			<nav>
 				<ul>
-					<li><a href="/back"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
-					<li><a href="/category"><i class="fa fa-home" aria-hidden="true"></i></a></li>
-					<li><a href="/search"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-					<li><a href="/card"><i class="fa fa-credit-card" aria-hidden="true"></i></a></li>
-					<li><a href="/refresh"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
+					<li><a href="/back" class="ajax_item"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
+					<li><a href="/category" class="ajax_item"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+					<li><a href="/search" class="ajax_item"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+					<li><a href="/card" class="ajax_item"><i class="fa fa-credit-card" aria-hidden="true"></i></a></li>
+					<li><a href="/refresh" class="ajax_item"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
 
-					<li><a href="/cart" class="cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="count"></span></a></li>
+					<li><a href="/cart" class="cart ajax_item"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="count"></span></a></li>
 				</ul>
 			</nav>
 		</header>
-		<main>
+
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12">
-					@yield('main')
+						<main>
+						@yield('main')
+						</main>
 					</div>
 				</div>
 			</div>
 		
-		</main>
 		<aside>
 			<button class="up"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
 			<button class="down"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>

@@ -34,7 +34,12 @@ class Pdf{
 
 	private function generateBarcode($value='')
 	{
-
+// $dompdf = new Dompdf([
+// 	'fontDir' => '/var/www/my_site/fonts',//указываем путь к папке, в которой лежат скомпилированные шрифты
+// 	'defaultFont' => 'dompdf_arial',//делаем наш шрифт шрифтом по умолчанию
+// ]);
+// $dompdf->load_html($html, 'UTF-8');
+// $dompdf->render();
 	}
 
 	public function process()
@@ -43,8 +48,9 @@ class Pdf{
 		//$html = '123';
 		$this->Dompdf->loadHtml($html);
 
-		$this->Dompdf->setPaper('my', 'portrait');
-		$this->Dompdf->set_option('defaultFont', 'FreeMono');
+		//$this->Dompdf->setPaper('my', 'portrait');
+		//$this->Dompdf->set_option('fontDir', base_path('/libs/dompdf/lib/fonts'));
+		$this->Dompdf->set_option('defaultFont', 'Roboto-Regular.ttf');
 
 		$this->Dompdf->render();
 

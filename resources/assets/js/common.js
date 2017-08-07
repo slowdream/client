@@ -1,25 +1,51 @@
 $(document).ready(function() {
-	$('.addToCart').click(function(e) {
+	//menu block
+	$('body').on('click', '.ajax_item', function(e) {
+		e.preventDefault();
+		var url = $(this).attr('href');
+		console.log(url);
+		$.ajax({
+			url: url,
+			type: 'POST',
+			//dataType: 'json',
+			data: {},		
+			success: function(data) {
+			$('main').html(data);
+		}
+		})
+		.done(function() {
+			console.log("success");
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		.always(function() {
+			console.log("complete");
+		});
+	});
+	//end menu block
+
+	$('main').on('click', '.addToCart', function(e) {
 		e.preventDefault();
 		var id = $(this).data('id');
 		var count = 1;
 		AddToCart(id, count);
 	});	
-	$('.removeFromCart').click(function(e) {
+	$('main').on('click', '.removeFromCart', function(e) {
 		e.preventDefault();
 		var id = $(this).data('id');
 		RemoveFromCart(id);
 	});		
-	$('#cancelCart').click(function(e) {
+	$('main').on('click', '#cancelCart', function(e) {
 		e.preventDefault();
 		CancelCart('UserCancel');
 		location.reload();
 	});		
-	$('#sendCart').click(function(e) {
+	$('main').on('click', '#sendCart', function(e) {
 		e.preventDefault();
 		SendCart();
 	});	
-	$('a[href="/refresh"]').click(function(e) {
+	$('main').on('click', 'a[href="/refresh"]', function(e) {
 		e.preventDefault();
 		//location.reload();
 		RefreshData();
@@ -38,7 +64,7 @@ function AddToCart(id, count = 1){
 		data: {
 			id: id,
 			count: count
-		},
+		}
 	})
 	.done(function() {
 		GetCartCount();

@@ -9,6 +9,7 @@ use App\Product;
 use App\Category;
 
 use Curl;
+use Pdf;
 
 class mainController extends Controller
 {
@@ -69,13 +70,15 @@ class mainController extends Controller
 
 	public function index()
 	{
-		$this->getDataFrom1C();
+		return view('welcome');
 	}
 
-	public function getContent($id = '')
+	public function getContent($id ='',Request $request)
 	{
 		$category = Category::where('parent_id', $id)->take(9)->get();		
-
+		if ($request->input('id')) {
+			$id = $request->input('id');
+		}
 		if (count($category)) {
 			return view('parts.categorys', ['categorys' => $category]);			
 		} else {
@@ -85,10 +88,22 @@ class mainController extends Controller
 	}
 	public function search(Request $request)
 	{		
-		$error = ['error' => 'No results found, please try with different keywords.'];
 		$query = '%'.$request->get('q') .'%';
-		$posts = Product::where('name', 'like', $query)->get();
-		dump($posts);
-		//return $posts->count() ? $posts : $error;
+		$products = Product::where('name', 'like', $query)->get();
+
+		return view('parts.items', ['products' => $products]);
+	}	
+	public function pdf()
+	{		
+        $pdf = new Pdf([
+            'name' => 'имя',
+            'order_num' => '123',
+            'summ' => '5000'
+        ]);
+        $pdf = $pdf->process();
+        file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
+        //$file = resource_path('reciepts/reciept.pdf');
+        //$print = `lp {$file}`;
+        return $pdf;
 	}
 }

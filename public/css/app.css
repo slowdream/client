@@ -8382,7 +8382,6 @@ header nav ul li:last-child {
 }
 
 main {
-  border: 1px solid #CCC;
   height: 100vh;
   overflow-y: auto;
   padding-top: 80px;
@@ -8407,6 +8406,7 @@ main {
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  width: 100%;
 }
 
 .cat_wrapper .item {

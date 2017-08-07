@@ -19,10 +19,9 @@
 Route::group(['middleware' => 'web'],function(){
 
 	Route::get('/1c',['as' => '1с', 'uses' => 'mainController@getDataFrom1C']);
-	Route::get('/',function(){
-		return redirect()->route('category');	
-	})->name('home');
-	Route::get('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
+	Route::get('/',['as' => 'home', 'uses' => 'mainController@index']);
+	Route::post('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
+	//Route::post('/category',['as' => 'category', 'uses' => 'mainController@getContent']);
 	//Route::get('/items/{id}',['as' => 'items', 'uses' => 'mainController@items']);
 
 	Route::post('/refresh', function(){
@@ -33,7 +32,7 @@ Route::group(['middleware' => 'web'],function(){
 	});
 });
 
-Route::get('/search', [
+Route::post('/search', [
     'as' => 'search',
     'uses' => 'mainController@search'
 ]);
@@ -42,7 +41,7 @@ Route::get('/pdf', [
 ]);
 
 Route::group(['prefix' => 'cart'], function() {
-	Route::get('/', ['as' => 'cart', 'uses' => 'cartController@index']);
+	Route::post('/', ['as' => 'cart', 'uses' => 'cartController@index']);
 	Route::post('/count', ['as' => 'cartCount', 'uses' => 'cartController@count']);
 	Route::post('/add', ['as' => 'cartAdd', 'uses' => 'cartController@add']);
 	Route::post('/remove', ['as' => 'cartRemove', 'uses' => 'cartController@remove']);

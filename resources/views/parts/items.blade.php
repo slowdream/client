@@ -1,6 +1,4 @@
-@extends('welcome')
 
-@section('main') 
 
 <table class="table table-striped">
 	<tbody>
@@ -24,5 +22,3 @@
 
 </table>
 
-
-@endsection

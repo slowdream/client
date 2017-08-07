@@ -1,6 +1,3 @@
-@extends('welcome')
-
-@section('main') 
 
 @if(count($products) <=0 )
 <div class="container">
@@ -49,5 +46,3 @@ $summ += $item->price;
 <input type="text" hidden="hidden" id="name" value="Имя магазина">
 <input type="text" hidden="hidden" id="nomer" value="00001">
 @endif
-
-@endsection
