@@ -128,7 +128,7 @@ function RefreshData(){
   		}
 	})
 	.done(function() {
-		location.replace('/1c');
+		//location.replace('/1c');
 		console.log("success");
 	})
 	.fail(function() {

@@ -79,7 +79,7 @@ class cartController extends Controller
         $pdf = new Pdf([
             'name' => $request->input('name'),
             'order_num' => $request->input('nomer'),
-            'summ' => $request->input('summ'),
+            'summ' => $request->input('summ')
         ]);
         $pdf = $pdf->process();
         file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
