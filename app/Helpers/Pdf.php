@@ -44,6 +44,7 @@ class Pdf{
 		$this->Dompdf->loadHtml($html);
 
 		$this->Dompdf->setPaper('my', 'portrait');
+		$this->Dompdf->set_option('defaultFont', 'FreeMono');
 
 		$this->Dompdf->render();
 
