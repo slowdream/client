@@ -12,7 +12,8 @@ $(document).ready(function() {
 	});		
 	$('#cancelCart').click(function(e) {
 		e.preventDefault();
-		CancelCart();
+		CancelCart('UserCancel');
+		location.reload();
 	});		
 	$('#sendCart').click(function(e) {
 		e.preventDefault();
@@ -72,15 +73,19 @@ function RemoveFromCart(id){
 	});
 	
 }
-function CancelCart(){
+function CancelCart(reason = ''){
 	$.ajax({
 		url: '/cart/cancel',
 		type: 'POST',
 		//dataType: 'json',
-		data: {},
+		data: {
+			reason: reason
+		},
+		success: function () {
+    		GetCartCount();
+		}
 	})
 	.done(function() {
-		location.reload();
 		console.log("success");
 	})
 	.fail(function() {
@@ -136,7 +141,7 @@ function RefreshData(){
 
 function SendCart() {
 	$.ajax({
-		url: '/cart',
+		url: '/cart/complete',
 		type: 'POST',
 		//dataType: 'json',
 		data: {
@@ -147,6 +152,7 @@ function SendCart() {
 		success: function(data){
 			$('main').html(data);
     		console.log(data);
+    		CancelCart('UserCancel');
   		}
 	})
 	.done(function() {

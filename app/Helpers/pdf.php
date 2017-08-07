@@ -8,8 +8,9 @@ class Pdf{
 	private $Dompdf;
 
 	private $name;
+	private $summ;
 	private $order_num;
-	private $barcode;
+	//private $barcode;
 
 	function __construct(array $config)
 	{
@@ -17,16 +18,16 @@ class Pdf{
 
 		$this->name = $config['name'];
 		$this->order_num = $config['order_num'];
-		$this->barcode = $config['barcode'];
+		$this->summ = $config['summ'];
 	}
 
 	private function makeTemplate()
 	{
-		$this->barcode = $this->generateBarcode();
+		//$this->barcode = $this->generateBarcode();
 		return view('receipt',[
 			'name' => $this->name,
 			'order_num' => $this->order_num,
-			'barcode' => $this->barcode
+			'summ' => $this->summ
 		]);
 	}
 
