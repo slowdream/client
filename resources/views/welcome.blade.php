@@ -12,7 +12,12 @@
 		<!-- style -->
 		<link href="/css/app.css" rel="stylesheet" type="text/css">
 
-
+	<!-- FontAwesome -->
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!-- jquery -->
+	<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<!-- My js -->
+	<script src="/js/all.js?{{date('now')}}"></script>
 
 	</head>
 	<body>
@@ -20,7 +25,7 @@
 			<nav>
 				<ul>
 					<li><a href="/back" class="ajax_item"><i class="fa fa-arrow-left" aria-hidden="true"></i></a></li>
-					<li><a href="/category" class="ajax_item"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+					<li><a href="/category" class="ajax_item home"><i class="fa fa-home" aria-hidden="true"></i></a></li>
 					<li><a href="/search" class="ajax_item"><i class="fa fa-search" aria-hidden="true"></i></a></li>
 					<li><a href="/card" class="ajax_item"><i class="fa fa-credit-card" aria-hidden="true"></i></a></li>
 					<li><a href="/refresh" class="ajax_item"><i class="fa fa-refresh" aria-hidden="true"></i></a></li>
@@ -30,29 +35,18 @@
 			</nav>
 		</header>
 
-			<div class="container">
-				<div class="row">
-					<div class="col-xs-12">
-						<main>
-						@yield('main')
-						</main>
-					</div>
-				</div>
-			</div>
-		
+		<main>			
+		</main>
+
 		<aside>
 			<button class="up"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
 			<button class="down"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 		</aside>
+
 		<footer>
-			
+			<img src="/img/banner.png" alt="">
 		</footer>
 	</body>
 
-	<!-- FontAwesome -->
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-	<!-- jquery -->
-	<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<!-- My js -->
-	<script src="/js/all.js"></script>
+
 </html>

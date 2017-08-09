@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).on('load', function() {
 	//menu block
 	$('body').on('click', '.ajax_item', function(e) {
 		e.preventDefault();
@@ -10,8 +10,8 @@ $(document).ready(function() {
 			//dataType: 'json',
 			data: {},		
 			success: function(data) {
-			$('main').html(data);
-		}
+				$('main').html(data);
+			}
 		})
 		.done(function() {
 			console.log("success");
@@ -53,7 +53,9 @@ $(document).ready(function() {
 });
 
 $(window).on('load', function() {
+	
 	GetCartCount();
+	$('.home').trigger('click');
 });
 
 function AddToCart(id, count = 1){
@@ -85,10 +87,12 @@ function RemoveFromCart(id){
 		//dataType: 'json',
 		data: {
 			id: id
-		},
+		},			
+		success: function(data) {
+			$('main').html(data);
+		}
 	})
 	.done(function() {
-		location.reload();
 		console.log("success");
 	})
 	.fail(function() {

@@ -1,8 +1,10 @@
 main {
 	//border: 1px solid #CCC;
 	height: 100vh;
+	height: calc(100vh - 115px);
 	overflow-y: auto;
 	padding-top: 80px;
+	padding-bottom: 115px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
