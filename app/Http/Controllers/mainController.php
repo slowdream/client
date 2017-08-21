@@ -8,21 +8,17 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
 
-use Curl;
 use Pdf;
+use Server1C;
 
 class mainController extends Controller
 {
 	public function getDataFrom1C()
 	{
-		$username = 'admin';
-		$password = 1252351;
-		$curl = new Curl('http://95.213.156.3:8888/');
-		$curl->config_load('trip.cfg');
-		$curl->set(CURLOPT_USERPWD, $username . ":" . $password);
 
+		$curl = new Server1C();
 
-		$categorys = $curl->request('/crm/hs/info?action=group');
+		$categorys = $curl->request('crm/hs/Terminal/?action=group');
 		$data = json_decode($categorys['html'], true);
 
 		$category = new Category;
@@ -35,7 +31,7 @@ class mainController extends Controller
 		}
 
 
-		$items = $curl->request('crm/hs/info?action=Goods');
+		$items = $curl->request('crm/hs/Terminal/?action=Goods');
 		$data = json_decode($items['html'], true);
 
 		foreach ($data as $val) {

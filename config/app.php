@@ -235,6 +235,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Curl' => App\Helpers\Curl::class,
         'Pdf' => App\Helpers\Pdf::class,
+        'Server1C' => App\Helpers\Server1C::class,
 
     ],
 

@@ -9,6 +9,7 @@ use App\OrderProds;
 use App\Product;
 
 use Pdf;
+use Server1C;
 
 class cartController extends Controller
 {
@@ -58,7 +59,8 @@ class cartController extends Controller
         $id = $request->input('id');
         $this->order->products->find($id)->delete();
         return 'true';
-    }    
+    }
+
     public function cancel(Request $request)
     {   
 
@@ -71,11 +73,6 @@ class cartController extends Controller
 
     public function complete(Request $request)
     {
-        // $pdf = new Pdf([
-        //     'name' => 'name',
-        //     'order_num' => 'order_num',
-        //     'barcode' => 'barcode',
-        // ]);        
         $pdf = new Pdf([
             'name' => $request->input('name'),
             'order_num' => $request->input('nomer'),
@@ -86,5 +83,24 @@ class cartController extends Controller
         $file = resource_path('reciepts/reciept.pdf');
         $print = `lp {$file}`;
         return $print;
+    }
+    
+    private function sendTo1C(Request $request)
+    
+        $curl = new Server1C();
+        $arr = [
+            'idterm' => 1313
+            'prods' => $this->order->products()->all(),
+            'id' => $this->order->id(),
+            'summ' => $this->order->summ,
+            'cash' => 1346,
+            'tel' => $request->input('tel'),
+            'comment' => $request->input('comment'),
+            'date' => date('YmdHis')
+        ];
+        $curl->post($arr);
+        $response = $curl->request('crm/hs/Terminal/?action=group');
+
+        $data = json_decode($response['html'], true);
     }
 }
