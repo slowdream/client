@@ -86,7 +86,7 @@ class cartController extends Controller
     }
 
     private function sendTo1C(Request $request)
-    
+    {
         $curl = new Server1C();
         $arr = [
             'idterm' => 1313,

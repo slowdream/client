@@ -23,8 +23,9 @@ class Server1C{
 	}	
 	public function post($post)
 	{
-		$postData = [];
-        $postData[$this->api_param] = json_encode($post, JSON_UNESCAPED_UNICODE);
-		return $this->curl->post($postData);
+		$this->curl->clear_headers();
+		$this->curl->add_header("Content-Type: application/json");
+        $postData = json_encode($post, JSON_UNESCAPED_UNICODE);
+		return $this->curl->post($postData, false);
 	}
 }

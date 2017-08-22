@@ -136,15 +136,17 @@ class Curl{
 	 * array - ассоциативный массив с параметрами
 	 * false - отлючить обращение методом POST
 	 */
-	public function post($data)
+	public function post($data, $decode = true)
 	{
 	    if ($data === false) {
 	        $this->set(CURLOPT_POST, false);
 	        return $this;
 	    }
-
+	    if($decode){
+	    	$data = http_build_query($data);
+	    }
 	    $this->set(CURLOPT_POST, true);
-	    $this->set(CURLOPT_POSTFIELDS, http_build_query($data));
+	    $this->set(CURLOPT_POSTFIELDS, $data);
 	    return $this;
 	}
 
@@ -191,7 +193,7 @@ class Curl{
 	 */
 	public function config_load($file)
 	{
-	    $data = file_get_contents(app_path().'/Helpers/'.$file);
+	    $data = file_get_contents(app_path('/Helpers/').$file);
 	    $data = json_decode($data, 1);
 	    
 	    curl_setopt_array($this->ch, $data);
@@ -199,7 +201,6 @@ class Curl{
 	    foreach ($data as $key => $val) {
 	        $this->options[$key] = $val;
 	    }
-	    
 	    return $this;
 	}
 
