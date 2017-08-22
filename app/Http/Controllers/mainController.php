@@ -71,10 +71,19 @@ class mainController extends Controller
 	public function api(Request $request)
 	{
 		$arr = $request->input('params');
+		$arr = json_decode($arr, true);
+
+		$arr = json_encode($arr);
+
 		$curl = new Server1C();
 		$curl->post($arr);
 		$response = $curl->request('crm/hs/Terminal/zakaz');
-		echo $response['html'];
+		
+		if ($request->input('dump')) {
+			dump($response['html']);
+		} else {
+			echo $response['html'];
+		}
 		die();
 	}
 
