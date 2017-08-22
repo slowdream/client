@@ -84,13 +84,13 @@ class cartController extends Controller
         $print = `lp {$file}`;
         return $print;
     }
-    
+
     private function sendTo1C(Request $request)
     
         $curl = new Server1C();
         $arr = [
-            'idterm' => 1313
-            'prods' => $this->order->products()->all(),
+            'idterm' => 1313,
+            'prods' => $this->order->products()->all(), // допилить до [id=>count,]
             'id' => $this->order->id(),
             'summ' => $this->order->summ,
             'cash' => 1346,
@@ -98,6 +98,7 @@ class cartController extends Controller
             'comment' => $request->input('comment'),
             'date' => date('YmdHis')
         ];
+        
         $curl->post($arr);
         $response = $curl->request('crm/hs/Terminal/?action=group');
 

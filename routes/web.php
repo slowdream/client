@@ -30,6 +30,7 @@ Route::group(['middleware' => 'web'],function(){
 		//`php artisan migrate:refresh`;
 		return $echo;		
 	});
+	Route::post('/api',['as' => 'api', 'uses' => 'mainController@api']);
 });
 
 Route::post('/search', [

@@ -67,6 +67,15 @@ class mainController extends Controller
 	public function index()
 	{
 		return view('welcome');
+	}	
+	public function api(Request $request)
+	{
+		$arr = $request->input('params');
+		$curl = new Server1C();
+		$curl->post($arr);
+		$response = $curl->request('crm/hs/Terminal/zakaz');
+		echo $response['html'];
+		die();
 	}
 
 	public function getContent($id ='',Request $request)
@@ -88,18 +97,5 @@ class mainController extends Controller
 		$products = Product::where('name', 'like', $query)->get();
 
 		return view('parts.items', ['products' => $products]);
-	}	
-	public function pdf()
-	{		
-        $pdf = new Pdf([
-            'name' => 'имя',
-            'order_num' => '123',
-            'summ' => '5000'
-        ]);
-        $pdf = $pdf->process();
-        file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
-        //$file = resource_path('reciepts/reciept.pdf');
-        //$print = `lp {$file}`;
-        return $pdf;
 	}
 }

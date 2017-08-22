@@ -6,6 +6,7 @@ use Curl;
 class Server1C{
 
 	private $curl;
+	private $api_param = 'params';
 
 	public function __construct() 
 	{
@@ -22,6 +23,8 @@ class Server1C{
 	}	
 	public function post($post)
 	{
-		return $this->curl->post($post);
+		$postData = [];
+        $postData[$this->api_param] = json_encode($post, JSON_UNESCAPED_UNICODE);
+		return $this->curl->post($postData);
 	}
 }
