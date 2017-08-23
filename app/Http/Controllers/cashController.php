@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Cash;
 use Server1C;
+use CashCode;
 class cashController extends Controller
 {
     public function summ()
