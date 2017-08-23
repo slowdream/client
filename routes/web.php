@@ -29,6 +29,11 @@ Route::group(['middleware' => 'web'],function(){
 		$echo = `cd {$path} && git fetch --all && git reset --hard origin/master`;
 		//`php artisan migrate:refresh`;
 		return $echo;		
+	});	
+	Route::get('/migrate', function(){
+		$path = base_path();
+		$echo = `cd {$path} && php artisan migrate:refresh`;
+		return $echo;		
 	});
 	Route::post('/api',['as' => 'api', 'uses' => 'mainController@api']);
 });
