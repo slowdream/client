@@ -40,6 +40,12 @@ Route::post('/search', [
 Route::get('/pdf', [
     'uses' => 'mainController@pdf'
 ]);
+Route::
+group(['prefix' => 'cash'], function() {
+	Route::get('/', ['uses' => 'cashController@summ']);
+	Route::get('/seed', ['uses' => 'cashController@seed']);
+	Route::get('/get', ['uses' => 'cashController@getCash']);
+});
 
 Route::group(['prefix' => 'cart'], function() {
 	Route::post('/', ['as' => 'cart', 'uses' => 'cartController@index']);

@@ -236,6 +236,7 @@ return [
         'Curl' => App\Helpers\Curl::class,
         'Pdf' => App\Helpers\Pdf::class,
         'Server1C' => App\Helpers\Server1C::class,
+        'CashCode' => App\Helpers\CashCode::class,
 
     ],
 

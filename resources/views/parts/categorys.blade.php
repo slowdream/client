@@ -10,5 +10,5 @@
 				<span class="title">{{ $item->name }}</span>
 			</a>
 		</div>
-	@endforeach		
+	@endforeach
 </div>
