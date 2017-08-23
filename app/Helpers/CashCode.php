@@ -54,7 +54,7 @@ class CashCode{
 	}
 	public function start() {
 		$this->info(['info' => "Try open..."]);
-		if (!$this->s->open()){
+		if (!$this->validator->open()){
 			$this->info['error'] = "Validator is not opened!";			
 			return false;
 		}
