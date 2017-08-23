@@ -22,6 +22,9 @@ class cashController extends Controller
 
     public function getCash(Cash $Cash)
     {
+        $timeOut = 15;
+        $timeStart = time();
+
     	$validator = new CashCode($Cash);
 		$Repeat = true;
 		while ($Repeat) {
@@ -34,7 +37,10 @@ class cashController extends Controller
 				if ($LastCode === 666) {
 					$Repeat = true;
 				}
-				dd($validator->info);
+                if ((time() - $timeStart) > $timeOut){
+                    break;
+                }
+				
 			}		
 
 			if ($Repeat) {sleep(1);}
