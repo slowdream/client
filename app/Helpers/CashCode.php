@@ -5,7 +5,7 @@ namespace App\Helpers;
 //require_once base_path().'/app/libs/cashcode/cashcodes.php';
 use App\libs\cashcode\CashValidator;
 use App\libs\cashcode\cashcodes;
-
+use Log;
 class CashCode{
 
 	use cashcodes;
@@ -45,30 +45,44 @@ class CashCode{
 		
 	public function __destruct()
 	{
-		$this->validator->open();
-		$this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"]);
+		//$this->validator->open();
+		//$this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"]);
 	}
 	public function info($val)
 	{
+		Log::info($val);
 		$this->info = array_merge($this->info, $val);
 	}
 	public function start() {
+
 		$this->info(['info' => "Try open..."]);
 		if (!$this->validator->open()){
-			$this->info['error'] = "Validator is not opened!";			
+			$this->info(['error' => "Validator is not opened!"]);
+			$this->validator->close();			
 			return false;
-		}
-		$this->info(['info' => "Reset..."]);	
+		}	
+
+		// $this->info(['info' => "send poll..."]);	
+		// if (!$this->sendCommand('Poll')){
+		// 	$this->info(['error' => "send poll error!"]);
+		// 	$this->validator->close();			
+		// 	return false;
+		// }
+
+		$this->info(['info' => "Reset..."]);
 		if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
-			$this->info(['error' => "Failed to reset!"]);
-			return false;
-		}
-		$this->info(['info' => "Enable Bill Types..."]);	
-		if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["EnableBillTypes"])) && ($this->CommandResult(3) == 0))){
-			$this->info(['error' => "Failed to set bill types!"]);
+			$this->info(['error' => "Failed to reset!",'more' => $this->CommandResult(3)]);
+			$this->validator->close();
 			return false;
 		}
 
+		$this->info(['info' => "Enable Bill Types..."]);
+		if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["EnableBillTypes"])) && ($this->CommandResult(3) == 0))){
+			$this->info(['error' => "Failed to set bill types!"]);
+			$this->validator->close();
+			return false;
+		}
+		return true;
 	}
 	//Тут у нас бесконечный loop
 	public function poll($LastCode)
@@ -84,9 +98,9 @@ class CashCode{
 					$LastCode = $Code;
 					$ExtendedCode = $this->CommandResult(4);
 					$massage = dechex($Code)."H ".$this->BillToBill_Code[$Code];
-					if ($this->BillToBill_ExtendedCode[$Code][$ExtendedCode] != "") {
-						$massage .= " - ".$this->BillToBill_ExtendedCode[$Code][$ExtendedCode];
-					}
+					// if ($this->BillToBill_ExtendedCode[$Code][$ExtendedCode] != "") {
+					// 	$massage .= " - ".$this->BillToBill_ExtendedCode[$Code][$ExtendedCode];
+					// }
 					$this->info(['massage' => $massage]);
 					switch ($Code)
 					{
@@ -121,13 +135,20 @@ class CashCode{
 	public function CommandResult($i)
 	{
 		return ord($this->validator->CommandResult[$i]);
-	}
-	// public function start()
-	// {
-	// 	if(!$this->reset()){
-	// 		return $this->info;
-	// 	}
+	}	
 
-	// }
+	public function getCommandResult()
+	{
+		return $this->validator->CommandResult;
+	}
+
+	public function sendCommand($command)
+	{
+		$command = $this->BillToBill_CMD[$command];
+		if($this->validator->ExecuteCommand($command)) {
+			return $this->getCommandResult();
+		}
+		return false;
+	}
 
 }

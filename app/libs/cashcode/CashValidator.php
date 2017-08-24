@@ -1,5 +1,6 @@
 <?php
 namespace App\libs\cashcode;
+use Log;
 class CashValidator{
 
 	public $ValidatorHandle = null;
@@ -33,14 +34,16 @@ class CashValidator{
 		{
 			fwrite($this->ValidatorHandle, $Command);
 			if (!$Waiting) {
-				return;
+				return true;
 			}
+			Log::info(1);
 			$result = null;
 			$cur_time = time();
-			$expire_time = mktime(date("H", $cur_time), date("i", $cur_time), date("s", $cur_time) + 5, date("m", $cur_time), date("d", $cur_time), date("Y", $cur_time));
+			$expire_time = time() + 5; //Максимум 5 сек ждем
 			while (time() < $expire_time)
-			{
+			{Log::info(2);
 				$result .= fread($this->ValidatorHandle, 255);
+				Log::info(3);
 				if (($result) && (ord($result[2]) > 0) && (strlen($result) >= ord($result[2])))
 				{
 					$this->CommandResult = $result;
@@ -54,6 +57,25 @@ class CashValidator{
 		{return true;}
 		else
 		{return false;}
+	}
+
+	public function readPort()
+	{
+		$result = null;
+		$cur_time = time();
+		$expire_time = $cur_time + 5; //Максимум 5 сек ждем
+		while (time() < $expire_time)
+		{
+			$result .= fread($this->ValidatorHandle, 255);
+			if ($result)
+			{
+				return $result;
+				break;
+			}
+			else
+			{usleep(50 * 1000);}
+		}
+		return false;
 	}
 
 }
