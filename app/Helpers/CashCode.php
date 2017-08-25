@@ -46,7 +46,7 @@ class CashCode{
 	public function __destruct()
 	{
 		//$this->validator->open();
-		//$this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"]);
+		$this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"]);
 	}
 	public function info($val)
 	{
@@ -62,12 +62,12 @@ class CashCode{
 			return false;
 		}	
 
-		// $this->info(['info' => "send poll..."]);	
-		// if (!$this->sendCommand('Poll')){
-		// 	$this->info(['error' => "send poll error!"]);
-		// 	$this->validator->close();			
-		// 	return false;
-		// }
+		$this->info(['info' => "send poll..."]);	
+		if (!$this->sendCommand('Poll')){
+			$this->info(['error' => "send poll error!"]);
+			$this->validator->close();			
+			return false;
+		}
 
 		$this->info(['info' => "Reset..."]);
 		if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){

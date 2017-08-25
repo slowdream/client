@@ -8,7 +8,8 @@ class CashValidator{
 
 	function open()
 	{
-		return $this->ValidatorHandle = fopen("/dev/ttyS0", "r+");
+		//return $this->ValidatorHandle = fopen("/dev/ttyS0", "r+");
+		return $this->ValidatorHandle = fopen("com1", "w+b");
 	}
 
 	function close()
@@ -35,15 +36,13 @@ class CashValidator{
 			fwrite($this->ValidatorHandle, $Command);
 			if (!$Waiting) {
 				return true;
-			}
-			Log::info(1);
+			}			
 			$result = null;
 			$cur_time = time();
 			$expire_time = time() + 5; //Максимум 5 сек ждем
 			while (time() < $expire_time)
-			{Log::info(2);
-				$result .= fread($this->ValidatorHandle, 255);
-				Log::info(3);
+			{
+				$result .= fread($this->ValidatorHandle, 255);				
 				if (($result) && (ord($result[2]) > 0) && (strlen($result) >= ord($result[2])))
 				{
 					$this->CommandResult = $result;
