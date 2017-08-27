@@ -35,7 +35,7 @@ Route::group(['middleware' => 'web'],function(){
 		$echo = `cd {$path} && php artisan migrate:refresh`;
 		return $echo;		
 	});
-	Route::post('/api',['as' => 'api', 'uses' => 'mainController@api']);
+	//Route::post('/api',['as' => 'api', 'uses' => 'mainController@api']);
 });
 
 Route::post('/search', [
@@ -45,8 +45,10 @@ Route::post('/search', [
 Route::get('/pdf', [
     'uses' => 'mainController@pdf'
 ]);
-Route::
-group(['prefix' => 'cash'], function() {
+Route::group(['prefix' => 'api'], function() {
+	Route::post('/category',['as' => 'api.category', 'uses' => 'api\categoryController@getCategory']);
+});
+Route::group(['prefix' => 'cash'], function() {
 	Route::get('/', ['uses' => 'cashController@summ']);
 	Route::get('/seed', ['uses' => 'cashController@seed']);
 	Route::get('/get', ['uses' => 'cashController@getCash']);
