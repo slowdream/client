@@ -11,7 +11,7 @@ use App\Category;
 
 
 
-class categoryController extends Controller
+class productsController extends Controller
 {
 
 	
@@ -21,12 +21,12 @@ class categoryController extends Controller
 	}	
 
 
-	public function getCategory($id = '', Request $request)
+	public function getProducts($id, Request $request)
 	{
 		
-		
-		$category = Category::where('parent_id', $id)->get();
-		return response()->json($category);
+		$id = Category::where('guid', $id)->first()->id;
+		$product = Product::where('category_id', $id)->get();
+		return response()->json($product);
 
 	}
 	public function search(Request $request)
