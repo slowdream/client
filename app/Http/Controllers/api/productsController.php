@@ -29,6 +29,19 @@ class productsController extends Controller
 		return response()->json($product);
 
 	}
+	
+	public function getSingleProduct($id, Request $request)
+	{
+		
+		$product = Product::where('guid', $id)->first()->toArray();
+		$parent = Category::where('id', $product["category_id"])->first()->name;
+		$product["parent"] = $parent;
+		
+		return response()->json($product);
+
+	}
+
+
 	public function search(Request $request)
 	{		
 		$query = '%'.$request->get('q') .'%';

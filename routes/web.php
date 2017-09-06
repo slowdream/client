@@ -42,13 +42,11 @@ Route::post('/search', [
     'as' => 'search',
     'uses' => 'mainController@search'
 ]);
+
 Route::get('/pdf', [
     'uses' => 'mainController@pdf'
 ]);
-Route::group(['middleware' => 'cors', 'prefix' => 'api'], function() {
-	Route::any('/category/{id?}',['as' => 'api.category', 'uses' => 'api\categoryController@getCategory']);
-	Route::any('/products/{id}',['as' => 'api.products', 'uses' => 'api\productsController@getProducts']);
-});
+
 Route::group(['prefix' => 'cash'], function() {
 	Route::get('/', ['uses' => 'cashController@summ']);
 	Route::get('/seed', ['uses' => 'cashController@seed']);

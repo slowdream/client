@@ -17,6 +17,7 @@ class CrateTableOrders extends Migration
             $table->increments('id');
             $table->integer('guid')->nullable(); // Айдишник заказа пришедший от 1С, заполняется только для заказов со статусом "оформлен"
             $table->string('status')->nullable(); // Статус заказа (формируется в терминале \ Отменен \ Оформлен)
+            $table->string('contacts')->nullable(); // Контактные данные в json формате
             $table->string('whyCanceled')->nullable(); // Причина закрытия (По тайм ауту \ Отменен в ручную \ Оформлен)
             $table->timestamps();
         });

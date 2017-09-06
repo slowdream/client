@@ -48,13 +48,14 @@ class mainController extends Controller
 			$product = Product::firstOrNew([	
 				'guid' => $val['id'],				
 			]);
+			
 			$product->fill([
 				'name' => $val['name'],
-				'image' => 'test image.jpg',
-				'description' => 'test description',
+				'image' => 'image.tyt',
+				'description' => str_replace("\n", '<br>', $val['descr']),
 				'price' => $val['price'],
 				'count' => $val['mount'],
-				'unit' => 'шт'
+				'unit' => $val['unit']
 			]);
 
 			$category->products()->save($product);
