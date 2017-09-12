@@ -9,7 +9,7 @@ use App\Order;
 use App\OrderProds;
 use App\Product;
 
-use Pdf;
+use PDF;
 use Server1C;
 
 class cartController extends Controller
@@ -17,9 +17,7 @@ class cartController extends Controller
   private $order;
 
   public function __construct(){
-      //  Проверим, есть ли в базе активный заказ, если нет, то создадим такой (пустой естественно)
-      $this->order = Order::firstOrCreate(['status'=>'active']);
-
+    $this->order = Order::where('status', 'active')->first();
   }
 
   /**
@@ -31,31 +29,49 @@ class cartController extends Controller
     $cartProducts = [];
     $product = new Product;
     foreach ($products as $item) {
-    	$itemProduct = $product::find($item->id)->toArray();
-    	$itemProduct['count'] = $item->count;
+      //$itemProduct = $product::find($item->id)->toArray();
+    	$itemProduct = $item->product->toArray();
+
+      $itemProduct['stock'] = $itemProduct['count'];
+      $itemProduct['count'] = $item->count;
     	$cartProducts[] = $itemProduct;
     }
     return response()->json($cartProducts);
   }
 
+  /**
+   * Отклик на запрос POST /cart/add
+   */
   public function addToCart(Request $request)
   {
-    $id = $request->input('id');
-    $count = $request->input('count');
+    $data = $request->input('data');
+    $id = $data['id'];
+    $count = $data['count'];
     $order_id = $this->order->id;
-    $product = Product::find($id);
-
+    $product = Product::where('guid', $id)->first();
+    //dd($product);
     $orderProd = OrderProds::firstOrNew([
       'product_id' => $product->id,
+      'guid' => $id,
       'price' => $product->price,
       'order_id' => $this->order->id
     ]);
 
     $orderProd->count = $count;
+    // dd($orderProd);
     $orderProd->save();
 
-    return 'true';
+    return $this->getCart();
   }
+
+  public function remove(Request $request)
+  {
+    $id  = $request->input('id');
+    OrderProds::where('guid', $id)->delete();
+
+    return $this->getCart();
+  }
+
   public function complete(Request $request)
   {
 
@@ -70,6 +86,22 @@ class cartController extends Controller
 		$this->sendTo1C();
 
   }
+
+  /*
+    Печать чека
+  */
+  public function printCheck()
+  {
+    $pdf = PDF::loadView('receipt', $this->order)->setPaper([0, 0, 100, 200], 'portrait');
+    $pdf->save(resource_path('reciepts/reciept.pdf'));
+    $file = resource_path('reciepts/reciept.pdf');
+    dd($file);
+    $print = `lp {$file}`;
+  }
+
+  /*
+    Отправка заказ в 1С
+  */
   private function sendTo1C()
   {
 
@@ -78,31 +110,31 @@ class cartController extends Controller
     $arr = [];
     $arr[0] = [
     	"type" => "0",
-      "idterm" => "13131",
+      "idterm" => env('ID_TERM', "test"),
       "data" => date('YmdHis'),
       "telnumber" => $contacts['tel']
     ];
-    $orderProd = $this->order->products;
 
+    $orderProd = $this->order->products;
 
     foreach ($orderProd as $product) {
     	$arr[] = [
         "type" => "1",
         "name" => intval($product->product->guid),
         "count" => $product->count,
-        "price" => $pr oduct->price,
+        "price" => $product->price,
         "sum" => $product->count * $product->price
     	];
     }
 
-    $curl->post($arr);
+
 
     /*
     	Пока отключим отправку на сервер
     */
+    //$curl->post($arr);
     //$response = $curl->request('crm/hs/Terminal/zakaz');
-
-    $data = json_decode($response['html'], true);
+    //$data = json_decode($response['html'], true);
 
     /*
     	Пока отключим закрытие заказа

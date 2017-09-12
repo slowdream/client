@@ -176,6 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         //DebugBar
         Barryvdh\Debugbar\ServiceProvider::class,
@@ -234,9 +235,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Curl' => App\Helpers\Curl::class,
-        'Pdf' => App\Helpers\Pdf::class,
+        //'Pdf' => App\Helpers\Pdf::class,
         'Server1C' => App\Helpers\Server1C::class,
         'CashCode' => App\Helpers\CashCode::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

@@ -11,7 +11,7 @@ class CashCode{
 	use cashcodes;
 	public $info = [];
 	private $BillToBill_CMD = [];
-	private $validator;
+	public $validator;
 	private $cash;
 
 	public function __construct($cashClass)
@@ -42,7 +42,7 @@ class CashCode{
 	        "Download" => pack("c*", 0x02, 0x03, 0x06, 0x50, 0x47, 0xD0),
 	    ];
 	}
-		
+
 	public function __destruct()
 	{
 		//$this->validator->open();
@@ -58,14 +58,7 @@ class CashCode{
 		$this->info(['info' => "Try open..."]);
 		if (!$this->validator->open()){
 			$this->info(['error' => "Validator is not opened!"]);
-			$this->validator->close();			
-			return false;
-		}	
-
-		$this->info(['info' => "send poll..."]);	
-		if (!$this->sendCommand('Poll')){
-			$this->info(['error' => "send poll error!"]);
-			$this->validator->close();			
+			$this->validator->close();
 			return false;
 		}
 
@@ -93,7 +86,7 @@ class CashCode{
 			$Code = $this->CommandResult(3);
 			if ($Code != 0){
 				if ($Code == $LastCode){
-					$this->info(['info' => "wait"]);				
+					$this->info(['info' => "wait"]);
 				}else{
 					$LastCode = $Code;
 					$ExtendedCode = $this->CommandResult(4);
@@ -135,11 +128,16 @@ class CashCode{
 	public function CommandResult($i)
 	{
 		return ord($this->validator->CommandResult[$i]);
-	}	
+	}
 
 	public function getCommandResult()
 	{
-		return $this->validator->CommandResult;
+		$massage = " \r\n nothing";
+		$Code = $this->CommandResult(3);
+		if($Code){
+			$massage = dechex($Code)."H ".$this->BillToBill_Code[$Code];
+		}
+		return $massage;
 	}
 
 	public function sendCommand($command)

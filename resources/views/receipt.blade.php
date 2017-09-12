@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&amp;subset=cyrillic" rel="stylesheet">
 	<title>Document</title>
 </head>
 <body>
-	
+
 
 <style type="text/css">
-
+body {
+font-family: 'Roboto Condensed', sans-serif;
+}
 </style>
 
-<br>{{ $name }}
-<br>{{ $order_num }}
-<br>{{ $summ }}
+<br>{{ $status }}
 <br>
 <br>test
 <br>

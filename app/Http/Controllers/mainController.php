@@ -22,12 +22,12 @@ class mainController extends Controller
 		$data = json_decode($categorys['html'], true);
 
 		$category = new Category;
-		foreach ($data as $val) {	
+		foreach ($data as $val) {
 			$category::firstOrCreate([
 				'guid' => $val['groupid'],
 				'name' => $val['group'],
 				'parent_id' => $val['parentid']
-			]);			
+			]);
 		}
 
 
@@ -40,15 +40,15 @@ class mainController extends Controller
 				'guid' => $val['groupid'],
 				'name' => $val['group'],
 			]);
-			
+
 			$category->update([
 				'items_parent' => true
 			]);
-			
-			$product = Product::firstOrNew([	
-				'guid' => $val['id'],				
+
+			$product = Product::firstOrNew([
+				'guid' => $val['id'],
 			]);
-			
+
 			$product->fill([
 				'name' => $val['name'],
 				'image' => 'image.tyt',
@@ -61,14 +61,14 @@ class mainController extends Controller
 			$category->products()->save($product);
 		}
 
-		return redirect()->route('home');	
+		return redirect()->route('home');
 	}
-	
+
 
 	public function index()
 	{
 		return view('welcome');
-	}	
+	}
 	public function api(Request $request)
 	{
 		$arr = $request->input('params');
@@ -79,7 +79,7 @@ class mainController extends Controller
 		$curl = new Server1C();
 		$curl->post($arr);
 		$response = $curl->request('crm/hs/Terminal/zakaz');
-		
+
 		if ($request->input('dump')) {
 			dump($response['html']);
 		} else {
@@ -90,19 +90,19 @@ class mainController extends Controller
 
 	public function getContent($id ='',Request $request)
 	{
-		$category = Category::where('parent_id', $id)->take(9)->get();		
+		$category = Category::where('parent_id', $id)->take(9)->get();
 		if ($request->input('id')) {
 			$id = $request->input('id');
 		}
 		if (count($category)) {
-			return view('parts.categorys', ['categorys' => $category]);			
+			return view('parts.categorys', ['categorys' => $category]);
 		} else {
-			$products = Category::where('guid', $id)->first()->products()->take(9)->get();			
+			$products = Category::where('guid', $id)->first()->products()->take(9)->get();
 			return view('parts.items', ['products' => $products]);
 		}
 	}
 	public function search(Request $request)
-	{		
+	{
 		$query = '%'.$request->get('q') .'%';
 		$products = Product::where('name', 'like', $query)->get();
 
