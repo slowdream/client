@@ -9,80 +9,48 @@
 
 
 <style type="text/css">
+* {
+  box-sizing: border-box;
+}
+body,html {
+  margin: 0;
+  padding: 0;
+}
 body {
 font-family: 'Roboto Condensed', sans-serif;
+font-size: 8px;
+padding: 5px;
 }
 </style>
 
-<br>{{ $status }}
-<br>
-<br>test
-<br>
-<br><h1>русские символы</h1>
-<br>
-<br>и тест по длине
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed incidunt accusamus deserunt quis saepe excepturi maxime. Natus quibusdam mollitia tempora neque voluptas illum nam nihil soluta! Repellat quae possimus, pariatur.
-<br>в
-<br>в
-<br>вв
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>в
-<br>далее пустые строки
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>конец пустых строк (30шт)
+
+<table>
+  <tbody>
+    <tr>
+      <td>Товар</td>
+      <td>Кол-во</td>
+      <td>Цена</td>
+    </tr>
+  @php
+      $summ = 0;
+  @endphp
+@foreach ($products as $product)
+
+    <tr>
+      <td>{{ $product['guid'] }}</td>
+      <td>{{ $product['count'] }}</td>
+      <td>{{ $product['price'] }}</td>
+    </tr>
+  @php
+      $summ += $product['count'] * $product['price'];
+  @endphp
+@endforeach
+    <tr>
+      <td>Итого: {{ $summ }}</td>
+    </tr>
+  </tbody>
+</table>
+
 
 </body>
 </html>

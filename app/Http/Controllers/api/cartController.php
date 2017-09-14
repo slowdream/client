@@ -78,6 +78,8 @@ class cartController extends Controller
   	$contacts = $request->input('contacts');
 
   	$this->order->contacts = $contacts;
+    $this->order->save();
+    $this->printCheck();
   	$this->order->status = 'Sendind';
   	$this->order->save();
   	/*
@@ -92,10 +94,17 @@ class cartController extends Controller
   */
   public function printCheck()
   {
-    $pdf = PDF::loadView('receipt', $this->order)->setPaper([0, 0, 100, 200], 'portrait');
+    $contacts = json_decode($this->order->contacts, true);
+    $orderProds = $this->order->products->toArray();
+
+    $data = [
+      'products' => $this->order->products->toArray(),
+      'tel' => $contacts['tel'],
+      'id' => $this->order->id,
+    ];
+    $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 80, 200], 'portrait');
     $pdf->save(resource_path('reciepts/reciept.pdf'));
     $file = resource_path('reciepts/reciept.pdf');
-    dd($file);
     $print = `lp {$file}`;
   }
 
