@@ -17,7 +17,7 @@ class cartController extends Controller
   private $order;
 
   public function __construct(){
-    $this->order = Order::where('status', 'active')->first();
+    $this->order = Order::firstOrCreate(['status'=>'active']);
   }
 
   /**
