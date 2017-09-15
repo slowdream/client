@@ -102,7 +102,8 @@ class cartController extends Controller
       'tel' => $contacts['tel'],
       'id' => $this->order->id,
     ];
-    $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 80, 200], 'portrait');
+    //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
+    $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 218, 300], 'portrait');
     $pdf->save(resource_path('reciepts/reciept.pdf'));
     $file = resource_path('reciepts/reciept.pdf');
     $print = `lp {$file}`;

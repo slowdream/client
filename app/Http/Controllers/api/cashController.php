@@ -17,20 +17,30 @@ class cashController extends Controller
   {
     //Отдаем сумму введеных купюр
     $summ = 0;
-    $cash = Cash::where('status', 'wait')->get();
+    $cash = Cash::where('status', 'injected')->get();
     foreach ($cash as $item) {
-        $summ += $item->value;
+      $summ += $item->value;
     }
     return $summ;
+  }
+
+  public function endCash($value='')
+  {
+    $cash = Cash::where('status', 'injected')->get();
+    foreach ($cash as $item) {
+      $summ += $item->value;
+    }
   }
 
   /*
     Запускается один раз и работает в фоне. Частые обращения приведут к зависанию
   */
-  public function getCash(Cash $Cash)
+  public function getCash(Request $request, Cash $Cash)
   {
     $timeOut = 5;
     $timeStart = time();
+    //$min = $request->input('minimum');
+    $min = 500;
 
     $validator = new CashCode($Cash);
     $Repeat = true;
@@ -38,11 +48,15 @@ class cashController extends Controller
     while ($Repeat) {
       $LastCode = null;
       $Repeat = false;
-
+      $banknote = '';
       if ($validator->start()){
         while(true){
-          $LastCode = $validator->poll($LastCode);
-
+          $banknote = Cash::where('status', 'wait')->first();
+          if (!$banknote) {
+            break;
+          }
+          $LastCode = $validator->poll($LastCode, $min);
+          dd($LastCode);
           if ((time() - $timeStart) > $timeOut){
               echo "timeOut";
               break;
@@ -58,7 +72,7 @@ class cashController extends Controller
         dump($validator->info);
       }
     }
-    echo $validator->sendCommand('ACK');
+    //echo $validator->sendCommand('ACK');
     //$validator->validator->close();
   }
 

@@ -14,14 +14,14 @@ use App\Category;
 class categoryController extends Controller
 {
 
-	public function index()
-	{
-	}	
+  public function index()
+  {
+  }
 
 
-	public function getCategory($id = '', Request $request)
-	{
-		$category = Category::where('parent_id', $id)->get();
-		return response()->json($category);
-	}
+  public function getCategory($id = '', Request $request)
+  {
+    $category = Category::where('parent_id', $id)->get();
+    return response()->json($category);
+  }
 }

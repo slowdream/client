@@ -23,6 +23,8 @@ padding: 5px;
 }
 </style>
 
+<h1>ID заказа {{ $id }}</h1>
+<h3>Ваш контактный телефон<br>{{ $tel }}</h3>
 
 <table>
   <tbody>

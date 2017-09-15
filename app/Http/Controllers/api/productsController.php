@@ -36,20 +36,23 @@ class productsController extends Controller
 		$product = Product::where('guid', $id)->first()->toArray();
 		$parent = Category::where('id', $product["category_id"])->first()->name;
 		$product["parent"] = $parent;
-		$img_folder = '/123/11/';
 
 		$path = public_path().'/prods_images/'.$product['guid'].'/';
-		$files = scandir($path);
-
-		$images = array_slice($files, 2);
 		$image = [];
-		foreach ($images as $img) {
-			$image[] = $img;
+		if (is_dir($path)) {
+			$files = scandir($path);
+			$images = array_slice($files, 2);
+			foreach ($images as $img) {
+				$image[] = $img;
+			}
+		} else {
+			$files = false;
 		}
-		if (!$image) {
+		if (!$image || !$files) {
 			$image = ['nothing/nothing.jpg'];
 		}
 		$product['image'] = $image;
+
 		return response()->json($product);
 	}
 
