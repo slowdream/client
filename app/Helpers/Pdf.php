@@ -1,6 +1,5 @@
 <?php
 namespace App\Helpers;
-require_once base_path().'/app/libs/dompdf/autoload.php';
 use Dompdf\Dompdf;
 
 class Pdf{

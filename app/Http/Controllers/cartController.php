@@ -62,13 +62,12 @@ class cartController extends Controller
     }
 
     public function cancel(Request $request)
-    {   
-
-        $reason = 'TimeOut';
-        if ($request->input('reason') != '') {
-            $reason = $request->input('reason');
-        }
-        $this->order->update(['status'=>'cancel', 'whyCanceled' => $reason]);
+    {
+      $reason = 'TimeOut';
+      if ($request->input('reason') != '') {
+        $reason = $request->input('reason');
+      }
+      $this->order->update(['status' => 'cancel', 'whyCanceled' => $reason]);
     }
 
     public function complete(Request $request)
