@@ -10,6 +10,10 @@ use App\OrderProds;
 use App\Cash;
 use CashCode;
 
+/**
+ * Class cashController
+ * @package App\Http\Controllers\api
+ */
 class cashController extends Controller
 {
 
@@ -24,12 +28,9 @@ class cashController extends Controller
     return $summ;
   }
 
-  public function endCash($value='')
+  public function endCash ()
   {
-    $cash = Cash::where('status', 'injected')->get();
-    foreach ($cash as $item) {
-      $summ += $item->value;
-    }
+    Cash::where('status', 'wait')->delete();
   }
 
   /*
@@ -56,7 +57,6 @@ class cashController extends Controller
             break;
           }
           $LastCode = $validator->poll($LastCode, $min);
-          dd($LastCode);
           if ((time() - $timeStart) > $timeOut){
               echo "timeOut";
               break;
@@ -64,7 +64,6 @@ class cashController extends Controller
           if ($LastCode === 666) {
               $Repeat = true;
           }
-
         }
         if ($Repeat) {sleep(1);}
       } else {

@@ -53,9 +53,9 @@ class mainController extends Controller
 				'name' => $val['name'],
 				'image' => 'image.tyt',
 				'description' => str_replace("\n", '<br>', $val['descr']),
-				'price' => $val['price'],
-				'count' => $val['mount'],
-				'unit' => $val['unit']
+        'price' => (int)$val['price'],
+        'count' => (int)$val['mount'],
+        'unit' => $val['unit']
 			]);
 
 			$category->products()->save($product);

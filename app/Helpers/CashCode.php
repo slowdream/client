@@ -85,6 +85,13 @@ class CashCode{
     return true;
   }
   //Тут у нас бесконечный loop
+
+  /**
+   * @param $LastCode
+   * @param $min
+   *
+   * @return int
+   */
   public function poll($LastCode, $min)
   {
     if ($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])){
@@ -112,7 +119,7 @@ class CashCode{
               $LastCode = 666;
               break;
             case 0x80:
-              ExecuteCommand($this->BillToBill_CMD["Stack"]);
+              $this->validator->ExecuteCommand($this->BillToBill_CMD["Stack"]);
               break;
             case 0x81:
               $this->info(['info' => "*BILLING MONEY*"]);
