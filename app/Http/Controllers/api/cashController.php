@@ -17,7 +17,7 @@ use CashCode;
 class cashController extends Controller
 {
 
-  public function summ()
+  public function getSumm ()
   {
     //Отдаем сумму введеных купюр
     $summ = 0;
@@ -34,15 +34,22 @@ class cashController extends Controller
   }
 
   /*
+   Запускает процедуру приема денег
+  */
+  public function startCash (Request $Request)
+  {
+    // TODO: Перед запуском проверить запущен ли уже прием
+    $data = $Request->input('cash');
+    $this->getCash($data['min']);
+  }
+
+  /*
     Запускается один раз и работает в фоне. Частые обращения приведут к зависанию
   */
-  public function getCash(Request $request, Cash $Cash)
+  public function getCash ($min = 500, Cash $Cash)
   {
     $timeOut = 5;
     $timeStart = time();
-    //$min = $request->input('minimum');
-    $min = 500;
-
     $validator = new CashCode($Cash);
     $Repeat = true;
 

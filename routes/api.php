@@ -19,7 +19,7 @@ Route::any('/product/{id}',['as' => 'api.product', 'uses' => 'api\productsContro
 Route::get('/search',['as' => 'api.search', 'uses' => 'api\productsController@search']);
 
 Route::get('/printCheck',['as' => 'api.search', 'uses' => 'api\cartController@printCheck']);
-Route::get('/getCash',['as' => 'api.getCash', 'uses' => 'api\cashController@getCash']);
+
 
 Route::group(['prefix' => '/cart'], function() {
 	Route::any('/', ['as' => 'api.cart', 'uses' => 'api\cartController@getCart']);
@@ -28,6 +28,12 @@ Route::group(['prefix' => '/cart'], function() {
 	Route::post('/remove', ['as' => 'api.cart.Remove', 'uses' => 'api\cartController@remove']);
 	Route::post('/cancel', ['as' => 'api.cart.Cancel', 'uses' => 'api\cartController@cancel']);
 	Route::post('/complete', ['as' => 'api.cart.Complete', 'uses' => 'api\cartController@complete']);
+});
+
+Route::group(['prefix' => '/cash'], function () {
+  Route::get('/summ', ['uses' => 'api\cashController@getSumm']);
+  Route::post('/start', ['uses' => 'api\cashController@startCash']);
+  Route::get('/end', ['uses' => 'api\cashController@endCash']);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
