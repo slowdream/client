@@ -15,7 +15,7 @@ class CreateTableCash extends Migration
   {
     Schema::create('cash', function (Blueprint $table) {
       $table->increments('id');
-      $table->integer('value'); // Номинал купюры
+      $table->integer('value')->nullable(); // Номинал купюры
       /*
         inbox - в боксе,
         extracted - Извлечено инкассатором,

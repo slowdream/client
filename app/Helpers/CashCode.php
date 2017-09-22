@@ -46,7 +46,7 @@ class CashCode{
   public function __destruct()
   {
     //$this->validator->open();
-    $this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"]);
+    //$this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"]);
   }
   public function info($val)
   {
@@ -71,9 +71,23 @@ class CashCode{
 
     $this->info(['info' => "Poll..."]);
     if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){
-      $this->info(['error' => "Failed to Poll!",'more' => $this->CommandResult(3)]);
-      $this->validator->close();
-      return false;
+      $codeMore = $this->CommandResult(3);
+      $this->info(['error' => "Failed to Poll!",'more' => $codeMore]);
+      // Если код ответа был 25, можно попробовать ресетнуть, должно помочь
+      if ($codeMore == 25) {
+        $this->info(['info' => "Reset..."]);
+        if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
+          $this->info(['error' => "Failed to reset!",'more' => $this->CommandResult(3)]);
+          $this->validator->close();
+          return false;
+        }
+        // Если ресет прошел удачно пробуем отправить Poll снова.
+        // if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){
+        //   $codeMore = $this->CommandResult(3);
+        //   $this->info(['error' => "Failed to Poll!",'more' => $codeMore]);
+        //   return false;
+        // }
+      }
     }
 
     $this->info(['info' => "Enable Bill Types..."]);
@@ -144,7 +158,8 @@ class CashCode{
               if ($summ <= $min) {
                 $this->cash::create(['status' => 'wait']);
               } else {
-                $this->sendCommand('EnableBillTypes');
+                $this->info(['info' => "Пробуем отключить прием денех"]);
+                $this->sendCommand('DisableBillTypes');
               }
               break;
           }

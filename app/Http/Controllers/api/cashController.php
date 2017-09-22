@@ -31,6 +31,11 @@ class cashController extends Controller
   public function endCash ()
   {
     Cash::where('status', 'wait')->delete();
+    $cash = Cash::where('status', 'injected')->get();
+    foreach ($cash as $banknote) {
+      $banknote->status = 'inbox';
+      $banknote->save();
+    }
   }
 
   /*
@@ -39,16 +44,19 @@ class cashController extends Controller
   public function startCash (Request $Request)
   {
     // TODO: Перед запуском проверить запущен ли уже прием
-    $data = $Request->input('cash');
-    $this->getCash($data['min']);
+    $min = $Request->input('cash');
+    $this->getCash($min);
   }
 
   /*
     Запускается один раз и работает в фоне. Частые обращения приведут к зависанию
   */
-  public function getCash ($min = 500, Cash $Cash)
+  public function getCash ($min = 500)
   {
-    $timeOut = 5;
+    ignore_user_abort(1);
+    $Cash = new Cash();
+    $Cash::firstOrCreate(['status' => 'wait']);
+    $timeOut = 30;
     $timeStart = time();
     $validator = new CashCode($Cash);
     $Repeat = true;
@@ -60,16 +68,24 @@ class cashController extends Controller
       if ($validator->start()){
         while(true){
           $banknote = Cash::where('status', 'wait')->first();
+          //dd($banknote);
           if (!$banknote) {
             break;
           }
           $LastCode = $validator->poll($LastCode, $min);
           if ((time() - $timeStart) > $timeOut){
-              echo "timeOut";
+              // отрубаем по таймауту
+              $validator->sendCommand('DisableBillTypes');
               break;
           }
           if ($LastCode === 666) {
+              // Я не помню зачем, но вроде так надо
+              // Если купюру зажевало - пройтись с нуля по циклу.
               $Repeat = true;
+          }
+          if ($LastCode == 129) {
+            // Если купюра принята - обнуляем таймаут
+            $timeStart = time();
           }
         }
         if ($Repeat) {sleep(1);}
