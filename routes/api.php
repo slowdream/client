@@ -26,7 +26,8 @@ Route::group(['prefix' => '/cart'], function() {
 	Route::post('/count', ['as' => 'api.cart.Count', 'uses' => 'api\cartController@count']);
 	Route::post('/add', ['as' => 'api.cart.Add', 'uses' => 'api\cartController@addToCart']);
 	Route::post('/remove', ['as' => 'api.cart.Remove', 'uses' => 'api\cartController@remove']);
-	Route::post('/cancel', ['as' => 'api.cart.Cancel', 'uses' => 'api\cartController@cancel']);
+  Route::post('/cancel', ['as' => 'api.cart.Cancel', 'uses' => 'api\cartController@cancel']);
+	Route::post('/add_contacts', ['as' => 'api.cart.Contacts', 'uses' => 'api\cartController@addContacts']);
 	Route::post('/complete', ['as' => 'api.cart.Complete', 'uses' => 'api\cartController@complete']);
 });
 

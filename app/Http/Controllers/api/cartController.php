@@ -72,21 +72,23 @@ class cartController extends Controller
     return $this->getCart();
   }
 
+  public function addContacts(Request $request)
+  {
+    $contacts = $request->input('contacts');
+    $this->order->contacts = $contacts;
+    $this->order->save();
+  }
+
   public function complete(Request $request)
   {
-
-  	$contacts = $request->input('contacts');
-
-  	$this->order->contacts = $contacts;
-    $this->order->save();
-    $this->printCheck();
+    return 123;
   	$this->order->status = 'Sendind';
   	$this->order->save();
   	/*
 			TODO: тут отправляем заказ или в очередь или сразу на сервер 1С
   	*/
-		$this->sendTo1C();
-
+    // $this->printCheck();
+		//$this->sendTo1C();
   }
 
   /*

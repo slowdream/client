@@ -1,6 +1,6 @@
 <?php
 
-//stty 9600 cs8 -parity -parenb -cstopb -istrip -ixon -crtscts clocal -F /dev/ttyS2
+//stty 9600 cs8 -parity -parenb -cstopb -istrip -ixon -crtscts clocal -F /dev/ttyS0
 
 
 // https://habrahabr.ru/conversations/ThreeDHead/
@@ -94,7 +94,7 @@ while ($Repeat) {
 						if ($Code != 0)
 						{
 							if ($Code == $LastCode)
-							{echo ".";}                              
+							{echo ".";}
 							else
 							{
 								$LastCode = $Code;
