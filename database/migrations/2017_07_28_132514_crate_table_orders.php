@@ -16,8 +16,20 @@ class CrateTableOrders extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('guid')->nullable(); // Айдишник заказа пришедший от 1С, заполняется только для заказов со статусом "оформлен"
+            /*
+                status:
+                    active = Активный заказ сессии
+                    active
+
+            */
             $table->string('status')->nullable(); // Статус заказа (формируется в терминале \ Отменен \ Оформлен)
             $table->string('contacts')->nullable(); // Контактные данные в json формате
+            /*
+                whyCanceled:
+                    payed = оплачен
+                    timeout = Закрыт по тай ауту
+                    canceled =
+            */
             $table->string('whyCanceled')->nullable(); // Причина закрытия (По тайм ауту \ Отменен в ручную \ Оформлен)
             $table->timestamps();
         });

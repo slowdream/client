@@ -21,6 +21,7 @@ class categoryController extends Controller
 
   public function getCategory($id = '', Request $request)
   {
+    // TODO: исключить из выборки путые категории
     $category = Category::where('parent_id', $id)->get();
     return response()->json($category);
   }

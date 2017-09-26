@@ -13,8 +13,13 @@ class Cash extends Model
 
   protected $hidden = [];
 
-  // public function fromDateTime ($value)
-  // {
-  //   return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
-  // }
+  public function fromDateTime ($value)
+  {
+    if(env('APP_ENV') == 'sqlsrv') {
+      return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    }
+    return $this->asDateTime($value)->format(
+      $this->getDateFormat()
+    );
+  }
 }
