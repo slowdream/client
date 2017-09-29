@@ -17,7 +17,7 @@ class Cors
   {
     \Debugbar::disable();
     header('Access-Control-Allow-Origin: *');
-    //header('Access-Control-Allow-Headers: Authorization, Content-Type' );
+    header('Access-Control-Allow-Headers: Authorization, Content-Type' );
     return $next($request);
       //->header('Access-Control-Allow-Origin', '*')
       //->header('Access-Control-Allow-Methods', '*')

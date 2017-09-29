@@ -81,7 +81,6 @@ class cartController extends Controller
 
   public function complete(Request $request)
   {
-    return 123;
   	$this->order->status = 'Sendind';
   	$this->order->save();
   	/*
