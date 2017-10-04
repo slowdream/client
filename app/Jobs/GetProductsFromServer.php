@@ -34,7 +34,7 @@ class GetProductsFromServer implements ShouldQueue
     public function handle()
     {
       $curl = new Server1C();
-      $categorys = $curl->request('crm/hs/Terminal/?action=group');
+      $categorys = $curl->request('crm/hs/Terminal/?action=group&' . env('ID_TERM', "test"));
       $data = json_decode($categorys['html'], true);
 
       $category = new Category;
@@ -46,7 +46,7 @@ class GetProductsFromServer implements ShouldQueue
         ]);
       }
 
-      $items = $curl->request('crm/hs/Terminal/?action=Goods');
+      $items = $curl->request('crm/hs/Terminal/?action=Goods&' . env('ID_TERM', "test"));
       $data = json_decode($items['html'], true);
       foreach ($data as $val) {
         $category = $category::firstOrCreate([

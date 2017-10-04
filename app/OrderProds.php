@@ -5,6 +5,29 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
+/**
+ * App\OrderProds
+ *
+ * @property int $id
+ * @property int|null $guid
+ * @property int|null $product_id
+ * @property int|null $count
+ * @property int|null $price
+ * @property int|null $order_id
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Order|null $order
+ * @property-read \App\Product|null $product
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereGuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\OrderProds whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class OrderProds extends Model
 {
   protected $table = 'orders_prods';

@@ -115,6 +115,11 @@ class cartController extends Controller
   */
   private function sendTo1C()
   {
+    $summ = 0;
+    $cash = Cash::where('status', 'injected')->get();
+    foreach ($cash as $item) {
+      $summ += $item->value;
+    }
 
     $curl = new Server1C();
     $contacts = json_decode($this->order->contacts, true);
@@ -123,7 +128,8 @@ class cartController extends Controller
     	"type" => "0",
       "idterm" => env('ID_TERM', "test"),
       "data" => date('YmdHis'),
-      "telnumber" => $contacts['tel']
+      "telnumber" => $contacts['tel'],
+      "Pay" => (string) $summ,
     ];
 
     $orderProd = $this->order->products;

@@ -5,6 +5,26 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
+/**
+ * App\Category
+ *
+ * @property int $id
+ * @property string $guid
+ * @property string $name
+ * @property string|null $parent_id
+ * @property int $items_parent
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereGuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereItemsParent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Category extends Model
 {
 
