@@ -21,21 +21,12 @@ Route::group(['middleware' => 'web'],function(){
 	Route::get('/1c',['as' => '1с', 'uses' => 'mainController@getDataFrom1C']);
 	Route::get('/',['as' => 'home', 'uses' => 'mainController@index']);
 	Route::post('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
-	//Route::post('/category',['as' => 'category', 'uses' => 'mainController@getContent']);
-	//Route::get('/items/{id}',['as' => 'items', 'uses' => 'mainController@items']);
 
-	Route::post('/refresh', function(){
-		$path = base_path();
-		$echo = `cd {$path} && git fetch --all && git reset --hard origin/master && composer update`;
-		//`php artisan migrate:refresh`;
-		return $echo;
-	});
 	Route::get('/migrate', function(){
-		$path = base_path();
-		$echo = `cd {$path} && php artisan migrate:refresh`;
-		return $echo;
+    //$order = App\Order::where('status', 'payed')->first();
+    //dd($order);
+    dispatch(new App\Jobs\SendOrdersToServer);
 	});
-	//Route::post('/api',['as' => 'api', 'uses' => 'mainController@api']);
 });
 
 Route::post('/search', [

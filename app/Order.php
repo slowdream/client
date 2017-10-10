@@ -47,4 +47,14 @@ class Order extends Model
   {
   	return $this->hasMany('App\OrderProds');
   }
+
+  public function getActive()
+  {
+  	return $this->firstOrCreate(['status'=>'active']);
+  }
+
+  public function cash()
+  {
+    return $this->hasMany('App\Cash');
+  }
 }

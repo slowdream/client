@@ -21,22 +21,13 @@ class cashController extends Controller
   public function getSumm ()
   {
     //Отдаем сумму введеных купюр
-    $summ = 0;
-    $cash = Cash::where('status', 'injected')->get();
-    foreach ($cash as $item) {
-      $summ += $item->value;
-    }
-    return $summ;
+    $cash = new Cash();
+    return $cash->summ();
   }
 
-  public function endCash ()
+  public function pauseCash ()
   {
     Cash::where('status', 'wait')->delete();
-    $cash = Cash::where('status', 'injected')->get();
-    foreach ($cash as $banknote) {
-      $banknote->status = 'inbox';
-      $banknote->save();
-    }
   }
 
   /*
@@ -44,7 +35,6 @@ class cashController extends Controller
   */
   public function startCash (Request $Request)
   {
-    // TODO: Перед запуском проверить запущен ли уже прием
     $min = $Request->input('cash');
     $this->dispatch(new CashCode($min));
     return 'true';

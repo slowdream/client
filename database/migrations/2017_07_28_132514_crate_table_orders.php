@@ -19,7 +19,8 @@ class CrateTableOrders extends Migration
             /*
                 status:
                     active = Активный заказ сессии
-                    active
+                    payed = Оплачен и готовится к отправке
+                    sended = Отправлен в 1С
 
             */
             $table->string('status')->nullable(); // Статус заказа (формируется в терминале \ Отменен \ Оформлен)
@@ -28,9 +29,10 @@ class CrateTableOrders extends Migration
                 whyCanceled:
                     payed = оплачен
                     timeout = Закрыт по тай ауту
-                    canceled =
+                    canceled = Отменен из корзины
             */
             $table->string('whyCanceled')->nullable(); // Причина закрытия (По тайм ауту \ Отменен в ручную \ Оформлен)
+            $table->integer('cash_id')->nullable(); // Купюры привязанные к заказу
             $table->timestamps();
         });
     }

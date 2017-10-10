@@ -11,10 +11,10 @@ class Server1C{
 	public function __construct() 
 	{
 		$username = 'admin';
-        $password = 1252351;
-        $this->curl = new Curl('http://95.213.156.3:8888/');
-        $this->curl->config_load('trip.cfg');
-        $this->curl->set(CURLOPT_USERPWD, $username . ":" . $password);
+    $password = 1252351;
+    $this->curl = new Curl('http://95.213.156.3:8888/');
+    $this->curl->config_load('trip.cfg');
+    $this->curl->set(CURLOPT_USERPWD, $username . ":" . $password);
 	}
 
 	public function request($request)

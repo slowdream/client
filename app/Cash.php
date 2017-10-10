@@ -37,4 +37,17 @@ class Cash extends Model
       $this->getDateFormat()
     );
   }
+  public function order()
+  {
+    return $this->belongsTo('App\Order');
+  }
+  public function summ()
+  {
+    $summ = 0;
+    $cash = $this::where('status', 'injected')->get();
+    foreach ($cash as $item) {
+      $summ += $item->value;
+    }
+    return $summ;
+  }
 }

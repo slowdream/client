@@ -18,7 +18,7 @@ Route::any('/products/{id}',['as' => 'api.products', 'uses' => 'api\productsCont
 Route::any('/product/{id}',['as' => 'api.product', 'uses' => 'api\productsController@getSingleProduct']);
 Route::get('/search',['as' => 'api.search', 'uses' => 'api\productsController@search']);
 
-Route::get('/printCheck',['as' => 'api.search', 'uses' => 'api\cartController@printCheck']);
+Route::get('/printCheck',['as' => 'api.printCheck', 'uses' => 'api\cartController@printCheck']);
 
 
 Route::group(['prefix' => '/cart'], function() {
@@ -34,6 +34,7 @@ Route::group(['prefix' => '/cart'], function() {
 Route::group(['prefix' => '/cash'], function () {
   Route::get('/summ', ['uses' => 'api\cashController@getSumm']);
   Route::post('/start', ['uses' => 'api\cashController@startCash']);
+  Route::get('/pause', ['uses' => 'api\cashController@pauseCash']);
   Route::get('/end', ['uses' => 'api\cashController@endCash']);
 });
 

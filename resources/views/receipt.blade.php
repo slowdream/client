@@ -1,58 +1,160 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&amp;subset=cyrillic" rel="stylesheet">
-	<title>Document</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400&amp;subset=cyrillic" rel="stylesheet">
+  <title>Document</title>
 </head>
 <body>
 
 
 <style type="text/css">
-* {
-  box-sizing: border-box;
-}
-body,html {
-  margin: 0;
-  padding: 0;
-}
-body {
-font-family: 'Roboto Condensed', sans-serif;
-font-size: 8px;
-padding: 5px;
-}
+  /* http://meyerweb.com/eric/tools/css/reset/
+     v2.0 | 20110126
+     License: none (public domain)
+  */
+
+  html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed,
+  figure, figcaption, footer, header, hgroup,
+  menu, nav, output, ruby, section, summary,
+  time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+  }
+  /* HTML5 display-role reset for older browsers */
+  article, aside, details, figcaption, figure,
+  footer, header, hgroup, menu, nav, section {
+    display: block;
+  }
+  body {
+    line-height: 1;
+  }
+  ol, ul {
+    list-style: none;
+  }
+  blockquote, q {
+    quotes: none;
+  }
+  blockquote:before, blockquote:after,
+  q:before, q:after {
+    content: '';
+    content: none;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+</style>
+<style type="text/css">
+  * {
+    box-sizing: border-box;
+  }
+  @font-face {
+    font-family: 'Roboto';
+    font-weight: normal;
+    src: url("{{asset('fonts/Roboto-Regular.ttf')}}")  format('truetype');
+  }
+  @font-face {
+    font-family: 'Roboto';
+    font-weight: bold;
+    src: url("{{asset('fonts/Roboto-Bold.ttf')}}")  format('truetype');
+  }
+  body {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 10px;
+    padding: 5px 10px;
+    color: #000;
+  }
+  h1 {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-weight: bold;
+  }
+  .name {
+    margin-bottom: 5px;
+    line-height: 15px;
+    height: 40px;
+    overflow: hidden;
+    display: block;
+  }
+  table {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  table td:last-child {
+    text-align: right;
+  }
 </style>
 
-<h1>ID заказа {{ $id }}</h1>
-<h3>Ваш контактный телефон<br>{{ $tel }}</h3>
+<h1>Магазин "Мир ремонта" <br> {{ $date }}</h1>
 
+<h2>Заказ № {{ $id }}</h2>
+@foreach ($products as $product)
+<span class="name">{{ $product['guid'] }} {{ $product['name'] }} </span>
 <table>
   <tbody>
     <tr>
-      <td>Товар</td>
-      <td>Кол-во</td>
-      <td>Цена</td>
-    </tr>
-  @php
-      $summ = 0;
-  @endphp
-@foreach ($products as $product)
-
-    <tr>
-      <td>{{ $product['guid'] }}</td>
+      <td>Количество</td>
       <td>{{ $product['count'] }}</td>
+    </tr>
+    <tr>
+      <td>Цена</td>
       <td>{{ $product['price'] }}</td>
     </tr>
-  @php
-      $summ += $product['count'] * $product['price'];
-  @endphp
-@endforeach
     <tr>
-      <td>Итого: {{ $summ }}</td>
+      <td>Сумма</td>
+      <td>{{ $product['count']*$product['price'] }}</td>
+    </tr>
+
+
+  </tbody>
+</table>
+@endforeach
+<table>
+  <tbody>
+    <tr>
+      <td>Итого без учета доставки:</td>
+      <td>{{ $summ }}</td>
+    </tr>
+    <tr>
+      <td>Оплачено: </td>
+      <td>{{ $cash }}</td>
     </tr>
   </tbody>
 </table>
 
-
+<div class="">
+  <h3>Указанный телефон:</h3>
+  <p>{{ $tel }}</p>
+  <h3>Адрес доставки:</h3>
+  <p>{{ $address }}</p>
+</div>
 </body>
 </html>

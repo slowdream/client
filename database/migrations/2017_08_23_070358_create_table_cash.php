@@ -22,8 +22,8 @@ class CreateTableCash extends Migration
         wait - ожидает поступления купюры,
         injected - купюра получена и ожидает зачисления
       */
-      // $table->string('status')->default('wait'); //
       $table->string('status'); //
+      $table->integer('order_id')->nullable(); // Айдишник заказа
       $table->timestamps();
     });
 
