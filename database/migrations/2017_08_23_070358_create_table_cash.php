@@ -17,7 +17,7 @@ class CreateTableCash extends Migration
       $table->increments('id');
       $table->integer('value')->nullable(); // Номинал купюры
       /*
-        inbox - в боксе,
+        inbox - зачислена,
         extracted - Извлечено инкассатором,
         wait - ожидает поступления купюры,
         injected - купюра получена и ожидает зачисления

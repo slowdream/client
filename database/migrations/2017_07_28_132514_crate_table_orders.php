@@ -21,6 +21,7 @@ class CrateTableOrders extends Migration
                     active = Активный заказ сессии
                     payed = Оплачен и готовится к отправке
                     sended = Отправлен в 1С
+                    canceled = Отменен из корзины
 
             */
             $table->string('status')->nullable(); // Статус заказа (формируется в терминале \ Отменен \ Оформлен)

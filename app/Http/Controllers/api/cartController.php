@@ -12,7 +12,7 @@ use App\Cash;
 
 use Carbon\Carbon;
 use PDF;
-use Server1C;
+use App\Jobs\SendOrdersToServer;
 
 
 class cartController extends Controller
@@ -82,7 +82,13 @@ class cartController extends Controller
 
   public function complete(Request $request)
   {
-    $this->order->status = 'payed';
+    $reason = $request->input('reason');
+    if ($reason == 'cancel'){
+      $reason = 'canceled';
+    } else {
+      $reason = 'payed';
+    }
+    $this->order->status = $reason;
     $this->order->save();
     Cash::where('status', 'wait')->delete();
     $cash = Cash::where('status', 'injected')->get();
@@ -93,18 +99,17 @@ class cartController extends Controller
     /*
       TODO: тут отправляем заказ или в очередь или сразу на сервер 1С
     */
-    $this->dispatch(new SendOrdersToServer());
-    //$this->printCheck();
-    //$this->sendTo1C();
+    dispatch(new SendOrdersToServer);
+    $this->printCheck($reason);
   }
 
   /*
     Печать чека
   */
-  public function printCheck()
+  public function printCheck($reason = 'payed')
   {
-    $ord = New Order();
-    dd($ord->getActive());
+    //$ord = New Order();
+    //dd($ord->getActive());
 
     $contacts = json_decode($this->order->contacts, true);
     $cartProducts = $this->order->products;
@@ -126,28 +131,25 @@ class cartController extends Controller
       'tel' => $contacts['tel'],
       'address' => $contacts['address'],
       'id' => $this->order->id,
-      'date' => Carbon::now('Europe/Moscow')->toDateTimeString()
+      'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
+      'reason' => $reason
     ];
 
     $pdfHeight = 220;
     $pdfHeight += count($products) * 90;
 
+    if ($reason == 'canceled') {
+      $pdfHeight += 40;
+    }
+
 
     //return view('receipt', $data);
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
     $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 218, $pdfHeight], 'portrait');
-    return $pdf->stream();
+    //return $pdf->stream();
     $pdf->save(resource_path('reciepts/reciept.pdf'));
     $file = resource_path('reciepts/reciept.pdf');
     $print = `lp {$file}`;
-  }
-
-  /*
-    Отправка заказ в 1С
-  */
-  private function sendTo1C()
-  {
-
   }
 
 }

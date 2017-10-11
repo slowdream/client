@@ -32,7 +32,9 @@ class SendOrdersToServer implements ShouldQueue
      */
     public function handle()
     {
-      $order = Order::where('status', 'payed')->first();
+      $order = Order::where('status', 'payed')
+                      ->orWhere('status', 'canceled')
+                      ->first();
       $orderProd = $order->products;
       $curl = new Server1C();
       $contacts = json_decode($order->contacts, true);
@@ -48,6 +50,7 @@ class SendOrdersToServer implements ShouldQueue
         "telnumber" => (string) $contacts['tel'],
         "address" => (string) $contacts['address'],
         "Pay" =>  $summ,
+        "reason" => $order->status
       ];
 
       foreach ($orderProd as $product) {
@@ -67,7 +70,7 @@ class SendOrdersToServer implements ShouldQueue
       /*
         Пока отключим закрытие заказа
       */
-      //$this->order->status = 'Complete';
-      //$this->order->save();
+      $order->status = 'sended';
+      $order->save();
     }
 }
