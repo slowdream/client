@@ -24,17 +24,14 @@ class cartController extends Controller
   }
 
   /**
-   * Отклик на запрос GET /cart
+   * Отклик на запрос GET /api/cart
    */
   public function getCart()
   {
     $products = $this->order->products->all();
     $cartProducts = [];
-    $product = new Product;
-    foreach ($products as $item) {
-      //$itemProduct = $product::find($item->id)->toArray();
+    foreach ($products as $item) {;
       $itemProduct = $item->product->toArray();
-
       $itemProduct['stock'] = $itemProduct['count'];
       $itemProduct['count'] = $item->count;
       $cartProducts[] = $itemProduct;
@@ -43,7 +40,7 @@ class cartController extends Controller
   }
 
   /**
-   * Отклик на запрос POST /cart/add
+   * Отклик на запрос POST /api/cart/add
    */
   public function addToCart(Request $request)
   {
@@ -65,6 +62,9 @@ class cartController extends Controller
     return $this->getCart();
   }
 
+  /**
+   * Отклик на запрос POST /api/cart/remove
+   */
   public function remove(Request $request)
   {
     $id  = $request->input('id');
@@ -73,6 +73,9 @@ class cartController extends Controller
     return $this->getCart();
   }
 
+  /**
+   * Отклик на запрос POST /api/cart/add_contacts
+   */
   public function addContacts(Request $request)
   {
     $contacts = $request->input('contacts');
@@ -80,6 +83,9 @@ class cartController extends Controller
     $this->order->save();
   }
 
+  /**
+   * Отклик на запрос POST /api/cart/complete
+   */
   public function complete(Request $request)
   {
     $reason = $request->input('reason');
@@ -101,10 +107,13 @@ class cartController extends Controller
     */
     dispatch(new SendOrdersToServer);
     $this->printCheck($reason);
+    $this->order = Order::firstOrCreate(['status'=>'active']);
+    return $this->getCart();
   }
 
   /*
     Печать чека
+    TODO: вынести это безобразие в job ?
   */
   public function printCheck($reason = 'payed')
   {

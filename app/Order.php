@@ -29,7 +29,7 @@ class Order extends Model
 {
 	protected $table = 'orders';
 
-  protected $fillable = ['guid','status','whyCanceled'];
+  protected $fillable = ['guid','status','reason'];
 
   protected $hidden = [];
 

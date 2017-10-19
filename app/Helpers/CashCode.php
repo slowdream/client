@@ -71,7 +71,7 @@ class CashCode{
 
     $this->info(['info' => "Poll..."]);
     if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){
-      $codeMore = $this->CommandResult(3);
+      $codeMore = $this->CommandResult(4);
       $this->info(['error' => "Failed to Poll!",'more' => $codeMore]);
       // Если код ответа был 25, можно попробовать ресетнуть, должно помочь
       if ($codeMore == 25) {
@@ -172,9 +172,9 @@ class CashCode{
   }
   // Возвращает расшифрованный код ответа
   // Под цифрой 3 идет стандартный ответ, под 4 расширенный
-  public function CommandResult($i)
+  public function CommandResult($slot)
   {
-    return ord($this->validator->CommandResult[$i]);
+    return ord($this->validator->CommandResult[$slot]);
   }
 
   public function getCommandResult()

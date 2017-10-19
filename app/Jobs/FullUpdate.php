@@ -36,6 +36,8 @@ class FullUpdate implements ShouldQueue
       `git fetch --all && git reset --hard origin/master && composer update`;
       // Выполняем миграции
       `php artisan migrate:refresh`;
+      // обновляем пакеты
+      `composer install`;
       // Стягиваем заново все товары
       dispatch(new GetProductsFromServer);
     }

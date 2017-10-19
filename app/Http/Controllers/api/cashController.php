@@ -40,9 +40,6 @@ class cashController extends Controller
     return 'true';
   }
 
-
-
-
   public function seed()
   {
     $Banknotes = [50,100,500,1000];
