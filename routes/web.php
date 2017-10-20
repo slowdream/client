@@ -1,5 +1,7 @@
 <?php
 
+
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +12,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -22,10 +25,9 @@ Route::group(['middleware' => 'web'],function(){
 	Route::get('/',['as' => 'home', 'uses' => 'mainController@index']);
 	Route::post('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
 
-	Route::get('/migrate', function(){
-    //$order = App\Order::where('status', 'payed')->first();
-    //dd($order);
-    dispatch(new App\Jobs\SendOrdersToServer);
+	Route::post('/makejob', function(Request $request){
+    $job = 'App\\Jobs\\' . $request->input('job');
+    dispatch(new $job);
 	});
 });
 
