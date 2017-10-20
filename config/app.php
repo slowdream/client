@@ -181,6 +181,8 @@ return [
         //DebugBar
         Barryvdh\Debugbar\ServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
+        Barryvdh\Cors\ServiceProvider::class,
         /*
          *  Мои хелперы
          */

@@ -43,8 +43,8 @@ class SendOrdersToServer implements ShouldQueue
       $summ = 0;
       $arr[0] = [
         "type" => "0",
-        //"idterm" => (string) env('ID_TERM', "test"),
-        "idterm" => "ПРК0001",
+        //"idterm" => strtoupper(env('ID_TERM', "test")),
+        "idterm" => "ПРК001",
         "IdOrder" => (string) $order->id,
         "data" => (string) date('YmdHis'),
         "telnumber" => (string) $contacts['tel'],

@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::options('*', function () {
+  $response = Response::make('');
+  $response->header('Access-Control-Allow-Origin', '*');
+  $response->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  return $response;
+});
+
+
 Route::any('/category/{id?}',['as' => 'api.category', 'uses' => 'api\categoryController@getCategory']);
 Route::any('/products/{id}',['as' => 'api.products', 'uses' => 'api\productsController@getProducts']);
 Route::any('/product/{id}',['as' => 'api.product', 'uses' => 'api\productsController@getSingleProduct']);
