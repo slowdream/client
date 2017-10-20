@@ -36,8 +36,8 @@ Route::post('/search', [
     'uses' => 'mainController@search'
 ]);
 
-Route::get('/pdf', [
-    'uses' => 'mainController@pdf'
+Route::get('/test', [
+    'uses' => 'api\cartController@printCheck'
 ]);
 
 Route::group(['prefix' => 'cash'], function() {

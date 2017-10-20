@@ -47,7 +47,6 @@ class cartController extends Controller
     $data = $request->input('data');
     $id = $data['id'];
     $count = $data['count'];
-    $order_id = $this->order->id;
     $product = Product::where('guid', $id)->first();
     $orderProd = OrderProds::firstOrNew([
       'product_id' => $product->id,
@@ -125,7 +124,9 @@ class cartController extends Controller
     $products = [];
     $summ = 0;
     foreach ($cartProducts as $product) {
-      $products[] = $product->product;
+      $prod = $product->product;
+      $prod['count'] = $product->count;
+      $products[] = $prod;
       $summ += $product->price*$product->count;
     }
     $cash = Cash::where('status', 'injected')->get();
@@ -133,6 +134,7 @@ class cartController extends Controller
     foreach ($cash as $item) {
       $cashSumm += $item->value;
     }
+    dd($products);
     $data = [
       'products' => $products,
       'summ' => $summ,

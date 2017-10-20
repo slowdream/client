@@ -30,7 +30,7 @@ class categoryController extends Controller
       if (!file_exists($image)) {
         $image = '/static/images/category.jpg';
       } else {
-        $image = 'http://client.my/categorys_images/' . $category['guid'] . '.jpg';
+        $image = route('home') . '/categorys_images/' . $category['guid'] . '.jpg';
       }
 
       $categorys[$id]['image'] = $image;

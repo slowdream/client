@@ -43,13 +43,13 @@ class productsController extends Controller
 			$files = scandir($path);
 			$images = array_slice($files, 2);
 			foreach ($images as $img) {
-				$image[] = $img;
+				$image[] = route('home') . '/prods_images/' . $product['guid'] .'/'. $img;
 			}
 		} else {
 			$files = false;
 		}
 		if (!$image || !$files) {
-			$image = ['nothing/nothing.jpg'];
+			$image = ['/static/images/no_photo.jpg'];
 		}
 		$product['image'] = $image;
 
