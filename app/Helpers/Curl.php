@@ -8,16 +8,16 @@ class Curl{
 	private $ch;  // экземляр курла
 	private $host;   // хост - базовая часть урла без слеша на конце
 	private $options; // массив с настройками курла
-	
+
 	//
 	// Инициализация класса для конкретного домена
 	//
-	// public static function app($host) 
+	// public static function app($host)
 	// {
 	//     return new self($host);
 	// }
 
-	public function __construct($host) 
+	public function __construct($host)
 	{
 	    $this->ch = curl_init();
 	    $this->host = $host;
@@ -31,14 +31,14 @@ class Curl{
 
 	/**
 	 * Устанавливает опцию курла и записывает в массив с опциями
-	 * 
+	 *
 	 * @param mixed $name
 	 * Константа (название) или номер опции курла
-	 * 
+	 *
 	 * @param mixeds $value
 	 * Значение опции для установки
 	 */
-	public function set($name, $value) 
+	public function set($name, $value)
 	{
 	    $this->options[$name] = $value;
 	    curl_setopt($this->ch, $name, $value);
@@ -47,22 +47,22 @@ class Curl{
 
 	/**
 	 * Отображает текущее состояние опции
-	 * 
+	 *
 	 * @param mixed $name
 	 * Константа (название) или номер опции курла
 	 */
-	public function get($name) 
+	public function get($name)
 	{
 	    return $this->options[$name];
 	}
 
 	/**
 	 * Устанавливает настройки куков
-	 * 
+	 *
 	 * @param string $file
 	 * Относительный путь до файла для сохранения кук
 	 */
-	public function cookie($path) 
+	public function cookie($path)
 	{
 	    $this->set(CURLOPT_COOKIEJAR, $_SERVER['DOCUMENT_ROOT'] . '/' . COOKIE_DIR .  $path);
 	    $this->set(CURLOPT_COOKIEFILE, $_SERVER['DOCUMENT_ROOT'] . '/' . COOKIE_DIR . $path);
@@ -71,7 +71,7 @@ class Curl{
 
 	/**
 	 * Включает или выключает возможность обращаться к HTTPS страницам
-	 * 
+	 *
 	 * @param int $act
 	 * 1 - https разрешено, 0 - https запрещено
 	 */
@@ -84,7 +84,7 @@ class Curl{
 
 	/**
 	 * Включает или выключает заголовки ответа
-	 * 
+	 *
 	 * @param int $act
 	 * 1 - есть, 0 - нет
 	 */
@@ -96,7 +96,7 @@ class Curl{
 
 	/**
 	 * Устанавливает, следовать ли за перенаправлением
-	 * 
+	 *
 	 * @param bool $param
 	 * TRUE - следовать
 	 * FALSE - не следовать
@@ -109,7 +109,7 @@ class Curl{
 
 	/**
 	 * Устанавливает реферер
-	 * 
+	 *
 	 * @url string $url
 	 */
 	public function referer($url)
@@ -120,7 +120,7 @@ class Curl{
 
 	/**
 	 * Устанавливает браузер
-	 * 
+	 *
 	 * @agent string $agent
 	 */
 	public function agent($agent)
@@ -131,7 +131,7 @@ class Curl{
 
 	/**
 	 * Настройка конфигурации для метода POST
-	 * 
+	 *
 	 * @param mixed $post
 	 * array - ассоциативный массив с параметрами
 	 * false - отлючить обращение методом POST
@@ -152,7 +152,7 @@ class Curl{
 
 	/**
 	 * Добавить 1 произвольный http-заголовок к запросу
-	 * 
+	 *
 	 * @param string $header
 	 */
 	public function add_header($header)
@@ -164,7 +164,7 @@ class Curl{
 
 	/**
 	 * Добавить несколько произвольных http-заголовоков к запросу
-	 * 
+	 *
 	 * @param array $headers
 	 */
 	public function add_headers($headers)
@@ -188,16 +188,16 @@ class Curl{
 
 	/**
 	 * Загрузить конфигурацию из файла
-	 * 
+	 *
 	 * @param string $file
 	 */
 	public function config_load($file)
 	{
 	    $data = file_get_contents(app_path('/Helpers/').$file);
 	    $data = json_decode($data, 1);
-	    
+
 	    curl_setopt_array($this->ch, $data);
-	    
+
 	    foreach ($data as $key => $val) {
 	        $this->options[$key] = $val;
 	    }
@@ -206,7 +206,7 @@ class Curl{
 
 	/**
 	 * Сохранить конфигурацию в файл
-	 * 
+	 *
 	 * @param string $file
 	 */
 	public function config_save($file)
@@ -218,7 +218,7 @@ class Curl{
 
 	/**
 	 * Выполнить запрос на конкретный урл
-	 * 
+	 *
 	 * @param string $url
 	 */
 	public function request($url='')
@@ -230,7 +230,7 @@ class Curl{
 
 	/**
 	 * Создает правильный URL
-	 * 
+	 *
 	 * @param string $url
 	 * адрес страницы без домена
 	 */
@@ -244,11 +244,11 @@ class Curl{
 
 	/**
 	 * Переводит полученную курлом страницу в человеческий вид
-	 * 
+	 *
 	 * @param string $data
 	 * Результат полученный функцией curl_exec
 	 * (т.е. заголовок и содержимое страницы)
-	 * 
+	 *
 	 * @return array
 	 * Возвращает распарсенный массив с информацией
 	 * [
@@ -313,5 +313,5 @@ class Curl{
 	        'headers' => $headers,
 	        'html' => $body_part
 	    );
-	}	
+	}
 }

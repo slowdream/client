@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\update;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -8,7 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class FullUpdate implements ShouldQueue
+class UpdateFrontend implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,7 +29,9 @@ class FullUpdate implements ShouldQueue
      */
     public function handle()
     {
-      dispatch(new update\UpdateBackend);
-      dispatch(new update\UpdateFrontend);
+      // Переходим в папку с проектом
+      `cd ~/web/frontend`;
+      //Скачиваем свежую версию с гита и ставим пакеты
+      `git fetch --all && git reset --hard origin/master && npm i`;
     }
 }

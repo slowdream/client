@@ -26,8 +26,9 @@ Route::group(['middleware' => 'web'],function(){
 	Route::post('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
 
 	Route::post('/makejob', function(Request $request){
-    $job = 'App\\Jobs\\' . $request->input('job');
-    dispatch(new $job);
+    // $job = 'App\\Jobs\\' . $request->input('job');
+    // dispatch(new $job);
+    dispatch(new App\Jobs\SendSms('+79996241313','text2'));
 	});
 });
 

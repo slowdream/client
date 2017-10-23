@@ -232,15 +232,7 @@ class SMSRU {
 
     curl_setopt($ch, CURLOPT_VERBOSE, 1);
 
-    if (!$post) {
-      $post = new stdClass();
-    }
-
-    if ($post->api_id && $post->api_id == 'none') {
-    }
-    else {
-      $post->api_id = $this->ApiKey;
-    }
+    $post['api_id'] = $this->ApiKey;
 
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query((array) $post));

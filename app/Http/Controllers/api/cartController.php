@@ -134,7 +134,6 @@ class cartController extends Controller
     foreach ($cash as $item) {
       $cashSumm += $item->value;
     }
-    dd($products);
     $data = [
       'products' => $products,
       'summ' => $summ,
@@ -153,7 +152,8 @@ class cartController extends Controller
       $pdfHeight += 40;
     }
 
-
+    $sms_text = view('sms', $data);
+    dispatch(new App\Jobs\SendSms($data['tel'], $sms_text));
     //return view('receipt', $data);
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
     $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 218, $pdfHeight], 'portrait');
