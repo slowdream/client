@@ -1,10 +1,10 @@
 Заказ № {{ $id }}
-@foreach ($products as $product)
-{{ $product['guid'] }} {{ $product['name'] }}
-  Количество {{ $product['count'] }}
-  Цена {{ $product['price'] }}
-  Сумма{{ $product['count']*$product['price'] }}
-@endforeach
+{{--@foreach ($products as $product)--}}
+{{--{{ $product['guid'] }} {{ $product['name'] }}--}}
+  {{--Количество {{ $product['count'] }}--}}
+  {{--Цена {{ $product['price'] }}--}}
+  {{--Сумма{{ $product['count']*$product['price'] }}--}}
+{{--@endforeach--}}
 Итого без учета доставки: {{ $summ }}
 Оплачено: {{ $cash }}
 

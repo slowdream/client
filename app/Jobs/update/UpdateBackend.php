@@ -12,14 +12,15 @@ class UpdateBackend implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $hard; // Жесткое обновление
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($hard = false)
     {
-        //
+        $this->hard = $hard;
     }
 
     /**
@@ -29,17 +30,21 @@ class UpdateBackend implements ShouldQueue
      */
     public function handle()
     {
-        return;
       $path = base_path();
       // Переходим в папку с проектом
       `cd {$path}`;
       //Скачиваем свежую версию с гита
-      `git fetch --all && git reset --hard origin/master && composer update`;
-      // Выполняем миграции
-      `php artisan migrate:refresh`;
+      `git fetch --all && git reset --hard origin/master`;
       // обновляем пакеты
       `composer install`;
-      // Стягиваем заново все товары
-      dispatch(new GetProductsFromServer);
+      if ($this->hard){
+        // Перезапускаем миграции
+        `php artisan migrate:refresh`;
+        // Стягиваем заново все товары
+        dispatch(new GetProductsFromServer);
+      } else {
+        // Выполняем новые миграции
+        `php artisan migrate`;
+      }
     }
 }

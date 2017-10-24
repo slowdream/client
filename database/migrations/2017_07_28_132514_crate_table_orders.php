@@ -33,11 +33,10 @@ class CrateTableOrders extends Migration
               prepayed = предоплата
               partpayed = Деньги внесены не полностью
               timeout = Закрыт по таймауту
-              cancel = Отменен из корзины
-              clear = Очищен
+              canceled = Отменен из корзины
+              cleared = Очищен
       */
       $table->string('reason')->nullable(); // Причина закрытия
-      $table->integer('cash_id')->nullable(); // Купюры привязанные к заказу
       $table->timestamps();
     });
   }

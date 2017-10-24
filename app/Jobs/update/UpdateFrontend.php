@@ -33,5 +33,7 @@ class UpdateFrontend implements ShouldQueue
       `cd ~/web/frontend`;
       //Скачиваем свежую версию с гита и ставим пакеты
       `git fetch --all && git reset --hard origin/master && npm i`;
+      // Билдим свежую версию
+      `npm run build`;
     }
 }

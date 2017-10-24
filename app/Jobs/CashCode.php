@@ -36,7 +36,7 @@ class CashCode implements ShouldQueue
       $min = $this->min;
       $Cash = new Cash();
       $Cash::firstOrCreate(['status' => 'wait']);
-      $timeOut = 30;
+      $timeOut = 50;
       $timeStart = time();
       $validator = new validator($Cash);
       $Repeat = true;

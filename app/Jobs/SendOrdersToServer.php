@@ -32,7 +32,7 @@ class SendOrdersToServer implements ShouldQueue
      */
     public function handle()
     {
-      $order = Order::where('status', 'payed')
+      $order = Order::where('status', 'complete')
                       ->orWhere('status', 'canceled')
                       ->first();
       $orderProd = $order->products;
@@ -40,17 +40,20 @@ class SendOrdersToServer implements ShouldQueue
       $contacts = json_decode($order->contacts, true);
       $arr = [];
 
-      $summ = 0;
+      $pay = 0;
+      $cash = $order->cash;
+      foreach ($cash as $item) {
+        $pay += $item->value;
+      }
       $arr[0] = [
         "type" => "0",
-        //"idterm" => strtoupper(env('ID_TERM', "test")),
-        "idterm" => "ПРК001",
+        "idterm" => strtoupper(env('ID_TERM', "test")),
         "IdOrder" => (string) $order->id,
         "data" => (string) date('YmdHis'),
         "telnumber" => (string) $contacts['tel'],
         "address" => (string) $contacts['address'],
-        "Pay" =>  $summ,
-        "reason" => $order->status
+        "Pay" =>  $pay,
+        "reason" => $order->reason
       ];
 
       foreach ($orderProd as $product) {
@@ -62,14 +65,10 @@ class SendOrdersToServer implements ShouldQueue
           "sum" => $product->count * $product->price
         ];
       }
-
       $curl->post($arr);
       $response = $curl->request('crm/hs/Terminal/zakaz');
       $data = json_decode($response['html'], true);
 
-      /*
-        Пока отключим закрытие заказа
-      */
       $order->status = 'sended';
       $order->save();
     }

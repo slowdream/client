@@ -13,6 +13,7 @@ use App\Cash;
 use Carbon\Carbon;
 use PDF;
 use App\Jobs\SendOrdersToServer;
+use App\Jobs\SendSms;
 
 
 class cartController extends Controller
@@ -88,24 +89,28 @@ class cartController extends Controller
   public function complete(Request $request)
   {
     $reason = $request->input('reason');
-    if ($reason == 'cancel'){
-      $reason = 'canceled';
+    // TODO добавить проверку что такая причина существует.
+    // Пока доступны только две причины - отменено и оплачено
+    $reason = ($reason == 'complete') ? 'payed' : 'canceled';
+
+    if ($reason == 'canceled') {
+      $this->order->status = 'canceled';
+      $this->order->save();
     } else {
-      $reason = 'payed';
+      $this->order->status = 'complete';
+      $this->order->reason = $reason;
+      $this->order->save();
+      Cash::where('status', 'wait')->delete();
+      $cash = Cash::where('status', 'injected')->get();
+      foreach ($cash as $banknote) {
+        $banknote->status = 'inbox';
+        $banknote->save();
+      }
+
+      //dispatch(new SendOrdersToServer);
+      //$this->printCheck($reason);
     }
-    $this->order->status = $reason;
-    $this->order->save();
-    Cash::where('status', 'wait')->delete();
-    $cash = Cash::where('status', 'injected')->get();
-    foreach ($cash as $banknote) {
-      $banknote->status = 'inbox';
-      $banknote->save();
-    }
-    /*
-      TODO: тут отправляем заказ или в очередь или сразу на сервер 1С
-    */
-    dispatch(new SendOrdersToServer);
-    $this->printCheck($reason);
+
     $this->order = Order::firstOrCreate(['status'=>'active']);
     return $this->getCart();
   }
@@ -153,7 +158,7 @@ class cartController extends Controller
     }
 
     $sms_text = view('sms', $data);
-    dispatch(new App\Jobs\SendSms($data['tel'], $sms_text));
+    dispatch(new SendSms($data['tel'], $sms_text));
     //return view('receipt', $data);
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
     $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 218, $pdfHeight], 'portrait');
