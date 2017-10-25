@@ -62,12 +62,12 @@ class CashCode{
       return false;
     }
 
-    // $this->info(['info' => "Reset..."]);
-    // if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
-    //   $this->info(['error' => "Failed to reset!",'more' => $this->CommandResult(3)]);
-    //   $this->validator->close();
-    //   return false;
-    // }
+     $this->info(['info' => "Reset..."]);
+     if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
+       $this->info(['error' => "Failed to reset!",'more' => $this->CommandResult(3)]);
+       $this->validator->close();
+       return false;
+     }
 
     $this->info(['info' => "Poll..."]);
     if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){

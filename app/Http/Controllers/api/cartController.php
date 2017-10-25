@@ -91,11 +91,13 @@ class cartController extends Controller
     $reason = $request->input('reason');
     // TODO добавить проверку что такая причина существует.
     // Пока доступны только две причины - отменено и оплачено
+
     $reason = ($reason == 'complete') ? 'payed' : 'canceled';
 
     if ($reason == 'canceled') {
       $this->order->status = 'canceled';
       $this->order->save();
+
     } else {
       $this->order->status = 'complete';
       $this->order->reason = $reason;
@@ -108,11 +110,12 @@ class cartController extends Controller
       }
 
       //dispatch(new SendOrdersToServer);
-      //$this->printCheck($reason);
+      $this->printCheck($reason);
     }
 
     $this->order = Order::firstOrCreate(['status'=>'active']);
-    return $this->getCart();
+    return response()->json([]);
+    //return $this->getCart();
   }
 
   /*
@@ -150,6 +153,9 @@ class cartController extends Controller
       'reason' => $reason
     ];
 
+    $sms_text = view('sms', $data);
+    dispatch(new SendSms($data['tel'], $sms_text));
+
     $pdfHeight = 220;
     $pdfHeight += count($products) * 90;
 
@@ -157,9 +163,6 @@ class cartController extends Controller
       $pdfHeight += 40;
     }
 
-    $sms_text = view('sms', $data);
-    dispatch(new SendSms($data['tel'], $sms_text));
-    //return view('receipt', $data);
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
     $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 218, $pdfHeight], 'portrait');
     //return $pdf->stream();
