@@ -153,7 +153,8 @@ class cartController extends Controller
       'reason' => $reason
     ];
 
-    $sms_text = view('sms', $data);
+    $sms_text = view('sms', $data)->render();
+
     dispatch(new SendSms($data['tel'], $sms_text));
 
     $pdfHeight = 220;
