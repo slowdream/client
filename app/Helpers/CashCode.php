@@ -62,12 +62,34 @@ class CashCode{
       return false;
     }
 
-     $this->info(['info' => "Reset..."]);
-     if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
-       $this->info(['error' => "Failed to reset!",'more' => $this->CommandResult(3)]);
-       $this->validator->close();
-       return false;
-     }
+    $this->info(['info' => "Poll..."]);
+    if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){
+      $codeMore = $this->CommandResult(4);
+      $this->info(['error' => "Failed to Poll!",'more' => $codeMore]);
+      // Если код ответа был 25, можно попробовать ресетнуть, должно помочь
+      if ($codeMore == 25) {
+        $this->info(['info' => "Reset..."]);
+        if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
+          $this->info(['error' => "Failed to reset!",'more' => $this->CommandResult(3)]);
+          $this->validator->close();
+          return false;
+        }
+        // Если ресет прошел удачно пробуем отправить Poll снова.
+        // if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){
+        //   $codeMore = $this->CommandResult(3);
+        //   $this->info(['error' => "Failed to Poll!",'more' => $codeMore]);
+        //   return false;
+        // }
+      }
+    }
+
+    // Чисто чтобы пожжужал для привлечения внимания
+    $this->info(['info' => "Reset..."]);
+    if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Reset"])) && ($this->CommandResult(3) == 0))){
+      $this->info(['error' => "Failed to reset!", 'more' => $this->CommandResult(3)]);
+      $this->validator->close();
+      return false;
+    }
 
     $this->info(['info' => "Poll..."]);
     if (!(($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])) && ($this->CommandResult(3) == 0))){
@@ -96,6 +118,7 @@ class CashCode{
       $this->validator->close();
       return false;
     }
+
     return true;
   }
   //Тут у нас бесконечный loop

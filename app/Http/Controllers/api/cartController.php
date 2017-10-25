@@ -88,11 +88,15 @@ class cartController extends Controller
    */
   public function complete(Request $request)
   {
+    Cash::where('status', 'wait')->delete();
     $reason = $request->input('reason');
+    $cashin = $request->input('cashin');
     // TODO добавить проверку что такая причина существует.
     // Пока доступны только две причины - отменено и оплачено
+    if ($cashin > 0) {
+      $reason = 'payed';
+    }
 
-    $reason = ($reason == 'complete') ? 'payed' : 'canceled';
 
     if ($reason == 'canceled') {
       $this->order->status = 'canceled';
@@ -102,7 +106,6 @@ class cartController extends Controller
       $this->order->status = 'complete';
       $this->order->reason = $reason;
       $this->order->save();
-      Cash::where('status', 'wait')->delete();
       $cash = Cash::where('status', 'injected')->get();
       foreach ($cash as $banknote) {
         $banknote->status = 'inbox';
