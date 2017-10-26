@@ -60,7 +60,7 @@ class productsController extends Controller
 	public function search(Request $request)
 	{
 
-		$query = '%'.$request->get('q') .'%';
+		$query = '%'.$request->input('q') .'%';
 		$products = Product::where('name', 'like', $query)->get();
 
 		return response()->json($products);

@@ -8,7 +8,8 @@ class CashValidator{
 
   function open()
   {
-    return $this->ValidatorHandle = fopen("/dev/ttyS0", "r+");
+    $port = "/dev/ttyS" + env('ID_COM_PORT', 0);
+    return $this->ValidatorHandle = fopen($port, "r+");
     //return $this->ValidatorHandle = fopen("com1", "w+b");
   }
 

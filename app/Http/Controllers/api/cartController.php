@@ -108,7 +108,7 @@ class cartController extends Controller
         $banknote->save();
       }
 
-      dispatch(new SendOrdersToServer);
+      dispatch(new SendOrdersToServer($this->order->id));
       $this->printCheck($reason, $summ);
     } else {
       $this->order->status = 'canceled';
@@ -146,16 +146,16 @@ class cartController extends Controller
       'address' => $contacts['address'],
       'id' => $this->order->id,
       'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
-      'reason' => $reason
+      'reason' => $reason,
+      'cashSumm' => $cashSumm
     ];
 
     $sms_text = view('sms', $data)->render();
 
     dispatch(new SendSms($data['tel'], $sms_text));
 
-    $pdfHeight = 220;
+    $pdfHeight = 275;
     $pdfHeight += count($products) * 90;
-
     // Чуток добавим высоте к чеку, для дополнительной информации
     if ($reason == 'canceled' || $cashSumm > $summ) {
       $pdfHeight += 40;

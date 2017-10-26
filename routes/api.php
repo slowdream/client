@@ -24,7 +24,7 @@ Route::options('*', function () {
 Route::any('/category/{id?}',['as' => 'api.category', 'uses' => 'api\categoryController@getCategory']);
 Route::any('/products/{id}',['as' => 'api.products', 'uses' => 'api\productsController@getProducts']);
 Route::any('/product/{id}',['as' => 'api.product', 'uses' => 'api\productsController@getSingleProduct']);
-Route::get('/search',['as' => 'api.search', 'uses' => 'api\productsController@search']);
+Route::post('/search',['as' => 'api.search', 'uses' => 'api\productsController@search']);
 
 Route::get('/printCheck',['as' => 'api.printCheck', 'uses' => 'api\cartController@printCheck']);
 
