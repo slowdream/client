@@ -92,28 +92,28 @@ class cartController extends Controller
     $reason = $request->input('reason');
     $cashin = $request->input('cashin');
     // TODO добавить проверку что такая причина существует.
-    // Пока доступны только две причины - отменено и оплачено
+
+
     if ($cashin > 0) {
       $reason = 'payed';
-    }
-
-
-    if ($reason == 'canceled') {
-      $this->order->status = 'canceled';
-      $this->order->save();
-
-    } else {
       $this->order->status = 'complete';
       $this->order->reason = $reason;
       $this->order->save();
       $cash = Cash::where('status', 'injected')->get();
+      $summ = 0;
+
       foreach ($cash as $banknote) {
+        $summ += $banknote->value;
         $banknote->status = 'inbox';
         $banknote->save();
       }
 
-      //dispatch(new SendOrdersToServer);
-      $this->printCheck($reason);
+      dispatch(new SendOrdersToServer);
+      $this->printCheck($reason, $summ);
+    } else {
+      $this->order->status = 'canceled';
+      $this->order->reason = $reason;
+      $this->order->save();
     }
 
     $this->order = Order::firstOrCreate(['status'=>'active']);
@@ -125,11 +125,8 @@ class cartController extends Controller
     Печать чека
     TODO: вынести это безобразие в job ?
   */
-  public function printCheck($reason = 'payed')
+  public function printCheck($reason = 'payed', $cashSumm = 0)
   {
-    //$ord = New Order();
-    //dd($ord->getActive());
-
     $contacts = json_decode($this->order->contacts, true);
     $cartProducts = $this->order->products;
     $products = [];
@@ -140,11 +137,7 @@ class cartController extends Controller
       $products[] = $prod;
       $summ += $product->price*$product->count;
     }
-    $cash = Cash::where('status', 'injected')->get();
-    $cashSumm = 0;
-    foreach ($cash as $item) {
-      $cashSumm += $item->value;
-    }
+
     $data = [
       'products' => $products,
       'summ' => $summ,
@@ -163,12 +156,14 @@ class cartController extends Controller
     $pdfHeight = 220;
     $pdfHeight += count($products) * 90;
 
-    if ($reason == 'canceled') {
+    // Чуток добавим высоте к чеку, для дополнительной информации
+    if ($reason == 'canceled' || $cashSumm > $summ) {
       $pdfHeight += 40;
     }
 
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
-    $pdf = PDF::loadView('receipt', $data)->setPaper([0, 0, 218, $pdfHeight], 'portrait');
+    $pdf = PDF::loadView('receipt', $data)
+                ->setPaper([0, 0, 218, $pdfHeight], 'portrait');
     //return $pdf->stream();
     $pdf->save(resource_path('reciepts/reciept.pdf'));
     $file = resource_path('reciepts/reciept.pdf');

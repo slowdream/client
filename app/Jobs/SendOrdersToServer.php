@@ -33,7 +33,10 @@ class SendOrdersToServer implements ShouldQueue
     public function handle()
     {
       $order = Order::where('status', 'complete')
-                      ->orWhere('status', 'canceled')
+                      ->orWhere(function ($query) {
+                        $query->where('status', 'canceled')
+                              ->whereNotNull('contacts');
+                      })
                       ->first();
       $orderProd = $order->products;
       $curl = new Server1C();
@@ -49,7 +52,7 @@ class SendOrdersToServer implements ShouldQueue
         "type" => "0",
         "idterm" => strtoupper(env('ID_TERM', "test")),
         "IdOrder" => (string) $order->id,
-        "data" => (string) date('YmdHis'),
+        "date" => (string) date('YmdHis'),
         "telnumber" => (string) $contacts['tel'],
         "address" => (string) $contacts['address'],
         "Pay" =>  $pay,
@@ -65,10 +68,12 @@ class SendOrdersToServer implements ShouldQueue
           "sum" => $product->count * $product->price
         ];
       }
+      if (count($arr) <= 1) {
+        return;
+      }
       $curl->post($arr);
       $response = $curl->request('crm/hs/Terminal/zakaz');
       $data = json_decode($response['html'], true);
-
       $order->status = 'sended';
       $order->save();
     }

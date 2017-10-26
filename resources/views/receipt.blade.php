@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400&amp;subset=cyrillic" rel="stylesheet">
   <title>Document</title>
@@ -155,11 +155,14 @@
   <p>{{ $tel }}</p>
   <h3>Адрес доставки:</h3>
   <p>{{ $address }}</p>
+  <h3>Телефон оператора: 8 (800) 555-35-35</h3>
 </div>
 
 @if ($reason == 'canceled')
   <p><h4>ВНИМАНИЕ!</h4> Ваш заказ не будет обработан, пожалуйста свяжитесь с оператором по телефону указанному на чеке</p>
 @endif
-
+@if ($cashSumm > $summ)
+  <p><h4>ВНИМАНИЕ!</h4> Сдачу в размере {{ $cashSumm - $summ }}р Вам доставит курьер вместе с заказом</p>
+@endif
 </body>
 </html>
