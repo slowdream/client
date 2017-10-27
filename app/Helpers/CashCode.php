@@ -5,6 +5,7 @@ namespace App\Helpers;
 //require_once base_path().'/app/libs/cashcode/cashcodes.php';
 use App\libs\cashcode\CashValidator;
 use App\libs\cashcode\cashcodes;
+use App\Order;
 use Log;
 class CashCode{
 
@@ -13,10 +14,12 @@ class CashCode{
   private $BillToBill_CMD = [];
   public $validator;
   private $cash;
+  private $order;
 
   public function __construct($cashClass)
   {
     $this->cash = $cashClass;
+    $this->order = Order::firstOrCreate(['status'=>'active']);
     $this->validator = new CashValidator();
 
     $this->BillToBill_CMD = [
@@ -171,7 +174,8 @@ class CashCode{
               ];
               $cash->value = $cashValue[$ExtendedCode];
               $cash->status = 'injected';
-              $cash->save();
+              $this->order->cash->save($cash);
+              //$cash->save();
 
               $summ = 0;
               $cash = $this->cash::where('status', 'injected')->get();
