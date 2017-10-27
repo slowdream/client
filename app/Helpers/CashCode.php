@@ -174,7 +174,7 @@ class CashCode{
               ];
               $cash->value = $cashValue[$ExtendedCode];
               $cash->status = 'injected';
-              $this->order->cash->save($cash);
+              $this->order->cash()->save($cash);
               //$cash->save();
 
               $summ = 0;

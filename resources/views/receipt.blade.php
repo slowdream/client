@@ -113,7 +113,7 @@
   }
 </style>
 
-<h1>Магазин "Мир ремонта" <br> {{ $date }}</h1>
+<h1>Магазин "Клуб мастеров" <br> {{ $date }}</h1>
 
 <h2>Заказ № {{ $id }}</h2>
 @foreach ($products as $product)
