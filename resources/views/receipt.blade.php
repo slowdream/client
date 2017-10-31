@@ -145,11 +145,11 @@
     </tr>
     <tr>
       <td>Доставка:</td>
-      <td>{{ $delivery }}}р</td>
+      <td>{{ $delivery }}р</td>
     </tr>
     <tr>
       <td>Итого:</td>
-      <td>{{ $summ + $delivery }}}р</td>
+      <td>{{ $summ + $delivery }}р</td>
     </tr>
     <tr>
       <td>Оплачено: </td>
@@ -170,8 +170,8 @@
 @if ($reason == 'canceled')
   <p><h4>ВНИМАНИЕ!</h4> Ваш заказ не будет обработан, пожалуйста свяжитесь с оператором по телефону указанному на чеке</p>
 @endif
-@if ($cashSumm + $delivery > $summ)
-  <p><h4>ВНИМАНИЕ!</h4> Сдачу в размере {{ $cashSumm + $delivery - $summ }}р Вам доставит курьер вместе с заказом</p>
+@if ($cash > $summ + $delivery)
+  <p><h4>ВНИМАНИЕ!</h4> Сдачу в размере {{ $cash - ($summ + $delivery) }}р Вам доставит курьер вместе с заказом</p>
 @endif
 </body>
 </html>

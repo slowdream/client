@@ -147,8 +147,7 @@ class cartController extends Controller
       'id' => $this->order->id,
       'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
       'reason' => $reason,
-      'delivery' => ($summ > 2000) ? 0 : 300,
-      'cashSumm' => $cashSumm
+      'delivery' => ($summ > 2000) ? 0 : 300
     ];
 
     $sms_text = view('sms', $data)->render();
