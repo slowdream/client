@@ -21,8 +21,16 @@ class cashController extends Controller
   public function getSumm ()
   {
     //Отдаем сумму введеных купюр
-    $cash = new Cash();
-    return $cash->summ();
+    $order = new Order();
+    $order = $order->getActive();
+    $cash = $order->cash;
+    $summ = 0;
+    foreach ($cash as $item) {
+      $summ += $item->value;
+    }
+    return $summ;
+    //$cash = new Cash();
+    //return $cash->summ();
   }
 
   public function pauseCash ()
@@ -40,18 +48,18 @@ class cashController extends Controller
     return 'true';
   }
 
-  public function seed()
+  public function seed ()
   {
-    $Banknotes = [50,100,500,1000];
-    for ($i=0; $i < 50; $i++) {
+    $Banknotes = [50, 100, 500, 1000];
+    for ($i = 0; $i < 50; $i++) {
       Cash::create([
-        'value' => $Banknotes[array_rand($Banknotes, 1)],
+        'value' => $Banknotes[ array_rand($Banknotes, 1) ],
         'status' => 'inbox'
       ]);
     }
-    for ($i=0; $i < 5; $i++) {
+    for ($i = 0; $i < 5; $i++) {
       Cash::create([
-        'value' => $Banknotes[array_rand($Banknotes, 1)],
+        'value' => $Banknotes[ array_rand($Banknotes, 1) ],
         'status' => 'wait'
       ]);
     }

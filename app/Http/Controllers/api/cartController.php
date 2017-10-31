@@ -154,7 +154,7 @@ class cartController extends Controller
 
     dispatch(new SendSms($data['tel'], $sms_text));
 
-    $pdfHeight = 275;
+    $pdfHeight = 310;
     $pdfHeight += count($products) * 90;
     // Чуток добавим высоте к чеку, для дополнительной информации
     if ($reason == 'canceled' || $cashSumm > $summ) {

@@ -35,7 +35,7 @@ class UpdateBackend implements ShouldQueue
     // Переходим в папку с проектом
     `cd {$path}`;
     //Скачиваем свежую версию с гита
-    `git fetch --all &&  `;
+    `git fetch --all && git reset --hard origin/master`;
     // обновляем пакеты
     `composer install`;
     if ($this->hard) {
