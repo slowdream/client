@@ -46,6 +46,27 @@ Route::group(['prefix' => '/cash'], function () {
   Route::get('/end', ['uses' => 'api\cashController@endCash']);
 });
 
+Route::get('/getbanners', function () {
+  $banners = [];
+
+  $path = public_path().'/banners/';
+  if (is_dir($path)) {
+    $files = scandir($path);
+    $images = array_slice($files, 2);
+    foreach ($images as $img) {
+      $banners[] = route('home') . '/banners/' . $img;
+    }
+  } else {
+    $files = false;
+  }
+  if (!$banners || !$files) {
+    $banners = ['/static/images/no_photo.jpg'];
+  }
+
+  return response()->json($banners);
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+

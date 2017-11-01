@@ -53,6 +53,7 @@ class SendOrdersToServer implements ShouldQueue
     foreach ($cash as $item) {
       $pay += $item->value;
     }
+
     $arr[0] = [
       "type" => "0",
       "idterm" => strtoupper(env('ID_TERM', "test")),
@@ -61,10 +62,13 @@ class SendOrdersToServer implements ShouldQueue
       "telnumber" => (string)$contacts['tel'],
       "address" => (string)$contacts['address'],
       "Pay" => $pay,
+      "Delivery" => 0,
       "reason" => $order->reason
     ];
 
+    $summ = 0;
     foreach ($orderProd as $product) {
+      $summ += $product->count * $product->price;
       $arr[] = [
         "type" => "1",
         "name" => intval($product->product->guid),
@@ -73,6 +77,9 @@ class SendOrdersToServer implements ShouldQueue
         "sum" => $product->count * $product->price
       ];
     }
+
+    $arr[0]["Delivery"] = ($summ < 2000) ? 300 : 0;
+
     if (count($arr) <= 1) {
       return;
     }
