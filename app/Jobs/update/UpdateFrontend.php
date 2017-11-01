@@ -30,7 +30,7 @@ class UpdateFrontend implements ShouldQueue
     public function handle()
     {
       // Переходим в папку с проектом
-      `cd ~/web/frontend`;
+      `cd home/terminal/web/frontend`;
       //Скачиваем свежую версию с гита и ставим пакеты
       `git fetch --all && git reset --hard origin/master && npm i`;
       // Билдим свежую версию
