@@ -18,5 +18,5 @@ Artisan::command('inspire', function () {
 })->describe('Display an inspiring quote');
 
 Artisan::command('GetProducts', function () {
-  dispatch(new GetProductsFromServer);
+  dispatch(new App\Jobs\GetProductsFromServer);
 });
