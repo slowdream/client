@@ -14,7 +14,6 @@ use CashCode as validator;
 class CashCode implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    private $min;
 
     /**
      * Create a new job instance.
@@ -23,7 +22,7 @@ class CashCode implements ShouldQueue
      */
     public function __construct($min)
     {
-      $this->min = $min;
+      //
     }
 
     /**
@@ -33,7 +32,6 @@ class CashCode implements ShouldQueue
      */
     public function handle()
     {
-      $min = $this->min;
       $Cash = new Cash();
       // Пока так, защита от будущих повисаний
       $Cash::where(['status' => 'wait'])->delete();

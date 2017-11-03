@@ -162,7 +162,7 @@ class cartController extends Controller
     }
 
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
-    $pdf = PDF::loadView('receipt', $data)
+    $pdf = PDF::loadView('check/receipt', $data)
                 ->setPaper([0, 0, 218, $pdfHeight], 'portrait');
     //return $pdf->stream();
     $pdf->save(resource_path('reciepts/reciept.pdf'));

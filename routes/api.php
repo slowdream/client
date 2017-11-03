@@ -42,6 +42,8 @@ Route::group(['prefix' => '/cart'], function() {
 Route::group(['prefix' => '/cash'], function () {
   Route::get('/summ', ['uses' => 'api\cashController@getSumm']);
   Route::post('/start', ['uses' => 'api\cashController@startCash']);
+  Route::post('/info', ['uses' => 'api\cashController@infoCash']);
+  Route::post('/incass', ['uses' => 'api\cashController@incass']);
   Route::get('/pause', ['uses' => 'api\cashController@pauseCash']);
   Route::get('/end', ['uses' => 'api\cashController@endCash']);
 });
