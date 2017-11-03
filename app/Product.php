@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 /**
@@ -35,9 +36,11 @@ use Carbon\Carbon;
  */
 class Product extends Model
 {
+  use SoftDeletes;
+
 	protected $table = 'products';
 
-  protected $fillable = ['name','guid','image','description','unit','price','count'];
+  protected $fillable = ['name','guid','image','description','unit','price','count','deleted_at'];
 
   protected $hidden = [];
 

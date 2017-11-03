@@ -23,6 +23,7 @@ class CrateTableProducts extends Migration
             $table->text('description');
             $table->string('unit', 10); //Единица измерения            
             $table->integer('category_id'); //Айдишник Категории родительской
+            $table->softDeletes();
             $table->timestamps();
         });
     }

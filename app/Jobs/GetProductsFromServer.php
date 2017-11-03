@@ -48,6 +48,9 @@ class GetProductsFromServer implements ShouldQueue
 
       $items = $curl->request('crm/hs/Terminal/?action=Goods&' . env('ID_TERM', "test"));
       $data = json_decode($items['html'], true);
+
+      Product::where('id', '>', 0 )->delete();
+
       foreach ($data as $val) {
         $category = $category::firstOrCreate([
           'guid' => $val['groupid'],
@@ -56,16 +59,17 @@ class GetProductsFromServer implements ShouldQueue
         $category->update([
           'items_parent' => true
         ]);
-        $product = Product::firstOrNew([
-          'guid' => $val['id'],
-        ]);
+        $product = Product::where('guid', '=', $val['id'])
+                          ->withTrashed()->first() ?: new Product(['guid' => $val['id']]);
+
         $product->fill([
           'name' => $val['name'],
           'image' => 'image.tyt',
           'description' => str_replace("\n", '<br>', $val['descr']),
           'price' => (int)$val['price'],
           'count' => (int)$val['mount'],
-          'unit' => $val['unit']
+          'unit' => $val['unit'],
+          'deleted_at' => null
         ]);
         $category->products()->save($product);
       }
