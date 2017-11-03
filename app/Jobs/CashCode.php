@@ -20,7 +20,7 @@ class CashCode implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($min)
+    public function __construct()
     {
       //
     }
