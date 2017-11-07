@@ -132,7 +132,7 @@ class CashCode{
    *
    * @return int
    */
-  public function poll($LastCode, $min)
+  public function poll($LastCode)
   {
     if ($this->validator->ExecuteCommand($this->BillToBill_CMD["Poll"])){
 
@@ -182,12 +182,7 @@ class CashCode{
               foreach ($cash as $item) {
                 $summ += $item->value;
               }
-              //if ($summ <= $min) {
-                $this->cash::create(['status' => 'wait']);
-//              } else {
-//                $this->info(['info' => "Пробуем отключить прием денех"]);
-//                $this->sendCommand('DisableBillTypes');
-//              }
+              $this->cash::create(['status' => 'wait']);
               break;
           }
         }
