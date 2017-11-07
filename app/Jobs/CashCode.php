@@ -54,7 +54,7 @@ class CashCode implements ShouldQueue
               $validator->sendCommand('DisableBillTypes');
               break;
             }
-            $LastCode = $validator->poll($LastCode, $min);
+            $LastCode = $validator->poll($LastCode);
             if ((time() - $timeStart) > $timeOut){
                 // отрубаем по таймауту
                 $validator->sendCommand('DisableBillTypes');
