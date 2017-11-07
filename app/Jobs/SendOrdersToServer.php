@@ -61,6 +61,8 @@ class SendOrdersToServer implements ShouldQueue
       "date" => (string)date('YmdHis'),
       "telnumber" => (string)$contacts['tel'],
       "address" => (string)$contacts['address'],
+      "orderDate" => (string)$contacts['date'],
+      "timeRange" => (string)$contacts['timeRange'],
       "Pay" => $pay,
       "Delivery" => 0,
       "reason" => $order->reason
