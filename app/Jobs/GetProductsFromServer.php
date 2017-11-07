@@ -46,7 +46,7 @@ class GetProductsFromServer implements ShouldQueue
         ]);
       }
 
-      $items = $curl->request('crm/hs/Terminal/?action=Goods&' . env('ID_TERM', "test"));
+      $items = $curl->request('crm/hs/Terminal/?action=Goods&idterm=' . strtoupper(env('ID_TERM', "test")));
       $data = json_decode($items['html'], true);
 
       Product::where('id', '>', 0 )->delete();
