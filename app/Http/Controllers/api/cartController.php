@@ -146,6 +146,8 @@ class cartController extends Controller
       'address' => $contacts['address'],
       'id' => $this->order->id,
       'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
+      'orderDate' => $contacts['date'],
+      'timeRange' => $contacts['timeRange']['text'],
       'reason' => $reason,
       'delivery' => ($summ > 2000) ? 0 : 300
     ];
