@@ -151,9 +151,12 @@ class cartController extends Controller
       'reason' => $reason,
       'delivery' => ($summ > 2000) ? 0 : 300
     ];
+    $data['timeRange'] =  mb_strimwidth($contacts['timeRange']['text'],0, 2)
+                          . '-' .
+                          mb_strimwidth($contacts['timeRange']['text'],-5, 2);
 
+    $data['orderDate'] = mb_strimwidth($contacts['date'],5,5);
     $sms_text = view('sms', $data)->render();
-
     dispatch(new SendSms($data['tel'], $sms_text));
 
     $pdfHeight = 310;
