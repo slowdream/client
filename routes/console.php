@@ -20,3 +20,7 @@ Artisan::command('inspire', function () {
 Artisan::command('GetProducts', function () {
   dispatch(new App\Jobs\GetProductsFromServer);
 });
+
+Artisan::command('SendOrdersToServer', function () {
+  dispatch(new App\Jobs\SendOrdersToServer());
+});
