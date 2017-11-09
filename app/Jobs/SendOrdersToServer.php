@@ -59,6 +59,7 @@ class SendOrdersToServer implements ShouldQueue
       "idterm" => strtoupper(env('ID_TERM', "test")),
       "IdOrder" => (string)$order->id,
       "date" => (string)date('YmdHis'),
+      "name" => (string)$contacts['name'],
       "telnumber" => (string)$contacts['tel'],
       "address" => (string)$contacts['address'],
       "orderDate" => (string)$contacts['date'],
