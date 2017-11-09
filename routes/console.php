@@ -21,6 +21,6 @@ Artisan::command('GetProducts', function () {
   dispatch(new App\Jobs\GetProductsFromServer);
 });
 
-Artisan::command('SendOrdersToServer', function () {
-  dispatch(new App\Jobs\SendOrdersToServer());
+Artisan::command('SendOrdersToServer {id=""}', function () {
+  dispatch(new App\Jobs\SendOrdersToServer("{id}"));
 });
