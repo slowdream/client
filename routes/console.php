@@ -20,7 +20,6 @@ Artisan::command('inspire', function () {
 Artisan::command('GetProducts', function () {
   dispatch(new App\Jobs\GetProductsFromServer);
 });
-
-Artisan::command('SendOrdersToServer {id=""}', function () {
-  dispatch(new App\Jobs\SendOrdersToServer("{id}"));
+Artisan::command("SendOrdersToServer {id=''}", function ($id) {
+  dispatch(new App\Jobs\SendOrdersToServer($id));
 });
