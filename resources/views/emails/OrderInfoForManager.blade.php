@@ -5,7 +5,7 @@
 Общая сумма заказа {{ $summ }}р + доставка {{ $delivery }}р
 Было оплачено на месте {{ $pay }}р
 @if($pay > $summ)
-Выдать сдачу в размере {{ $pay - $summ }}р
+Выдать сдачу в размере {{ ($pay + $delivery) - $summ }}р
 @endif
 Позиции:
 @foreach($products as $product)
