@@ -6,8 +6,10 @@
 Было оплачено на месте {{ $pay }}р
 @if($pay > ($summ + $delivery))
 Выдать сдачу в размере {{ $pay  - ($summ + $delivery) }}р
+@elseif($pay < ($summ + $delivery))
+При получении получить с покупателя {{ ($summ + $delivery) - $pay }}р
 @endif
 Позиции:
 @foreach($products as $product)
-{{ $product['guid'] }} {{ $product['name'] }} {{ $product['count'] }}{{ $product['unit'] }} {{ $product['price'] }}р
+    {{ $product['guid'] }} {{ $product['name'] }} {{ $product['count'] }}{{ $product['unit'] }} {{ $product['price'] }}р
 @endforeach

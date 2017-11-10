@@ -126,11 +126,11 @@
     </tr>
     <tr>
       <td>Цена</td>
-      <td>{{ $product['price'] }}</td>
+      <td>{{ $product['price'] }}р</td>
     </tr>
     <tr>
       <td>Сумма</td>
-      <td>{{ $product['count']*$product['price'] }}</td>
+      <td>{{ $product['count']*$product['price'] }}р</td>
     </tr>
 
 
@@ -153,7 +153,7 @@
     </tr>
     <tr>
       <td>Оплачено: </td>
-      <td>{{ $cash }}</td>
+      <td>{{ $cash }}р</td>
     </tr>
   </tbody>
 </table>
