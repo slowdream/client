@@ -82,10 +82,13 @@ class SendOrdersToServer implements ShouldQueue
     }
 
     $arr[0]["Delivery"] = ($summ < 2000) ? 300 : 0;
-
+    $arr[0]["Summ"] = $summ;
     if (count($arr) <= 1) {
       return;
     }
+
+    dispatch(new SendOrderToManager($arr));
+
     $curl->post($arr);
     $response = $curl->request('crm/hs/Terminal/zakaz');
     $data = json_decode($response['html'], true);
