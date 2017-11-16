@@ -156,7 +156,7 @@ class cartController extends Controller
                           mb_strimwidth($contacts['timeRange']['text'],-5, 2);
 
     $data['orderDate'] = mb_strimwidth($contacts['date'],5,5);
-    $sms_text = view('sms', $data)->render();
+    $sms_text = view('other_massages.sms', $data)->render();
     dispatch(new SendSms($data['tel'], $sms_text));
 
     $pdfHeight = 310;

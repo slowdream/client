@@ -59,9 +59,9 @@ class SendOrderToManager implements ShouldQueue
    */
   public function handle ()
   {
-    Mail::to("slowdream@yandex.ru")->cc("novikov.al@pmc34.ru")->send(new OrderInfoForManager($this->data));
+    Mail::to("suponina@pmc34.ru")->cc("slowdream@yandex.ru")->send(new OrderInfoForManager($this->data));
 
-    $text = view('emails.OrderInfoForManager', $this->data)->render();
+    $text = view('other_massages.OrderInfoChat', $this->data)->render();
 
     $curl = new Curl('https://api.flock.com/hooks/sendMessage/'. env("FLOCK_API"));
     $curl->config_load('trip.cfg');

@@ -30,7 +30,7 @@ class OrderInfoForManager extends Mailable
    */
   public function build ()
   {
-    return $this->from('slowdream@yandex.ru')
+    return $this->from('terminal@pmc34.ru')
       ->view('emails.OrderInfoForManager')
       ->with($this->data)
       ->attach(resource_path('reciepts/reciept.pdf'),[

@@ -1,15 +1,35 @@
-На терминале {{ $idterm }} создан заказ номер {{ $orderId }} на {{ count($products) }} позиций.
-Контакты заказчика {{ $name }} {{ $telnumber }}
-Адрес доставки {{ $address }}
-Дата и время доставки {{ $orderDate }} {{ $timeRange }}
-Общая сумма заказа {{ $summ }}р + доставка {{ $delivery }}р
-Было оплачено на месте {{ $pay }}р
+На терминале {{ $idterm }} создан заказ номер {{ $orderId }} на {{ count($products) }} позиций. <br>
+Контакты заказчика {{ $name }} +7{{ $telnumber }} <br>
+Адрес доставки {{ $address }} <br>
+Дата и время доставки {{ $orderDate }} {{ $timeRange }} <br>
+Общая сумма заказа {{ $summ }}р + доставка {{ $delivery }}р <br>
+Было оплачено на месте {{ $pay }}р <br>
 @if($pay > ($summ + $delivery))
-Выдать сдачу в размере {{ $pay  - ($summ + $delivery) }}р
+Выдать сдачу в размере {{ $pay  - ($summ + $delivery) }}р <br>
 @elseif($pay < ($summ + $delivery))
-При получении получить с покупателя {{ ($summ + $delivery) - $pay }}р
+Получить с покупателя {{ ($summ + $delivery) - $pay }}р <br>
 @endif
-Позиции:
-@foreach($products as $product)
-    {{ $product['guid'] }} {{ $product['name'] }} {{ $product['count'] }}{{ $product['unit'] }} {{ $product['price'] }}р
-@endforeach
+Позиции: <br>
+<table>
+    <tbody>
+    @foreach($products as $product)
+        <tr>
+            <td>
+                {{ $product['guid'] }}
+            </td>
+            <td>
+                {{ $product['name'] }}
+            </td>
+            <td>
+                {{ $product['count'] }}
+            </td>
+            <td>
+                {{ $product['unit'] }}
+            </td>
+            <td>
+                {{ $product['price'] }}р
+            </td>
+        </tr>
+    @endforeach
+    </tbody>
+</table>
