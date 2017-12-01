@@ -8,6 +8,7 @@ class CashValidator{
 
   function open()
   {
+    `stty -F {env('ID_COM_PORT', "/dev/ttyS0")} min 0 -hupcl -icrnl -ixon -isig -icanon -iexten -echo ignbrk noflsh -opost`;
     return $this->ValidatorHandle = fopen(env('ID_COM_PORT', "/dev/ttyS0"), "r+");
     //return $this->ValidatorHandle = fopen("com1", "w+b");
   }
