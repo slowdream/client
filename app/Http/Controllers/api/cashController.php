@@ -80,7 +80,7 @@ class cashController extends Controller
       'count' => count($inboxCash),
       'last_incass' => $lastIncass,
       'orders_count' => count($orders),
-      'orders_summ' => $orders_summ,
+      'orders_summ' => number_format($orders_summ, 2, ',', ' '),
       'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
       'id_term' => strtoupper(env('ID_TERM'))
     ];
