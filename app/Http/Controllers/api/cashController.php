@@ -60,19 +60,34 @@ class cashController extends Controller
     foreach ($inboxCash as $cash) {
       $inboxCashSumm += $cash->value;
     }
-    $incass = Event::where('name', 'incass')->first();
+    $incass = Event::where('name', 'incass')->latest()->first();
     $lastIncass = ($incass) ? $incass->created_at->toDateTimeString() : 'Не проводилась';
+
+    $orders = Order::where('created_at', '>', $incass->created_at->toDateTimeString())
+                    ->where('status', 'complete')
+                    ->get();
+
+    $orders_summ = 0;
+    foreach ($orders as $order) {
+      $orders_summ += $order->products->sum(function ($product) {
+        return $product['count']*$product['price'];
+      });
+    }
+
+
     $cashInfo = [
       'summ' => number_format($inboxCashSumm, 2, ',', ' '),
       'count' => count($inboxCash),
       'last_incass' => $lastIncass,
+      'orders_count' => count($orders),
+      'orders_summ' => $orders_summ,
       'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
       'id_term' => strtoupper(env('ID_TERM'))
     ];
 
     //Четвертое число в размере бумаги это высота чека
     $pdf = PDF::loadView('check/cashInfo', $cashInfo)
-      ->setPaper([0, 0, 218, 250], 'portrait');
+      ->setPaper([0, 0, 218, 330], 'portrait');
     //return $pdf->stream();
     $pdf->save(resource_path('reciepts/cash-info.pdf'));
     $file = resource_path('reciepts/cash-info.pdf');
