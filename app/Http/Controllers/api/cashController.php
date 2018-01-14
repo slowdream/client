@@ -57,21 +57,27 @@ class cashController extends Controller
     $needCheck = $Request->input('check');
     $inboxCash = Cash::where('status', 'inbox')->get();
     $inboxCashSumm = 0;
-    foreach ($inboxCash as $cash) {
-      $inboxCashSumm += $cash->value;
+    if ($inboxCash){
+        foreach ($inboxCash as $cash) {
+            $inboxCashSumm += $cash->value;
+        }
     }
+
     $incass = Event::where('name', 'incass')->latest()->first();
     $lastIncass = ($incass) ? $incass->created_at->toDateTimeString() : 'Не проводилась';
-
-    $orders = Order::where('created_at', '>', $incass->created_at->toDateTimeString())
-                    ->where('status', 'complete')
-                    ->get();
-
     $orders_summ = 0;
-    foreach ($orders as $order) {
-      $orders_summ += $order->products->sum(function ($product) {
-        return $product['count']*$product['price'];
-      });
+    if($incass) {
+        $orders = Order::where('created_at', '>', $incass->created_at->toDateTimeString())
+                        ->where('status', 'complete')
+                        ->get();
+        if(!$orders) {
+            return;
+        }
+        foreach ($orders as $order) {
+          $orders_summ += $order->products->sum(function ($product) {
+            return $product['count']*$product['price'];
+          });
+        }
     }
 
 
