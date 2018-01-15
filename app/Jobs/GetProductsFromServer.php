@@ -33,45 +33,45 @@ class GetProductsFromServer implements ShouldQueue
      */
     public function handle()
     {
-      $curl = new Server1C();
-      $categorys = $curl->request('crm/hs/Terminal/?action=group&' . env('ID_TERM', "test"));
-      $data = json_decode($categorys['html'], true);
+        $curl = new Server1C();
+        $categorys = $curl->request('crm/hs/Terminal/?action=group&' . env('ID_TERM', "test"));
+        $data = json_decode($categorys['html'], true);
 
-      $category = new Category;
-      foreach ($data as $val) {
-        $category::firstOrCreate([
-          'guid' => $val['groupid'],
-          'name' => $val['group'],
-          'parent_id' => $val['parentid']
-        ]);
-      }
+        $category = new Category;
+        foreach ($data as $val) {
+            $category::firstOrCreate([
+              'guid' => $val['groupid'],
+              'name' => $val['group'],
+              'parent_id' => $val['parentid']
+            ]);
+        }
 
-      $items = $curl->request('crm/hs/Terminal/?action=Goods&idterm=' . strtoupper(env('ID_TERM', "test")));
-      $data = json_decode($items['html'], true);
+        $items = $curl->request('crm/hs/Terminal/?action=Goods&idterm=' . strtoupper(env('ID_TERM', "test")));
+        $data = json_decode($items['html'], true);
 
-      Product::where('id', '>', 0 )->delete();
+        Product::where('id', '>', 0)->delete();
 
-      foreach ($data as $val) {
-        $category = $category::firstOrCreate([
-          'guid' => $val['groupid'],
-          'name' => $val['group'],
-        ]);
-        $category->update([
-          'items_parent' => true
-        ]);
-        $product = Product::where('guid', '=', $val['id'])
-                          ->withTrashed()->first() ?: new Product(['guid' => $val['id']]);
+        foreach ($data as $val) {
+            $category = $category::firstOrCreate([
+              'guid' => $val['groupid'],
+              'name' => $val['group'],
+            ]);
+            $category->update([
+              'items_parent' => true
+            ]);
+            $product = Product::where('guid', '=', $val['id'])
+              ->withTrashed()->first() ?: new Product(['guid' => $val['id']]);
 
-        $product->fill([
-          'name' => $val['name'],
-          'image' => 'image.tyt',
-          'description' => str_replace("\n", '<br>', $val['descr']),
-          'price' => (int)$val['price'],
-          'count' => (int)$val['mount'],
-          'unit' => $val['unit'],
-          'deleted_at' => null
-        ]);
-        $category->products()->save($product);
-      }
+            $product->fill([
+              'name' => $val['name'],
+              'image' => 'image.tyt',
+              'description' => str_replace("\n", '<br>', $val['descr']),
+              'price' => (int)$val['price'],
+              'count' => (int)$val['mount'],
+              'unit' => $val['unit'],
+              'deleted_at' => null
+            ]);
+            $category->products()->save($product);
+        }
     }
 }

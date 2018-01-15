@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Cash;
 use Server1C;
 use CashCode;
+
 class cashController extends Controller
 {
     public function summ()
@@ -22,51 +23,53 @@ class cashController extends Controller
 
     public function getCash(Cash $Cash)
     {
-      $timeOut = 15;
-      $timeStart = time();
+        $timeOut = 15;
+        $timeStart = time();
 
-      $validator = new CashCode($Cash);
-      $Repeat = true;
+        $validator = new CashCode($Cash);
+        $Repeat = true;
 
-      while ($Repeat) {
-        $LastCode = null;
-        $Repeat = false;
-         
-        if ($validator->start()){
-            while(true){
-                $LastCode = $validator->poll($LastCode);
+        while ($Repeat) {
+            $LastCode = null;
+            $Repeat = false;
 
-                if ((time() - $timeStart) > $timeOut){
-                    echo "timeOut";
-                    break;
+            if ($validator->start()) {
+                while (true) {
+                    $LastCode = $validator->poll($LastCode);
+
+                    if ((time() - $timeStart) > $timeOut) {
+                        echo "timeOut";
+                        break;
+                    }
+                    if ($LastCode === 666) {
+                        $Repeat = true;
+                    }
+
                 }
-                if ($LastCode === 666) {
-                    $Repeat = true;
+                if ($Repeat) {
+                    sleep(1);
                 }
-                
+            } else {
+                echo 'fail start';
+                dump($validator->info);
             }
-            if ($Repeat) {sleep(1);}
-        } else {
-          echo 'fail start';
-          dump($validator->info);
         }
-      }
     }
 
 
     public function seed()
     {
-        $Banknotes = [50,100,500,1000];
-        for ($i=0; $i < 50; $i++) {
+        $Banknotes = [50, 100, 500, 1000];
+        for ($i = 0; $i < 50; $i++) {
             Cash::create([
-                'value' => $Banknotes[array_rand($Banknotes, 1)],
-                'status' => 'inbox'
+              'value' => $Banknotes[array_rand($Banknotes, 1)],
+              'status' => 'inbox'
             ]);
         }
-        for ($i=0; $i < 5; $i++) { 
+        for ($i = 0; $i < 5; $i++) {
             Cash::create([
-                'value' => $Banknotes[array_rand($Banknotes, 1)],
-                'status' => 'wait'
+              'value' => $Banknotes[array_rand($Banknotes, 1)],
+              'status' => 'wait'
             ]);
         }
 

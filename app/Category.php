@@ -28,24 +28,24 @@ use Carbon\Carbon;
 class Category extends Model
 {
 
-  protected $table = 'categories';
+    protected $table = 'categories';
 
-  protected $fillable = ['guid','name','image','description','parent_id','items_parent'];
+    protected $fillable = ['guid', 'name', 'image', 'description', 'parent_id', 'items_parent'];
 
-  protected $hidden = [];
+    protected $hidden = [];
 
-  public function fromDateTime ($value)
-  {
-    if(env('APP_ENV') == 'sqlsrv') {
-      return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    public function fromDateTime($value)
+    {
+        if (env('APP_ENV') == 'sqlsrv') {
+            return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+        }
+        return $this->asDateTime($value)->format(
+          $this->getDateFormat()
+        );
     }
-    return $this->asDateTime($value)->format(
-      $this->getDateFormat()
-    );
-  }
 
-  public function products()
-  {
-    return $this->hasMany('App\Product');
-  }
+    public function products()
+    {
+        return $this->hasMany('App\Product');
+    }
 }

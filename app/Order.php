@@ -27,34 +27,34 @@ use Carbon\Carbon;
  */
 class Order extends Model
 {
-	protected $table = 'orders';
+    protected $table = 'orders';
 
-  protected $fillable = ['guid','status','reason'];
+    protected $fillable = ['guid', 'status', 'reason'];
 
-  protected $hidden = [];
+    protected $hidden = [];
 
-  public function fromDateTime ($value)
-  {
-    if(env('APP_ENV') == 'sqlsrv') {
-      return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    public function fromDateTime($value)
+    {
+        if (env('APP_ENV') == 'sqlsrv') {
+            return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+        }
+        return $this->asDateTime($value)->format(
+          $this->getDateFormat()
+        );
     }
-    return $this->asDateTime($value)->format(
-      $this->getDateFormat()
-    );
-  }
 
-  public function products()
-  {
-  	return $this->hasMany('App\OrderProds');
-  }
+    public function products()
+    {
+        return $this->hasMany('App\OrderProds');
+    }
 
-  public function getActive()
-  {
-  	return $this->firstOrCreate(['status'=>'active']);
-  }
+    public function getActive()
+    {
+        return $this->firstOrCreate(['status' => 'active']);
+    }
 
-  public function cash()
-  {
-    return $this->hasMany('App\Cash');
-  }
+    public function cash()
+    {
+        return $this->hasMany('App\Cash');
+    }
 }

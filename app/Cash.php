@@ -22,32 +22,34 @@ use Carbon\Carbon;
  */
 class Cash extends Model
 {
-	protected $table = 'cash';
+    protected $table = 'cash';
 
-  protected $fillable = ['value','status'];
+    protected $fillable = ['value', 'status'];
 
-  protected $hidden = [];
+    protected $hidden = [];
 
-  public function fromDateTime ($value)
-  {
-    if(env('APP_ENV') == 'sqlsrv') {
-      return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    public function fromDateTime($value)
+    {
+        if (env('APP_ENV') == 'sqlsrv') {
+            return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+        }
+        return $this->asDateTime($value)->format(
+          $this->getDateFormat()
+        );
     }
-    return $this->asDateTime($value)->format(
-      $this->getDateFormat()
-    );
-  }
-  public function order()
-  {
-    return $this->belongsTo('App\Order');
-  }
-  public function summ()
-  {
-    $summ = 0;
-    $cash = $this::where('status', 'injected')->get();
-    foreach ($cash as $item) {
-      $summ += $item->value;
+
+    public function order()
+    {
+        return $this->belongsTo('App\Order');
     }
-    return $summ;
-  }
+
+    public function summ()
+    {
+        $summ = 0;
+        $cash = $this::where('status', 'injected')->get();
+        foreach ($cash as $item) {
+            $summ += $item->value;
+        }
+        return $summ;
+    }
 }

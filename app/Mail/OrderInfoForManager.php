@@ -9,32 +9,31 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class OrderInfoForManager extends Mailable
 {
-  use Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
-  protected $data;
+    protected $data;
 
-  /**
-   * Create a new message instance.
-   *
-   * @return void
-   */
-  public function __construct ($data)
-  {
-    $this->data = $data;
-  }
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
 
-  /**
-   * Build the message.
-   *
-   * @return $this
-   */
-  public function build ()
-  {
-    return $this->from('terminal@pmc34.ru')
-      ->view('emails.OrderInfoForManager')
-      ->with($this->data)
-      ->attach(resource_path('reciepts/reciept.pdf'),[
-        'mime' => 'application/pdf',
-      ]);
-  }
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->view('emails.OrderInfoForManager')
+          ->with($this->data)
+          ->attach(resource_path('reciepts/reciept.pdf'), [
+            'mime' => 'application/pdf',
+          ]);
+    }
 }

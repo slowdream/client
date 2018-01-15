@@ -6,19 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-  protected $table = 'events';
+    protected $table = 'events';
 
-  protected $fillable = ['name','comment'];
+    protected $fillable = ['name', 'comment'];
 
-  protected $hidden = [];
+    protected $hidden = [];
 
-  public function fromDateTime ($value)
-  {
-    if(env('APP_ENV') == 'sqlsrv') {
-      return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+    public function fromDateTime($value)
+    {
+        if (env('APP_ENV') == 'sqlsrv') {
+            return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
+        }
+        return $this->asDateTime($value)->format(
+          $this->getDateFormat()
+        );
     }
-    return $this->asDateTime($value)->format(
-      $this->getDateFormat()
-    );
-  }
 }

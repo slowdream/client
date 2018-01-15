@@ -16,16 +16,17 @@ class cartController extends Controller
 
     private $order;
 
-    public function __construct(){
+    public function __construct()
+    {
         //  Проверим, есть ли в базе активный заказ, если нет, то создадим такой (пустой естественно)  
-        $this->order = Order::firstOrCreate(['status'=>'active']);
-        
+        $this->order = Order::firstOrCreate(['status' => 'active']);
+
     }
-    
+
     public function index()
     {
-        $products = $this->order->products->all();        
-        
+        $products = $this->order->products->all();
+
         return view('parts.cart', ['products' => $products]);
     }
 
@@ -40,12 +41,12 @@ class cartController extends Controller
         $id = $request->input('id');
         $count = $request->input('count');
         $order_id = $this->order->id;
-        $product = Product::find($id);        
+        $product = Product::find($id);
 
         $orderProd = OrderProds::firstOrNew([
-            'product_id' => $product->id,            
-            'price' => $product->price,            
-            'order_id' => $this->order->id            
+          'product_id' => $product->id,
+          'price' => $product->price,
+          'order_id' => $this->order->id
         ]);
 
         $orderProd->count = $count;
@@ -63,19 +64,19 @@ class cartController extends Controller
 
     public function cancel(Request $request)
     {
-      $reason = 'TimeOut';
-      if ($request->input('reason') != '') {
-        $reason = $request->input('reason');
-      }
-      $this->order->update(['status' => 'cancel', 'whyCanceled' => $reason]);
+        $reason = 'TimeOut';
+        if ($request->input('reason') != '') {
+            $reason = $request->input('reason');
+        }
+        $this->order->update(['status' => 'cancel', 'whyCanceled' => $reason]);
     }
 
     public function complete(Request $request)
     {
         $pdf = new Pdf([
-            'name' => $request->input('name'),
-            'order_num' => $request->input('nomer'),
-            'summ' => $request->input('summ')
+          'name' => $request->input('name'),
+          'order_num' => $request->input('nomer'),
+          'summ' => $request->input('summ')
         ]);
         $pdf = $pdf->process();
         file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
@@ -88,16 +89,16 @@ class cartController extends Controller
     {
         $curl = new Server1C();
         $arr = [
-            'idterm' => 1313,
-            'prods' => $this->order->products()->all(), // допилить до [id=>count,]
-            'id' => $this->order->id(),
-            'summ' => $this->order->summ,
-            'cash' => 1346,
-            'tel' => $request->input('tel'),
-            'comment' => $request->input('comment'),
-            'date' => date('YmdHis')
+          'idterm' => 1313,
+          'prods' => $this->order->products()->all(), // допилить до [id=>count,]
+          'id' => $this->order->id(),
+          'summ' => $this->order->summ,
+          'cash' => 1346,
+          'tel' => $request->input('tel'),
+          'comment' => $request->input('comment'),
+          'date' => date('YmdHis')
         ];
-        
+
         $curl->post($arr);
         $response = $curl->request('crm/hs/Terminal/?action=group');
 

@@ -18,7 +18,7 @@ class TestEmail extends Mailable
      *
      * @return void
      */
-    public function __construct ()
+    public function __construct()
     {
     }
 
@@ -27,11 +27,10 @@ class TestEmail extends Mailable
      *
      * @return $this
      */
-    public function build ()
+    public function build()
     {
-        return $this->from('terminal@pmc34.ru')
-          ->view('emails.TestEmail')
-          ->attach(resource_path('reciepts/reciept.pdf'),[
+        return $this->view('emails.TestEmail')
+          ->attach(resource_path('reciepts/reciept.pdf'), [
             'mime' => 'application/pdf',
           ]);
     }

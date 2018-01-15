@@ -22,7 +22,7 @@ class CashCode implements ShouldQueue
      */
     public function __construct()
     {
-      //
+        //
     }
 
     /**
@@ -32,48 +32,50 @@ class CashCode implements ShouldQueue
      */
     public function handle()
     {
-      $Cash = new Cash();
-      // Пока так, защита от будущих повисаний
-      $Cash::where(['status' => 'wait'])->delete();
-      $Cash::create(['status' => 'wait']);
-      //$Cash::firstOrCreate(['status' => 'wait']);
-      $timeOut = 50;
-      $timeStart = time();
-      $validator = new validator($Cash);
-      $Repeat = true;
+        $Cash = new Cash();
+        // Пока так, защита от будущих повисаний
+        $Cash::where(['status' => 'wait'])->delete();
+        $Cash::create(['status' => 'wait']);
+        //$Cash::firstOrCreate(['status' => 'wait']);
+        $timeOut = 50;
+        $timeStart = time();
+        $validator = new validator($Cash);
+        $Repeat = true;
 
-      while ($Repeat) {
-        $LastCode = null;
-        $Repeat = false;
-        $banknote = '';
-        if ($validator->start()){
-          while(true){
-            $banknote = Cash::where('status', 'wait')->first();
-            if (!$banknote) {
-              // Если не найдена запись со статусом wait, значит остановим прием
-              $validator->sendCommand('DisableBillTypes');
-              break;
+        while ($Repeat) {
+            $LastCode = null;
+            $Repeat = false;
+            $banknote = '';
+            if ($validator->start()) {
+                while (true) {
+                    $banknote = Cash::where('status', 'wait')->first();
+                    if (!$banknote) {
+                        // Если не найдена запись со статусом wait, значит остановим прием
+                        $validator->sendCommand('DisableBillTypes');
+                        break;
+                    }
+                    $LastCode = $validator->poll($LastCode);
+                    if ((time() - $timeStart) > $timeOut) {
+                        // отрубаем по таймауту
+                        $validator->sendCommand('DisableBillTypes');
+                        break;
+                    }
+                    if ($LastCode === 666) {
+                        // Я не помню зачем, но вроде так надо
+                        // Если купюру зажевало - пройтись с нуля по циклу.
+                        $Repeat = true;
+                    }
+                    if ($LastCode == 129) {
+                        // Если купюра принята - обнуляем таймаут
+                        $timeStart = time();
+                    }
+                }
+                if ($Repeat) {
+                    sleep(1);
+                }
+            } else {
+                // TODO: Надо чет делать если не получилось запуститься
             }
-            $LastCode = $validator->poll($LastCode);
-            if ((time() - $timeStart) > $timeOut){
-                // отрубаем по таймауту
-                $validator->sendCommand('DisableBillTypes');
-                break;
-            }
-            if ($LastCode === 666) {
-                // Я не помню зачем, но вроде так надо
-                // Если купюру зажевало - пройтись с нуля по циклу.
-                $Repeat = true;
-            }
-            if ($LastCode == 129) {
-              // Если купюра принята - обнуляем таймаут
-              $timeStart = time();
-            }
-          }
-          if ($Repeat) {sleep(1);}
-        } else {
-          // TODO: Надо чет делать если не получилось запуститься
         }
-      }
     }
 }
