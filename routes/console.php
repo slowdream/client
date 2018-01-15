@@ -54,3 +54,7 @@ Artisan::command('testprinter', function () {
     $file = resource_path('reciepts/reciept.pdf');
     $print = `lp {$file}`;
 });
+
+Artisan::command("testemail", function () {
+    Mail::to("slowdream@yandex.ru")->send(new \App\Mail\TestEmail());
+});
