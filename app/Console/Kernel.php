@@ -27,7 +27,10 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             dispatch(new \App\Jobs\GetProductsFromServer());
-        })->daily();
+        })->dailyAt('10:05');
+        $schedule->call(function () {
+            dispatch(new \App\Jobs\GetProductsFromServer());
+        })->dailyAt('16:55');
     }
 
     /**
