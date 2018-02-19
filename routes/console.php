@@ -18,9 +18,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
 
-Artisan::command('GetProducts', function () {
-    dispatch(new App\Jobs\GetProductsFromServer);
-});
+//Artisan::command('GetProducts', function () {
+//    dispatch(new App\Jobs\GetProductsFromServer);
+//});
+
 Artisan::command("SendOrdersToServer {id=''}", function ($id) {
     dispatch(new App\Jobs\SendOrdersToServer($id));
 });

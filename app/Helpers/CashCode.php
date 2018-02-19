@@ -146,7 +146,7 @@ class CashCode
             $Code = $this->CommandResult(3);
             if ($Code != 0) {
                 if ($Code == $LastCode) {
-                    $this->info(['info' => "wait"]);
+                    //$this->info(['info' => "wait"]);
                 } else {
                     $LastCode = $Code;
                     $ExtendedCode = $this->CommandResult(4);
