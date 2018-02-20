@@ -33,7 +33,6 @@ class cartController extends Controller
         $products = $this->order->products->all();
         $cartProducts = [];
         foreach ($products as $item) {
-            ;
             $itemProduct = $item->product->toArray();
             $itemProduct['stock'] = $itemProduct['count'];
             $itemProduct['count'] = $item->count;
@@ -161,7 +160,7 @@ class cartController extends Controller
         $sms_text = view('other_massages.sms', $data)->render();
         dispatch(new SendSms($data['tel'], $sms_text));
 
-        $pdfHeight = 310;
+        $pdfHeight = 330;
         $pdfHeight += count($products) * 100;
         // Чуток добавим высоте к чеку, для дополнительной информации
         if ($reason == 'canceled' || $cashSumm > $summ) {

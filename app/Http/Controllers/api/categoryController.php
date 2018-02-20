@@ -20,10 +20,15 @@ class categoryController extends Controller
 
     public function getCategory($id = '', Request $request)
     {
-        // TODO: исключить из выборки путые категории
         $categorys = Category::where('parent_id', $id)->get()->toArray();
 
         foreach ($categorys as $id => $category) {
+            // Уберем из массива пустые категории
+            if (!!$category['items_parent'] && !Product::where('category_id', $category['id'])->get()->count()) {
+                unset($categorys[$id]);
+                continue;
+            }
+
             $image = public_path() . '/categorys_images/' . $category['guid'] . '.jpg';
 
             if (!file_exists($image)) {
@@ -34,7 +39,7 @@ class categoryController extends Controller
 
             $categorys[$id]['image'] = $image;
         }
-
+        sort($categorys);
         return response()->json($categorys);
     }
 }
