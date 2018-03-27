@@ -62,6 +62,7 @@ class SendOrderToManager implements ShouldQueue
     {
         Mail::to("suponina@pmc34.ru")
             ->cc("slowdream@yandex.ru")
+            ->cc("gamov@pmc34.ru")
             ->cc("voroncov@pmc34.ru")
                 ->send(new OrderInfoForManager($this->data));
     }

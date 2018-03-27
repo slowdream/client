@@ -95,22 +95,26 @@ class cartController extends Controller
         // TODO добавить проверку что такая причина существует.
 
 
-        if ($cashin > 0) {
-            $reason = 'payed';
+        if ($cashin > 0 || $reason == 'withoutPay') {
+            $reason = ($reason == 'withoutPay') ? 'withoutPay' : 'payed';
             $this->order->status = 'complete';
             $this->order->reason = $reason;
             $this->order->save();
-            $cash = Cash::where('status', 'injected')->get();
             $summ = 0;
 
-            foreach ($cash as $banknote) {
-                $summ += $banknote->value;
-                $banknote->status = 'inbox';
-                $banknote->save();
+            if ($reason != 'withoutPay') {
+                $cash = Cash::where('status', 'injected')->get();
+
+                foreach ($cash as $banknote) {
+                    $summ += $banknote->value;
+                    $banknote->status = 'inbox';
+                    $banknote->save();
+                }
             }
 
             dispatch(new SendOrdersToServer($this->order->id));
             $this->printCheck($reason, $summ);
+
         } else {
             $this->order->status = 'canceled';
             $this->order->reason = $reason;

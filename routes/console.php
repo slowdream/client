@@ -25,6 +25,9 @@ Artisan::command('inspire', function () {
 Artisan::command("SendOrdersToServer {id=''}", function ($id) {
     dispatch(new App\Jobs\SendOrdersToServer($id));
 });
+Artisan::command("CashTest", function () {
+    dispatch(new App\Jobs\CashCode(10));
+});
 
 Artisan::command('testprinter', function () {
     $data = [

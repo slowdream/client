@@ -38,12 +38,13 @@ class GetProductsFromServer implements ShouldQueue
         $data = json_decode($categorys['html'], true);
 
         $category = new Category;
+        $category::where('id', '>', 0)->delete();
+
         foreach ($data as $val) {
-            $category::firstOrCreate([
-              'guid' => $val['groupid'],
-              'name' => $val['group'],
-              'parent_id' => $val['parentid']
-            ]);
+            $category::updateOrCreate(
+              ['guid' => $val['groupid']],
+              ['name' => $val['group'], 'parent_id' => $val['parentid'], 'deleted_at' => null]
+            );
         }
 
         $items = $curl->request('crm/hs/Terminal/?action=Goods&idterm=' . strtoupper(env('ID_TERM', "test")));

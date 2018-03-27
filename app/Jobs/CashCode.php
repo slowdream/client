@@ -15,14 +15,16 @@ class CashCode implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $timeOut;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($timeOut = 50)
     {
-        //
+        $this->timeOut = $timeOut;
     }
 
     /**
@@ -36,8 +38,8 @@ class CashCode implements ShouldQueue
         // Пока так, защита от будущих повисаний
         $Cash::where(['status' => 'wait'])->delete();
         $Cash::create(['status' => 'wait']);
+        $timeOut = $this->timeOut;
         //$Cash::firstOrCreate(['status' => 'wait']);
-        $timeOut = 50;
         $timeStart = time();
         $validator = new validator($Cash);
         $Repeat = true;
