@@ -2,47 +2,40 @@
 
 namespace App\Http\Controllers;
 
-
-use Illuminate\Http\Request;
-
-use App\Product;
 use App\Category;
-
-use Pdf;
+use App\Product;
+use Illuminate\Http\Request;
 use Server1C;
 
 class mainController extends Controller
 {
     public function getDataFrom1C()
     {
-
         $curl = new Server1C();
 
         $categorys = $curl->request('crm/hs/Terminal/?action=group');
         $data = json_decode($categorys['html'], true);
 
-        $category = new Category;
+        $category = new Category();
         foreach ($data as $val) {
             $category::firstOrCreate([
-              'guid' => $val['groupid'],
-              'name' => $val['group'],
-              'parent_id' => $val['parentid']
+              'guid'      => $val['groupid'],
+              'name'      => $val['group'],
+              'parent_id' => $val['parentid'],
             ]);
         }
-
 
         $items = $curl->request('crm/hs/Terminal/?action=Goods');
         $data = json_decode($items['html'], true);
 
         foreach ($data as $val) {
-
             $category = $category::firstOrCreate([
               'guid' => $val['groupid'],
               'name' => $val['group'],
             ]);
 
             $category->update([
-              'items_parent' => true
+              'items_parent' => true,
             ]);
 
             $product = Product::firstOrNew([
@@ -50,12 +43,12 @@ class mainController extends Controller
             ]);
 
             $product->fill([
-              'name' => $val['name'],
-              'image' => 'image.tyt',
+              'name'        => $val['name'],
+              'image'       => 'image.tyt',
               'description' => str_replace("\n", '<br>', $val['descr']),
-              'price' => (int)$val['price'],
-              'count' => (int)$val['mount'],
-              'unit' => $val['unit']
+              'price'       => (int) $val['price'],
+              'count'       => (int) $val['mount'],
+              'unit'        => $val['unit'],
             ]);
 
             $category->products()->save($product);
@@ -63,7 +56,6 @@ class mainController extends Controller
 
         return redirect()->route('home');
     }
-
 
     public function index()
     {
@@ -89,7 +81,7 @@ class mainController extends Controller
         die();
     }
 
-    public function getContent($id = '', Request $request)
+    public function getContent($id, Request $request)
     {
         $category = Category::where('parent_id', $id)->take(9)->get();
         if ($request->input('id')) {
@@ -99,13 +91,14 @@ class mainController extends Controller
             return view('parts.categorys', ['categorys' => $category]);
         } else {
             $products = Category::where('guid', $id)->first()->products()->take(9)->get();
+
             return view('parts.items', ['products' => $products]);
         }
     }
 
     public function search(Request $request)
     {
-        $query = '%' . $request->get('q') . '%';
+        $query = '%'.$request->get('q').'%';
         $products = Product::where('name', 'like', $query)->get();
 
         return view('parts.items', ['products' => $products]);

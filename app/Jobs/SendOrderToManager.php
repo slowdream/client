@@ -2,16 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Mail\OrderInfoForManager;
+use App\order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\order;
-use Curl;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Mail;
-use App\Mail\OrderInfoForManager;
 
 class SendOrderToManager implements ShouldQueue
 {
@@ -27,27 +25,27 @@ class SendOrderToManager implements ShouldQueue
     public function __construct($data)
     {
         $emailData = [
-          "idterm" => strtoupper(env('ID_TERM', "test")),
-          'orderId' => $data[0]["IdOrder"],
-          "name" => $data[0]['name'],
-          "telnumber" => $data[0]["telnumber"],
-          "address" => $data[0]['address'],
-          "orderDate" => $data[0]["orderDate"],
-          "timeRange" => $data[0]["timeRange"],
-          "pay" => $data[0]["Pay"],
-          "summ" => $data[0]["Summ"],
-          "delivery" => $data[0]["Delivery"],
-          "products" => []
+          'idterm'    => strtoupper(env('ID_TERM', 'test')),
+          'orderId'   => $data[0]['IdOrder'],
+          'name'      => $data[0]['name'],
+          'telnumber' => $data[0]['telnumber'],
+          'address'   => $data[0]['address'],
+          'orderDate' => $data[0]['orderDate'],
+          'timeRange' => $data[0]['timeRange'],
+          'pay'       => $data[0]['Pay'],
+          'summ'      => $data[0]['Summ'],
+          'delivery'  => $data[0]['Delivery'],
+          'products'  => [],
         ];
 
-        $order = Order::find($data[0]["IdOrder"]);
+        $order = Order::find($data[0]['IdOrder']);
         foreach ($order->products as $product) {
             $emailData['products'][] = [
-              'guid' => $product->product->guid,
-              'name' => $product->product->name,
+              'guid'  => $product->product->guid,
+              'name'  => $product->product->name,
               'count' => $product->count,
-              'unit' => $product->product->unit,
-              'price' => $product->product->price
+              'unit'  => $product->product->unit,
+              'price' => $product->product->price,
             ];
         }
         $this->data = $emailData;
@@ -60,10 +58,10 @@ class SendOrderToManager implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to("suponina@pmc34.ru")
-            ->cc("slowdream@yandex.ru")
-            ->cc("gamov@pmc34.ru")
-            ->cc("voroncov@pmc34.ru")
+        Mail::to('suponina@pmc34.ru')
+            ->cc('slowdream@yandex.ru')
+            ->cc('gamov@pmc34.ru')
+            ->cc('voroncov@pmc34.ru')
                 ->send(new OrderInfoForManager($this->data));
     }
 }

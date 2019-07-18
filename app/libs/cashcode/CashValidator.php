@@ -6,40 +6,40 @@ use Log;
 
 class CashValidator
 {
-
     public $ValidatorHandle = null;
     public $CommandResult = null;
 
-    function open()
+    public function open()
     {
-        $com = env('ID_COM_PORT', "/dev/ttyS0");
+        $com = env('ID_COM_PORT', '/dev/ttyS0');
         `stty -F {$com} min 0 -hupcl -icrnl -ixon -isig -icanon -iexten -echo ignbrk noflsh -opost`;
-        return $this->ValidatorHandle = fopen($com, "r+");
+
+        return $this->ValidatorHandle = fopen($com, 'r+');
         //return $this->ValidatorHandle = fopen("com1", "w+b");
     }
 
-    function close()
+    public function close()
     {
         if ($this->ValidatorHandle) {
             fclose($this->ValidatorHandle);
         }
     }
 
-    function sendACK($ack)
+    public function sendACK($ack)
     {
-
         if ($this->ValidatorHandle) {
             fwrite($this->ValidatorHandle, $ack);
         }
     }
 
-    function ErrorHandler($errno, $errstr, $errfile, $errline)
+    public function ErrorHandler($errno, $errstr, $errfile, $errline)
     {
-        $data["error_text"] = $errstr;
+        $data['error_text'] = $errstr;
+
         return false;
     }
 
-    function ExecuteCommand($Command, $Waiting = true)
+    public function ExecuteCommand($Command, $Waiting = true)
     {
         if ($this->ValidatorHandle) {
             Log::info('FWrite "ExecuteCommand" start');
@@ -86,7 +86,7 @@ class CashValidator
                 usleep(50 * 1000);
             }
         }
+
         return false;
     }
-
 }

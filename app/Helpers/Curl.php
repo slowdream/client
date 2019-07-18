@@ -2,10 +2,8 @@
 
 namespace App\Helpers;
 
-
 class Curl
 {
-
     private $ch;  // экземляр курла
     private $host;   // хост - базовая часть урла без слеша на конце
     private $options; // массив с настройками курла
@@ -32,26 +30,26 @@ class Curl
     }
 
     /**
-     * Устанавливает опцию курла и записывает в массив с опциями
+     * Устанавливает опцию курла и записывает в массив с опциями.
      *
-     * @param mixed $name
-     * Константа (название) или номер опции курла
-     *
+     * @param mixed  $name
+     *                      Константа (название) или номер опции курла
      * @param mixeds $value
-     * Значение опции для установки
+     *                      Значение опции для установки
      */
     public function set($name, $value)
     {
         $this->options[$name] = $value;
         curl_setopt($this->ch, $name, $value);
+
         return $this;
     }
 
     /**
-     * Отображает текущее состояние опции
+     * Отображает текущее состояние опции.
      *
      * @param mixed $name
-     * Константа (название) или номер опции курла
+     *                    Константа (название) или номер опции курла
      */
     public function get($name)
     {
@@ -59,15 +57,16 @@ class Curl
     }
 
     /**
-     * Устанавливает настройки куков
+     * Устанавливает настройки куков.
      *
      * @param string $file
-     * Относительный путь до файла для сохранения кук
+     *                     Относительный путь до файла для сохранения кук
      */
     public function cookie($path)
     {
-        $this->set(CURLOPT_COOKIEJAR, $_SERVER['DOCUMENT_ROOT'] . '/' . COOKIE_DIR . $path);
-        $this->set(CURLOPT_COOKIEFILE, $_SERVER['DOCUMENT_ROOT'] . '/' . COOKIE_DIR . $path);
+        $this->set(CURLOPT_COOKIEJAR, $_SERVER['DOCUMENT_ROOT'].'/'.COOKIE_DIR.$path);
+        $this->set(CURLOPT_COOKIEFILE, $_SERVER['DOCUMENT_ROOT'].'/'.COOKIE_DIR.$path);
+
         return $this;
     }
 
@@ -75,24 +74,26 @@ class Curl
      * Включает или выключает возможность обращаться к HTTPS страницам
      *
      * @param int $act
-     * 1 - https разрешено, 0 - https запрещено
+     *                 1 - https разрешено, 0 - https запрещено
      */
     public function ssl($act)
     {
         $this->set(CURLOPT_SSL_VERIFYPEER, $act);
         $this->set(CURLOPT_SSL_VERIFYHOST, $act);
+
         return $this;
     }
 
     /**
-     * Включает или выключает заголовки ответа
+     * Включает или выключает заголовки ответа.
      *
      * @param int $act
-     * 1 - есть, 0 - нет
+     *                 1 - есть, 0 - нет
      */
     public function headers($act)
     {
         $this->set(CURLOPT_HEADER, $act);
+
         return $this;
     }
 
@@ -100,12 +101,13 @@ class Curl
      * Устанавливает, следовать ли за перенаправлением
      *
      * @param bool $param
-     * TRUE - следовать
-     * FALSE - не следовать
+     *                    TRUE - следовать
+     *                    FALSE - не следовать
      */
     public function follow($param)
     {
         $this->set(CURLOPT_FOLLOWLOCATION, $param);
+
         return $this;
     }
 
@@ -117,6 +119,7 @@ class Curl
     public function referer($url)
     {
         $this->set(CURLOPT_REFERER, $url);
+
         return $this;
     }
 
@@ -128,20 +131,22 @@ class Curl
     public function agent($agent)
     {
         $this->set(CURLOPT_USERAGENT, $agent);
+
         return $this;
     }
 
     /**
-     * Настройка конфигурации для метода POST
+     * Настройка конфигурации для метода POST.
      *
      * @param mixed $post
-     * array - ассоциативный массив с параметрами
-     * false - отлючить обращение методом POST
+     *                    array - ассоциативный массив с параметрами
+     *                    false - отлючить обращение методом POST
      */
     public function post($data, $decode = true)
     {
         if ($data === false) {
             $this->set(CURLOPT_POST, false);
+
             return $this;
         }
         if ($decode) {
@@ -149,11 +154,12 @@ class Curl
         }
         $this->set(CURLOPT_POST, true);
         $this->set(CURLOPT_POSTFIELDS, $data);
+
         return $this;
     }
 
     /**
-     * Добавить 1 произвольный http-заголовок к запросу
+     * Добавить 1 произвольный http-заголовок к запросу.
      *
      * @param string $header
      */
@@ -161,11 +167,12 @@ class Curl
     {
         $this->options[CURLOPT_HTTPHEADER][] = $header;
         $this->set(CURLOPT_HTTPHEADER, $this->options[CURLOPT_HTTPHEADER]);
+
         return $this;
     }
 
     /**
-     * Добавить несколько произвольных http-заголовоков к запросу
+     * Добавить несколько произвольных http-заголовоков к запросу.
      *
      * @param array $headers
      */
@@ -176,27 +183,29 @@ class Curl
         }
 
         $this->set(CURLOPT_HTTPHEADER, $this->options[CURLOPT_HTTPHEADER]);
+
         return $this;
     }
 
     /**
-     * Очиситить массив произвольных http-заголовков
+     * Очиситить массив произвольных http-заголовков.
      */
     public function clear_headers()
     {
         $this->options[CURLOPT_HTTPHEADER] = [];
         $this->set(CURLOPT_HTTPHEADER, $this->options[CURLOPT_HTTPHEADER]);
+
         return $this;
     }
 
     /**
-     * Загрузить конфигурацию из файла
+     * Загрузить конфигурацию из файла.
      *
      * @param string $file
      */
     public function config_load($file)
     {
-        $data = file_get_contents(app_path('/Helpers/') . $file);
+        $data = file_get_contents(app_path('/Helpers/').$file);
         $data = json_decode($data, 1);
 
         curl_setopt_array($this->ch, $data);
@@ -204,23 +213,25 @@ class Curl
         foreach ($data as $key => $val) {
             $this->options[$key] = $val;
         }
+
         return $this;
     }
 
     /**
-     * Сохранить конфигурацию в файл
+     * Сохранить конфигурацию в файл.
      *
      * @param string $file
      */
     public function config_save($file)
     {
         $data = json_encode($this->options);
-        file_put_contents('config/' . $file, $data);
+        file_put_contents('config/'.$file, $data);
+
         return $this;
     }
 
     /**
-     * Выполнить запрос на конкретный урл
+     * Выполнить запрос на конкретный урл.
      *
      * @param string $url
      */
@@ -228,38 +239,39 @@ class Curl
     {
         curl_setopt($this->ch, CURLOPT_URL, $this->make_url($url));
         $data = curl_exec($this->ch);
+
         return $this->process_result($data);
     }
 
     /**
-     * Создает правильный URL
+     * Создает правильный URL.
      *
      * @param string $url
-     * адрес страницы без домена
+     *                    адрес страницы без домена
      */
     private function make_url($url)
     {
         if ($url[0] != '/') {
-            $url = '/' . $url;
+            $url = '/'.$url;
         }
 
-        return $this->host . $url;
+        return $this->host.$url;
     }
 
     /**
-     * Переводит полученную курлом страницу в человеческий вид
+     * Переводит полученную курлом страницу в человеческий вид.
      *
      * @param string $data
-     * Результат полученный функцией curl_exec
-     * (т.е. заголовок и содержимое страницы)
+     *                     Результат полученный функцией curl_exec
+     *                     (т.е. заголовок и содержимое страницы)
      *
      * @return array
-     * Возвращает распарсенный массив с информацией
-     * [
-     * 'headers' => заголовки,
-     * 'headers['start']' => первая строка HTTP заголовка со статус-кодом,
-     * 'html' => содержимое страницы
-     * ]
+     *               Возвращает распарсенный массив с информацией
+     *               [
+     *               'headers' => заголовки,
+     *               'headers['start']' => первая строка HTTP заголовка со статус-кодом,
+     *               'html' => содержимое страницы
+     *               ]
      */
     private function process_result($data)
     {
@@ -267,7 +279,7 @@ class Curl
         if (!isset($this->options[CURLOPT_HEADER]) || !$this->options[CURLOPT_HEADER]) {
             return [
               'headers' => [],
-              'html' => $data
+              'html'    => $data,
             ];
         }
 
@@ -316,7 +328,7 @@ class Curl
 
         return [
           'headers' => $headers,
-          'html' => $body_part
+          'html'    => $body_part,
         ];
     }
 }

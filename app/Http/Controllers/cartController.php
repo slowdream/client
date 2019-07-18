@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Order;
 use App\OrderProds;
 use App\Product;
-
+use Illuminate\Http\Request;
 use Pdf;
 use Server1C;
 
 class cartController extends Controller
 {
-
     private $order;
 
     public function __construct()
     {
-        //  Проверим, есть ли в базе активный заказ, если нет, то создадим такой (пустой естественно)  
+        //  Проверим, есть ли в базе активный заказ, если нет, то создадим такой (пустой естественно)
         $this->order = Order::firstOrCreate(['status' => 'active']);
-
     }
 
     public function index()
@@ -37,7 +33,6 @@ class cartController extends Controller
 
     public function add(Request $request)
     {
-
         $id = $request->input('id');
         $count = $request->input('count');
         $order_id = $this->order->id;
@@ -45,8 +40,8 @@ class cartController extends Controller
 
         $orderProd = OrderProds::firstOrNew([
           'product_id' => $product->id,
-          'price' => $product->price,
-          'order_id' => $this->order->id
+          'price'      => $product->price,
+          'order_id'   => $this->order->id,
         ]);
 
         $orderProd->count = $count;
@@ -59,6 +54,7 @@ class cartController extends Controller
     {
         $id = $request->input('id');
         $this->order->products->find($id)->delete();
+
         return 'true';
     }
 
@@ -74,14 +70,15 @@ class cartController extends Controller
     public function complete(Request $request)
     {
         $pdf = new Pdf([
-          'name' => $request->input('name'),
+          'name'      => $request->input('name'),
           'order_num' => $request->input('nomer'),
-          'summ' => $request->input('summ')
+          'summ'      => $request->input('summ'),
         ]);
         $pdf = $pdf->process();
         file_put_contents(resource_path('reciepts/reciept.pdf'), $pdf);
         $file = resource_path('reciepts/reciept.pdf');
         $print = `lp {$file}`;
+
         return $print;
     }
 
@@ -89,14 +86,14 @@ class cartController extends Controller
     {
         $curl = new Server1C();
         $arr = [
-          'idterm' => 1313,
-          'prods' => $this->order->products()->all(), // допилить до [id=>count,]
-          'id' => $this->order->id(),
-          'summ' => $this->order->summ,
-          'cash' => 1346,
-          'tel' => $request->input('tel'),
+          'idterm'  => 1313,
+          'prods'   => $this->order->products()->all(), // допилить до [id=>count,]
+          'id'      => $this->order->id(),
+          'summ'    => $this->order->summ,
+          'cash'    => 1346,
+          'tel'     => $request->input('tel'),
           'comment' => $request->input('comment'),
-          'date' => date('YmdHis')
+          'date'    => date('YmdHis'),
         ];
 
         $curl->post($arr);

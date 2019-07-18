@@ -2,18 +2,16 @@
 
 /**
  * Класс для работы с API сайта sms.ru для PHP 5.3 и выше
- * Разработчик WebProgrammer (kl.dm.vl@yandex.ru), легкие корректировки - Роман Гудев <rgudev@bk.ru>
+ * Разработчик WebProgrammer (kl.dm.vl@yandex.ru), легкие корректировки - Роман Гудев <rgudev@bk.ru>.
  */
 class SMSRU
 {
-
     private $ApiKey;
     private $protocol = 'https';
     private $domain = 'sms.ru';
     private $count_repeat = 5;    //количество попыток достучаться до сервера если он не доступен
 
-
-    function __construct($ApiKey)
+    public function __construct($ApiKey)
     {
         $this->ApiKey = $ApiKey;
     }
@@ -35,29 +33,30 @@ class SMSRU
      */
     public function send_one($post)
     {
-        $url = $this->protocol . '://' . $this->domain . '/sms/send';
+        $url = $this->protocol.'://'.$this->domain.'/sms/send';
         $request = $this->Request($url, $post);
         $resp = $this->CheckReplyError($request, 'send');
 
-        if ($resp->status == "OK") {
-            $temp = (array)$resp->sms;
+        if ($resp->status == 'OK') {
+            $temp = (array) $resp->sms;
             $temp = array_pop($temp);
+
             return $temp;
         } else {
             return $resp;
         }
-
     }
 
     public function send($post)
     {
-        $url = $this->protocol . '://' . $this->domain . '/sms/send';
+        $url = $this->protocol.'://'.$this->domain.'/sms/send';
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'send');
     }
 
     /**
-     * Отправка СМС сообщений по электронной почте
+     * Отправка СМС сообщений по электронной почте.
      *
      * @param $post
      *   $post->from = string - Ваш электронный адрес
@@ -70,24 +69,26 @@ class SMSRU
      */
     public function sendSmtp($post)
     {
-        $post->to = $this->ApiKey . '@' . $this->domain;
+        $post->to = $this->ApiKey.'@'.$this->domain;
         $post->subject = $this->sms_mime_header_encode($post->subject, $post->charset, $post->send_charset);
         if ($post->charset != $post->send_charset) {
             $post->body = iconv($post->charset, $post->send_charset, $post->body);
         }
         $headers = "From: $post->\r\n";
         $headers .= "Content-type: text/plain; charset=$post->send_charset\r\n";
+
         return mail($post->to, $post->subject, $post->body, $headers);
     }
 
     public function getStatus($id)
     {
-        $url = $this->protocol . '://' . $this->domain . '/sms/status';
+        $url = $this->protocol.'://'.$this->domain.'/sms/status';
 
         $post = new stdClass();
         $post->sms_id = $id;
 
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'getStatus');
     }
 
@@ -103,18 +104,20 @@ class SMSRU
      */
     public function getCost($post)
     {
-        $url = $this->protocol . '://' . $this->domain . '/sms/cost';
+        $url = $this->protocol.'://'.$this->domain.'/sms/cost';
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'getCost');
     }
 
     /**
-     * Получение состояния баланса
+     * Получение состояния баланса.
      */
     public function getBalance()
     {
-        $url = $this->protocol . '://' . $this->domain . '/my/balance';
+        $url = $this->protocol.'://'.$this->domain.'/my/balance';
         $request = $this->Request($url);
+
         return $this->CheckReplyError($request, 'getBalance');
     }
 
@@ -123,18 +126,20 @@ class SMSRU
      */
     public function getLimit()
     {
-        $url = $this->protocol . '://' . $this->domain . '/my/limit';
+        $url = $this->protocol.'://'.$this->domain.'/my/limit';
         $request = $this->Request($url);
+
         return $this->CheckReplyError($request, 'getLimit');
     }
 
     /**
-     * Получение списка отправителей
+     * Получение списка отправителей.
      */
     public function getSenders()
     {
-        $url = $this->protocol . '://' . $this->domain . '/my/senders';
+        $url = $this->protocol.'://'.$this->domain.'/my/senders';
         $request = $this->Request($url);
+
         return $this->CheckReplyError($request, 'getSenders');
     }
 
@@ -149,34 +154,35 @@ class SMSRU
      */
     public function authCheck($post)
     {
-        $url = $this->protocol . '://' . $this->domain . '/auth/check';
+        $url = $this->protocol.'://'.$this->domain.'/auth/check';
         $post->api_id = 'none';
+
         return $this->CheckReplyError($request, 'AuthCheck');
     }
 
-
     /**
-     * На номера, добавленные в стоплист, не доставляются сообщения (и за них не списываются деньги)
+     * На номера, добавленные в стоплист, не доставляются сообщения (и за них не списываются деньги).
      *
      * @param string $phone Номер телефона.
-     * @param string $text Примечание (доступно только вам).
+     * @param string $text  Примечание (доступно только вам).
      *
      * @return mixed|\stdClass
      */
-    public function addStopList($phone, $text = "")
+    public function addStopList($phone, $text = '')
     {
-        $url = $this->protocol . '://' . $this->domain . '/stoplist/add';
+        $url = $this->protocol.'://'.$this->domain.'/stoplist/add';
 
         $post = new stdClass();
         $post->stoplist_phone = $phone;
         $post->stoplist_text = $text;
 
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'addStopList');
     }
 
     /**
-     * Удаляет один номер из стоплиста
+     * Удаляет один номер из стоплиста.
      *
      * @param string $phone Номер телефона.
      *
@@ -184,12 +190,13 @@ class SMSRU
      */
     public function delStopList($phone)
     {
-        $url = $this->protocol . '://' . $this->domain . '/stoplist/del';
+        $url = $this->protocol.'://'.$this->domain.'/stoplist/del';
 
         $post = new stdClass();
         $post->stoplist_phone = $phone;
 
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'delStopList');
     }
 
@@ -198,8 +205,9 @@ class SMSRU
      */
     public function getStopList()
     {
-        $url = $this->protocol . '://' . $this->domain . '/stoplist/get';
+        $url = $this->protocol.'://'.$this->domain.'/stoplist/get';
         $request = $this->Request($url);
+
         return $this->CheckReplyError($request, 'getStopList');
     }
 
@@ -208,15 +216,16 @@ class SMSRU
      */
     public function ucsSms()
     {
-        $url = $this->protocol . '://' . $this->domain . '/ucs/sms';
+        $url = $this->protocol.'://'.$this->domain.'/ucs/sms';
         $request = $this->Request($url);
-        $output->status = "OK";
+        $output->status = 'OK';
         $output->status_code = '100';
+
         return $output;
     }
 
     /**
-     * Добавить URL Callback системы на вашей стороне, на которую будут возвращаться статусы отправленных вами сообщений
+     * Добавить URL Callback системы на вашей стороне, на которую будут возвращаться статусы отправленных вами сообщений.
      *
      * @param $post
      *    $post->url = string - Адрес обработчика (должен начинаться на http://)
@@ -225,13 +234,14 @@ class SMSRU
      */
     public function addCallback($post)
     {
-        $url = $this->protocol . '://' . $this->domain . '/callback/add';
+        $url = $this->protocol.'://'.$this->domain.'/callback/add';
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'addCallback');
     }
 
     /**
-     * Удалить обработчик, внесенный вами ранее
+     * Удалить обработчик, внесенный вами ранее.
      *
      * @param $post
      *   $post->url = string - Адрес обработчика (должен начинаться на http://)
@@ -240,18 +250,20 @@ class SMSRU
      */
     public function delCallback($post)
     {
-        $url = $this->protocol . '://' . $this->domain . '/callback/del';
+        $url = $this->protocol.'://'.$this->domain.'/callback/del';
         $request = $this->Request($url, $post);
+
         return $this->CheckReplyError($request, 'delCallback');
     }
 
     /**
-     * Все имеющиеся у вас обработчики
+     * Все имеющиеся у вас обработчики.
      */
     public function getCallback()
     {
-        $url = $this->protocol . '://' . $this->domain . '/callback/get';
+        $url = $this->protocol.'://'.$this->domain.'/callback/get';
         $request = $this->Request($url);
+
         return $this->CheckReplyError($request, 'getCallback');
     }
 
@@ -260,7 +272,7 @@ class SMSRU
         if ($post) {
             $r_post = $post;
         }
-        $ch = curl_init($url . "?json=1");
+        $ch = curl_init($url.'?json=1');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
@@ -269,7 +281,7 @@ class SMSRU
         $post['api_id'] = $this->ApiKey;
 
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query((array)$post));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query((array) $post));
 
         $body = curl_exec($ch);
         if ($body === false) {
@@ -280,19 +292,21 @@ class SMSRU
         curl_close($ch);
         if ($error && $this->count_repeat > 0) {
             $this->count_repeat--;
+
             return $this->Request($url, $r_post);
         }
+
         return $body;
     }
 
     private function CheckReplyError($res, $action)
     {
-
         if (!$res) {
             $temp = new stdClass();
-            $temp->status = "ERROR";
-            $temp->status_code = "000";
-            $temp->status_text = "Невозможно установить связь с сервером.";
+            $temp->status = 'ERROR';
+            $temp->status_code = '000';
+            $temp->status_text = 'Невозможно установить связь с сервером.';
+
             return $temp;
         }
 
@@ -300,9 +314,10 @@ class SMSRU
 
         if (!$result || !$result->status) {
             $temp = new stdClass();
-            $temp->status = "ERROR";
-            $temp->status_code = "000";
-            $temp->status_text = "Невозможно установить связь с сервером.";
+            $temp->status = 'ERROR';
+            $temp->status_code = '000';
+            $temp->status_text = 'Невозможно установить связь с сервером.';
+
             return $temp;
         }
 
@@ -314,6 +329,7 @@ class SMSRU
         if ($post_charset != $send_charset) {
             $str = iconv($post_charset, $send_charset, $str);
         }
-        return "=?" . $send_charset . "?B?" . base64_encode($str) . "?=";
+
+        return '=?'.$send_charset.'?B?'.base64_encode($str).'?=';
     }
 }

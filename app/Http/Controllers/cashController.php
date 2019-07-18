@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Cash;
-use Server1C;
 use CashCode;
 
 class cashController extends Controller
@@ -18,6 +15,7 @@ class cashController extends Controller
         foreach ($cash as $item) {
             $summ += $item->value;
         }
+
         return $summ;
     }
 
@@ -38,13 +36,12 @@ class cashController extends Controller
                     $LastCode = $validator->poll($LastCode);
 
                     if ((time() - $timeStart) > $timeOut) {
-                        echo "timeOut";
+                        echo 'timeOut';
                         break;
                     }
                     if ($LastCode === 666) {
                         $Repeat = true;
                     }
-
                 }
                 if ($Repeat) {
                     sleep(1);
@@ -56,23 +53,20 @@ class cashController extends Controller
         }
     }
 
-
     public function seed()
     {
         $Banknotes = [50, 100, 500, 1000];
         for ($i = 0; $i < 50; $i++) {
             Cash::create([
-              'value' => $Banknotes[array_rand($Banknotes, 1)],
-              'status' => 'inbox'
+              'value'  => $Banknotes[array_rand($Banknotes, 1)],
+              'status' => 'inbox',
             ]);
         }
         for ($i = 0; $i < 5; $i++) {
             Cash::create([
-              'value' => $Banknotes[array_rand($Banknotes, 1)],
-              'status' => 'wait'
+              'value'  => $Banknotes[array_rand($Banknotes, 1)],
+              'status' => 'wait',
             ]);
         }
-
     }
-
 }

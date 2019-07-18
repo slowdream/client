@@ -2,13 +2,12 @@
 
 namespace App\Jobs\update;
 
+use App\Jobs\GetProductsFromServer;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\Jobs\GetProductsFromServer;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class UpdateBackend implements ShouldQueue
 {
@@ -44,7 +43,7 @@ class UpdateBackend implements ShouldQueue
             // Перезапускаем миграции
             `php artisan migrate:refresh`;
             // Стягиваем заново все товары
-            dispatch(new GetProductsFromServer);
+            dispatch(new GetProductsFromServer());
         } else {
             // Выполняем новые миграции
             `php artisan migrate`;

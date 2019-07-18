@@ -2,16 +2,14 @@
 
 namespace App;
 
-
 class SiteAnalizator
 {
-
     protected $header;  // header страницы.
     protected $content; // body страницы.
     protected $data = [/*
-    	'email' => [],
- 		'phone' => []
-	*/
+        'email' => [],
+        'phone' => []
+    */
     ];
 
     /**
@@ -21,7 +19,6 @@ class SiteAnalizator
      */
     public function __construct($data)
     {
-
         $this->header = new TextParser($data['headers']);
         $this->content = new TextParser($data['html']);
 
@@ -72,6 +69,7 @@ class SiteAnalizator
 
     /**
      * Получаем всю собранную инфу.
+     *
      * @return array
      */
     public function getData()

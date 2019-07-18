@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
-use Illuminate\Http\Request;
+use App\Cash;
 use App\Http\Controllers\Controller;
-
+use App\Jobs\SendOrdersToServer;
+use App\Jobs\SendSms;
 use App\Order;
 use App\OrderProds;
 use App\Product;
-use App\Cash;
-
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use PDF;
-use App\Jobs\SendOrdersToServer;
-use App\Jobs\SendSms;
-
 
 class cartController extends Controller
 {
@@ -26,7 +23,7 @@ class cartController extends Controller
     }
 
     /**
-     * Отклик на запрос GET /api/cart
+     * Отклик на запрос GET /api/cart.
      */
     public function getCart()
     {
@@ -38,11 +35,12 @@ class cartController extends Controller
             $itemProduct['count'] = $item->count;
             $cartProducts[] = $itemProduct;
         }
+
         return response()->json($cartProducts);
     }
 
     /**
-     * Отклик на запрос POST /api/cart/add
+     * Отклик на запрос POST /api/cart/add.
      */
     public function addToCart(Request $request)
     {
@@ -52,9 +50,9 @@ class cartController extends Controller
         $product = Product::where('guid', $id)->first();
         $orderProd = OrderProds::firstOrNew([
           'product_id' => $product->id,
-          'guid' => $id,
-          'price' => $product->price,
-          'order_id' => $this->order->id
+          'guid'       => $id,
+          'price'      => $product->price,
+          'order_id'   => $this->order->id,
         ]);
 
         $orderProd->count = $count;
@@ -64,7 +62,7 @@ class cartController extends Controller
     }
 
     /**
-     * Отклик на запрос POST /api/cart/remove
+     * Отклик на запрос POST /api/cart/remove.
      */
     public function remove(Request $request)
     {
@@ -75,7 +73,7 @@ class cartController extends Controller
     }
 
     /**
-     * Отклик на запрос POST /api/cart/add_contacts
+     * Отклик на запрос POST /api/cart/add_contacts.
      */
     public function addContacts(Request $request)
     {
@@ -85,7 +83,7 @@ class cartController extends Controller
     }
 
     /**
-     * Отклик на запрос POST /api/cart/complete
+     * Отклик на запрос POST /api/cart/complete.
      */
     public function complete(Request $request)
     {
@@ -93,7 +91,6 @@ class cartController extends Controller
         $reason = $request->input('reason');
         $cashin = $request->input('cashin');
         // TODO добавить проверку что такая причина существует.
-
 
         if ($cashin > 0 || $reason == 'withoutPay') {
             $reason = ($reason == 'withoutPay') ? 'withoutPay' : 'payed';
@@ -114,7 +111,6 @@ class cartController extends Controller
 
             dispatch(new SendOrdersToServer($this->order->id));
             $this->printCheck($reason, $summ);
-
         } else {
             $this->order->status = 'canceled';
             $this->order->reason = $reason;
@@ -122,6 +118,7 @@ class cartController extends Controller
         }
 
         $this->order = Order::firstOrCreate(['status' => 'active']);
+
         return response()->json([]);
         //return $this->getCart();
     }
@@ -144,20 +141,20 @@ class cartController extends Controller
         }
 
         $data = [
-          'products' => $products,
-          'summ' => $summ,
-          'cash' => $cashSumm,
-          'tel' => $contacts['tel'],
-          'address' => $contacts['address'],
-          'id' => $this->order->id,
-          'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
+          'products'  => $products,
+          'summ'      => $summ,
+          'cash'      => $cashSumm,
+          'tel'       => $contacts['tel'],
+          'address'   => $contacts['address'],
+          'id'        => $this->order->id,
+          'date'      => Carbon::now('Europe/Moscow')->toDateTimeString(),
           'orderDate' => $contacts['date'],
           'timeRange' => $contacts['timeRange']['text'],
-          'reason' => $reason,
-          'delivery' => ($summ > 2000) ? 0 : 300
+          'reason'    => $reason,
+          'delivery'  => ($summ > 2000) ? 0 : 300,
         ];
         $data['timeRange'] = mb_strimwidth($contacts['timeRange']['text'], 0, 2)
-          . '-' .
+          .'-'.
           mb_strimwidth($contacts['timeRange']['text'], -5, 2);
 
         $data['orderDate'] = mb_strimwidth($contacts['date'], 5, 5);
@@ -179,5 +176,4 @@ class cartController extends Controller
         $file = resource_path('reciepts/reciept.pdf');
         $print = `lp {$file}`;
     }
-
 }

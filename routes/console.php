@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
 use Carbon\Carbon;
+use Illuminate\Foundation\Inspiring;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ Artisan::command('inspire', function () {
 Artisan::command("SendOrdersToServer {id=''}", function ($id) {
     dispatch(new App\Jobs\SendOrdersToServer($id));
 });
-Artisan::command("CashTest", function () {
+Artisan::command('CashTest', function () {
     dispatch(new App\Jobs\CashCode(10));
 });
 
@@ -33,22 +33,22 @@ Artisan::command('testprinter', function () {
     $data = [
       'products' => [
         [
-          'guid' => '66666',
-          'name' => 'ttteeest',
+          'guid'  => '66666',
+          'name'  => 'ttteeest',
           'count' => '3',
           'price' => '666',
-        ]
+        ],
       ],
-      'summ' => 666,
-      'cash' => 6666,
-      'tel' => '666666',
-      'address' => 'gdfgdfgdfgdfgfddf',
-      'id' => '6666',
-      'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
+      'summ'      => 666,
+      'cash'      => 6666,
+      'tel'       => '666666',
+      'address'   => 'gdfgdfgdfgdfgfddf',
+      'id'        => '6666',
+      'date'      => Carbon::now('Europe/Moscow')->toDateTimeString(),
       'orderDate' => '66.66.66',
       'timeRange' => '121-122',
-      'reason' => 'test',
-      'delivery' => 300
+      'reason'    => 'test',
+      'delivery'  => 300,
     ];
     //Четвертое число в размере бумаги это высота чека и его нужно вычислять заранее
     $pdf = PDF::loadView('check/receipt', $data)
@@ -59,6 +59,6 @@ Artisan::command('testprinter', function () {
     $print = `lp {$file}`;
 });
 
-Artisan::command("testemail", function () {
-    Mail::to("slowdream@yandex.ru")->send(new \App\Mail\TestEmail());
+Artisan::command('testemail', function () {
+    Mail::to('slowdream@yandex.ru')->send(new \App\Mail\TestEmail());
 });

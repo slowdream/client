@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers\api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-
-use App\Order;
-use App\Event;
 use App\Cash;
-
+use App\Event;
+use App\Http\Controllers\Controller;
 use App\Jobs\CashCode;
+use App\Order;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use PDF;
 
 /**
- * Class cashController
- * @package App\Http\Controllers\api
+ * Class cashController.
  */
 class cashController extends Controller
 {
-
     public function getSumm()
     {
         //Отдаем сумму введеных купюр
@@ -30,6 +26,7 @@ class cashController extends Controller
         foreach ($cash as $item) {
             $summ += $item->value;
         }
+
         return $summ;
         //$cash = new Cash();
         //return $cash->summ();
@@ -46,6 +43,7 @@ class cashController extends Controller
     public function startCash(Request $Request)
     {
         $this->dispatch(new CashCode());
+
         return 'true';
     }
 
@@ -79,15 +77,14 @@ class cashController extends Controller
             });
         }
 
-
         $cashInfo = [
-          'summ' => number_format($inboxCashSumm, 2, ',', ' '),
-          'count' => count($inboxCash),
-          'last_incass' => $lastIncass,
+          'summ'         => number_format($inboxCashSumm, 2, ',', ' '),
+          'count'        => count($inboxCash),
+          'last_incass'  => $lastIncass,
           'orders_count' => count($orders),
-          'orders_summ' => number_format($orders_summ, 2, ',', ' '),
-          'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
-          'id_term' => strtoupper(env('ID_TERM'))
+          'orders_summ'  => number_format($orders_summ, 2, ',', ' '),
+          'date'         => Carbon::now('Europe/Moscow')->toDateTimeString(),
+          'id_term'      => strtoupper(env('ID_TERM')),
         ];
 
         //Четвертое число в размере бумаги это высота чека
@@ -111,10 +108,10 @@ class cashController extends Controller
         }
         Cash::where('status', 'inbox')->update(['status' => 'extracted']);
         $cashInfo = [
-          'summ' => number_format($inboxCashSumm, 2, ',', ' '),
-          'count' => count($inboxCash),
-          'date' => Carbon::now('Europe/Moscow')->toDateTimeString(),
-          'id_term' => strtoupper(env('ID_TERM'))
+          'summ'    => number_format($inboxCashSumm, 2, ',', ' '),
+          'count'   => count($inboxCash),
+          'date'    => Carbon::now('Europe/Moscow')->toDateTimeString(),
+          'id_term' => strtoupper(env('ID_TERM')),
         ];
         Event::create(['name' => 'incass']);
         $pdf = PDF::loadView('check/incass', $cashInfo)
@@ -130,16 +127,15 @@ class cashController extends Controller
         $Banknotes = [50, 100, 500, 1000];
         for ($i = 0; $i < 50; $i++) {
             Cash::create([
-              'value' => $Banknotes[array_rand($Banknotes, 1)],
-              'status' => 'inbox'
+              'value'  => $Banknotes[array_rand($Banknotes, 1)],
+              'status' => 'inbox',
             ]);
         }
         for ($i = 0; $i < 5; $i++) {
             Cash::create([
-              'value' => $Banknotes[array_rand($Banknotes, 1)],
-              'status' => 'wait'
+              'value'  => $Banknotes[array_rand($Banknotes, 1)],
+              'status' => 'wait',
             ]);
         }
-
     }
 }

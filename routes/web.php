@@ -1,7 +1,7 @@
 <?php
 
-
 use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,44 +13,41 @@ use Illuminate\Http\Request;
 |
 */
 
-
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
+Route::group(['middleware' => 'web'], function () {
+    Route::get('/1c', ['as' => '1с', 'uses' => 'mainController@getDataFrom1C']);
+    Route::get('/', ['as' => 'home', 'uses' => 'mainController@index']);
+    Route::post('/category/{id?}', ['as' => 'category', 'uses' => 'mainController@getContent']);
 
-Route::group(['middleware' => 'web'],function(){
-
-	Route::get('/1c',['as' => '1с', 'uses' => 'mainController@getDataFrom1C']);
-	Route::get('/',['as' => 'home', 'uses' => 'mainController@index']);
-	Route::post('/category/{id?}',['as' => 'category', 'uses' => 'mainController@getContent']);
-
-	Route::post('/makejob', function(Request $request){
-    $job = 'App\\Jobs\\' . $request->input('job');
-    dispatch(new $job);
-	});
+    Route::post('/makejob', function (Request $request) {
+        $job = 'App\\Jobs\\'.$request->input('job');
+        dispatch(new $job());
+    });
 });
 
 Route::post('/search', [
-    'as' => 'search',
-    'uses' => 'mainController@search'
+    'as'   => 'search',
+    'uses' => 'mainController@search',
 ]);
 
 Route::get('/test', [
-    'uses' => 'api\cartController@printCheck'
+    'uses' => 'api\cartController@printCheck',
 ]);
 
-Route::group(['prefix' => 'cash'], function() {
-	Route::get('/', ['uses' => 'cashController@summ']);
-	Route::get('/seed', ['uses' => 'cashController@seed']);
-	Route::get('/get', ['uses' => 'cashController@getCash']);
+Route::group(['prefix' => 'cash'], function () {
+    Route::get('/', ['uses' => 'cashController@summ']);
+    Route::get('/seed', ['uses' => 'cashController@seed']);
+    Route::get('/get', ['uses' => 'cashController@getCash']);
 });
 
-Route::group(['prefix' => 'cart'], function() {
-	Route::post('/', ['as' => 'cart', 'uses' => 'cartController@index']);
-	Route::post('/count', ['as' => 'cartCount', 'uses' => 'cartController@count']);
-	Route::post('/add', ['as' => 'cartAdd', 'uses' => 'cartController@add']);
-	Route::post('/remove', ['as' => 'cartRemove', 'uses' => 'cartController@remove']);
-	Route::post('/cancel', ['as' => 'cartCancel', 'uses' => 'cartController@cancel']);
-	Route::post('/complete', ['as' => 'cartComplete', 'uses' => 'cartController@complete']);
+Route::group(['prefix' => 'cart'], function () {
+    Route::post('/', ['as' => 'cart', 'uses' => 'cartController@index']);
+    Route::post('/count', ['as' => 'cartCount', 'uses' => 'cartController@count']);
+    Route::post('/add', ['as' => 'cartAdd', 'uses' => 'cartController@add']);
+    Route::post('/remove', ['as' => 'cartRemove', 'uses' => 'cartController@remove']);
+    Route::post('/cancel', ['as' => 'cartCancel', 'uses' => 'cartController@cancel']);
+    Route::post('/complete', ['as' => 'cartComplete', 'uses' => 'cartController@complete']);
 });
