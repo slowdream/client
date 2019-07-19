@@ -3,10 +3,10 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class FullUpdate implements ShouldQueue
 {
@@ -32,6 +32,6 @@ class FullUpdate implements ShouldQueue
     public function handle()
     {
         dispatch(new update\UpdateBackend($this->hard));
-        dispatch(new update\UpdateFrontend);
+        dispatch(new update\UpdateFrontend());
     }
 }

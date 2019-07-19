@@ -17,6 +17,7 @@ class Event extends Model
         if (env('APP_ENV') == 'sqlsrv') {
             return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
         }
+
         return $this->asDateTime($value)->format(
           $this->getDateFormat()
         );

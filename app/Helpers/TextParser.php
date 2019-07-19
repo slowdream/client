@@ -2,10 +2,8 @@
 
 namespace App;
 
-
 class TextParser
 {
-
     private $cur; //Позиция курсора
     public $str; //Пришедшая строка
 
@@ -29,6 +27,7 @@ class TextParser
         }
 
         $this->cur = $res;
+
         return true;
     }
 
@@ -41,6 +40,7 @@ class TextParser
         }
 
         $this->cur = $res + strlen($pattern);
+
         return true;
     }
 
@@ -54,17 +54,17 @@ class TextParser
 
         $out = substr($this->str, $this->cur, $res - $this->cur);
         $this->cur = $res;
+
         return $out;
     }
-
 
     public function readToPos($pos)
     {
         $out = substr($this->str, $this->cur, $pos - $this->cur);
         $this->cur = $pos;
+
         return $out;
     }
-
 
     public function readFrom($pattern)
     {
@@ -75,9 +75,9 @@ class TextParser
         }
 
         $out = substr($this->str, $res, $this->cur - $res);
+
         return $out;
     }
-
 
     public function getPos($pattern)
     {
@@ -90,18 +90,16 @@ class TextParser
         return $res;
     }
 
-
     public function subtag($start_pattern, $tag, $need_move = true)
     {
-
         $start_position = $this->cur;
 
         if ($this->moveTo($start_pattern) === -1) {
             return -1;
         }
 
-        $start = '<' . $tag;
-        $end = '</' . $tag . '>';
+        $start = '<'.$tag;
+        $end = '</'.$tag.'>';
 
         // Позиция для начала поиска, чтобы не включать стартовый открывающий тег
         $curpos = $this->cur + strlen($start);
@@ -148,7 +146,6 @@ class TextParser
 
     public function subtag_inner($start_pattern, $tag, $need_move = true)
     {
-
         $_data = $this->subtag($start_pattern, $tag, $need_move = true);
         if ($_data === -1) {
             return -1;
@@ -169,12 +166,10 @@ class TextParser
         $data = substr($_data, $pos1, $pos2 - $pos1);
 
         return $data;
-
     }
 
     public function subtag_inner2($start_pattern, $tag, $need_move = true)
     {
-
         $_data = $this->subtag($start_pattern, $tag, $need_move = true);
         if ($_data === -1) {
             return -1;
@@ -191,12 +186,10 @@ class TextParser
         unset($p, $_data);
 
         return $data;
-
     }
 
     public function def()
     {
         $this->cur = 0;
     }
-
 }

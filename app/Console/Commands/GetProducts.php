@@ -37,6 +37,6 @@ class GetProducts extends Command
      */
     public function handle()
     {
-        dispatch(new \App\Jobs\GetProductsFromServer);
+        dispatch(new \App\Jobs\GetProductsFromServer());
     }
 }

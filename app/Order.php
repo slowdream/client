@@ -2,11 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Order
+ * App\Order.
  *
  * @property int $id
  * @property int|null $guid
@@ -16,6 +16,7 @@ use Carbon\Carbon;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\OrderProds[] $products
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereContacts($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Order whereGuid($value)
@@ -38,6 +39,7 @@ class Order extends Model
         if (env('APP_ENV') == 'sqlsrv') {
             return Carbon::parse(parent::fromDateTime($value))->format('Y-d-m H:i:s');
         }
+
         return $this->asDateTime($value)->format(
           $this->getDateFormat()
         );

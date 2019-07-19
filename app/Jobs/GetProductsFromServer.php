@@ -2,14 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Category;
+use App\Product;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use App\Product;
-use App\Category;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Server1C;
 
 class GetProductsFromServer implements ShouldQueue
@@ -34,10 +33,10 @@ class GetProductsFromServer implements ShouldQueue
     public function handle()
     {
         $curl = new Server1C();
-        $categorys = $curl->request('crm/hs/Terminal/?action=group&' . env('ID_TERM', "test"));
+        $categorys = $curl->request('crm/hs/Terminal/?action=group&'.env('ID_TERM', 'test'));
         $data = json_decode($categorys['html'], true);
 
-        $category = new Category;
+        $category = new Category();
         $category::where('id', '>', 0)->delete();
 
         foreach ($data as $val) {
@@ -47,7 +46,7 @@ class GetProductsFromServer implements ShouldQueue
             );
         }
 
-        $items = $curl->request('crm/hs/Terminal/?action=Goods&idterm=' . strtoupper(env('ID_TERM', "test")));
+        $items = $curl->request('crm/hs/Terminal/?action=Goods&idterm='.strtoupper(env('ID_TERM', 'test')));
         $data = json_decode($items['html'], true);
 
         Product::where('id', '>', 0)->delete();
@@ -58,19 +57,19 @@ class GetProductsFromServer implements ShouldQueue
               'name' => $val['group'],
             ]);
             $category->update([
-              'items_parent' => true
+              'items_parent' => true,
             ]);
             $product = Product::where('guid', '=', $val['id'])
               ->withTrashed()->first() ?: new Product(['guid' => $val['id']]);
 
             $product->fill([
-              'name' => $val['name'],
-              'image' => 'image.tyt',
+              'name'        => $val['name'],
+              'image'       => 'image.tyt',
               'description' => str_replace("\n", '<br>', $val['descr']),
-              'price' => (int)$val['price'],
-              'count' => (int)$val['mount'],
-              'unit' => $val['unit'],
-              'deleted_at' => null
+              'price'       => (int) $val['price'],
+              'count'       => (int) $val['mount'],
+              'unit'        => $val['unit'],
+              'deleted_at'  => null,
             ]);
             $category->products()->save($product);
         }

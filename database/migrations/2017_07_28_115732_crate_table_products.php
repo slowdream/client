@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CrateTableProducts extends Migration
 {
@@ -21,7 +21,7 @@ class CrateTableProducts extends Migration
             $table->integer('count'); //Колво
             $table->string('image', 250);
             $table->text('description');
-            $table->string('unit', 10); //Единица измерения            
+            $table->string('unit', 10); //Единица измерения
             $table->integer('category_id'); //Айдишник Категории родительской
             $table->softDeletes();
             $table->timestamps();

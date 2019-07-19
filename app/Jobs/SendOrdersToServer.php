@@ -2,14 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Server1C;
-use App\Order;
 
 class SendOrdersToServer implements ShouldQueue
 {
@@ -56,34 +55,34 @@ class SendOrdersToServer implements ShouldQueue
         }
 
         $arr[0] = [
-          "type" => "0",
-          "idterm" => strtoupper(env('ID_TERM', "test")),
-          "IdOrder" => (string)$order->id,
-          "date" => (string)date('YmdHis'),
-          "name" => (string)$contacts['name'],
-          "telnumber" => (string)$contacts['tel'],
-          "address" => (string)$contacts['address'],
-          "orderDate" => (string)$contacts['date'],
-          "timeRange" => (string)$contacts['timeRange']['text'],
-          "Pay" => $pay,
-          "Delivery" => 0,
-          "reason" => $order->reason
+          'type'      => '0',
+          'idterm'    => strtoupper(env('ID_TERM', 'test')),
+          'IdOrder'   => (string) $order->id,
+          'date'      => (string) date('YmdHis'),
+          'name'      => (string) $contacts['name'],
+          'telnumber' => (string) $contacts['tel'],
+          'address'   => (string) $contacts['address'],
+          'orderDate' => (string) $contacts['date'],
+          'timeRange' => (string) $contacts['timeRange']['text'],
+          'Pay'       => $pay,
+          'Delivery'  => 0,
+          'reason'    => $order->reason,
         ];
 
         $summ = 0;
         foreach ($orderProd as $product) {
             $summ += $product->count * $product->price;
             $arr[] = [
-              "type" => "1",
-              "name" => intval($product->product->guid),
-              "count" => $product->count,
-              "price" => $product->price,
-              "sum" => $product->count * $product->price
+              'type'  => '1',
+              'name'  => intval($product->product->guid),
+              'count' => $product->count,
+              'price' => $product->price,
+              'sum'   => $product->count * $product->price,
             ];
         }
 
-        $arr[0]["Delivery"] = ($summ < 2000) ? 300 : 0;
-        $arr[0]["Summ"] = $summ;
+        $arr[0]['Delivery'] = ($summ < 2000) ? 300 : 0;
+        $arr[0]['Summ'] = $summ;
         if (count($arr) <= 1) {
             return;
         }
